@@ -1,0 +1,47 @@
+@import "src/app/core/scss/fuse";
+
+#orders {
+  .content {
+    overflow: hidden;
+  }
+}
+.selectedBar{
+    flex: 1;
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    height: 120px;
+    z-index: 99;
+}
+
+.sidenav-component {
+  display: flex;
+  flex-direction: column;
+  flex: 1 0 auto;
+  height: 100%;
+  .sidenav-content {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    @include media-breakpoint(gt-sm) {
+      padding: 24px 4px 24px 24px;
+    }
+    .card {
+      display: flex;
+      flex-direction: column;
+      flex: 0 1 auto;
+      padding: 0;
+      @include media-breakpoint(gt-sm) {
+        @include mat-elevation(4);
+      }
+      >.header {
+        flex: 0 1 auto;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+      }
+      >.content {
+        flex: 0 1 auto;
+      }
+    }
+  }
+}

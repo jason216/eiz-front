@@ -1,0 +1,127 @@
+<div class="mat-white-bg p-24 mr-24 mb-24" fxLayout="column" fxLayoutAlign="start"
+                  fxFlex="1 0 auto">
+
+    <div class="h2 mb-24">Reactive Form Example</div>
+
+    <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+        <mat-form-field fxFlex="33">
+          <input matInput placeholder="Name" required [(ngModel)]="order['shipTo_name']">
+        </mat-form-field>
+
+        <mat-form-field fxFlex="34">
+          <input matInput placeholder="Email" [(ngModel)]="order['shipTo_email']">
+        </mat-form-field>
+
+        <mat-form-field fxFlex="33">
+          <input matInput placeholder="Phone"[(ngModel)]="order['shipTo_phone']">
+        </mat-form-field>
+    </div>
+
+    <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+      <mat-form-field fxFlex="100">
+        <input matInput placeholder="Sales Record Number" required [(ngModel)]="order['salesRecordNumber']">
+      </mat-form-field>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+      <mat-form-field fxFlex="100">
+        <input matInput placeholder="Address 1" required [(ngModel)]="order['shipTo_address1']">
+      </mat-form-field>
+    </div>
+
+    <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+ 
+      <mat-form-field fxFlex="100">
+        <input matInput placeholder="Address 2" [(ngModel)]="order['shipTo_address2']">
+      </mat-form-field>
+    </div>
+
+    <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto" fxLayoutWrap>
+
+      <mat-form-field fxFlex="25">
+        <input matInput placeholder="Suburb" required [(ngModel)]="order['shipTo_suburb']">
+      </mat-form-field>
+
+      <mat-form-field fxFlex="25">
+        <input matInput placeholder="State" required [(ngModel)]="order['shipTo_state']">
+      </mat-form-field>
+
+      <mat-form-field fxFlex="25">
+        <input matInput placeholder="Postcode" required [(ngModel)]="order['shipTo_postcode']">
+      </mat-form-field>
+
+      <mat-form-field fxFlex="25">
+        <input matInput placeholder="Country" required [(ngModel)]="order['shipTo_country']">
+      </mat-form-field>
+
+    </div>
+
+    <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+
+      <mat-form-field fxFlex="33">
+        <span matPrefix>$&nbsp;</span>
+        <input matInput placeholder="Postage" [(ngModel)]="order['postage']">
+      </mat-form-field>
+      <mat-form-field fxFlex="34">
+        <mat-select placeholder="Status" [(ngModel)]="order['status']">
+          <mat-option>-- None --</mat-option>
+          <mat-optgroup *ngFor="let group of statusGroups" [label]="group.name" [disabled]="group.disabled">
+            <mat-option *ngFor="let status of group.status" [value]="status.value">
+              {{ status.viewValue }}
+            </mat-option>
+          </mat-optgroup>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field fxFlex="33">
+        <mat-select placeholder="Payment Method" [(ngModel)]="order['payment']">
+          <mat-option>-- None --</mat-option>
+          <mat-option *ngFor="let payment of payments" [value]="payment.value">{{ payment.viewValue }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+          <!-- <mat-form-field>
+      <input matInput [matDatepicker]="picker" placeholder="Paid Date" >
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field> -->
+
+    </div>
+
+    <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+
+      <ngx-datatable fxFlex="100" #myTable class='material fullscreen expandable' [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50"
+        [rowHeight]="auto" [rows]=rows [columns]=columnsRef [limit]="20">
+
+        <ng-template #cellEditTextTmpl let-rowIndex="rowIndex" let-column="column" let-value="value" let-row="row" ngx-datatable-cell-template>
+          <!-- <span title="Double click to edit" *ngIf="!editing[rowIndex]">
+            {{value}}
+          </span> -->
+          <!-- <mat-form-field class="example-full-width" *ngIf="editing[rowIndex]"> -->
+          <mat-form-field class="example-full-width">
+            <input matInput [value]="value" (change)="updateValue($event, column.prop, rowIndex)" (blur)="updateValue($event, column.prop, rowIndex)" (keyup)="updateValue($event, column.prop, rowIndex)">
+          </mat-form-field>
+        </ng-template>
+
+        <ng-template #cellActionTmpl let-row="row" let-value="value" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+          <mat-button-toggle-group #group="matButtonToggleGroup">
+            <mat-button-toggle value="left" (click)="addRow()">
+              New
+            </mat-button-toggle>
+            <!-- <mat-button-toggle value="left" (click)="editing[rowIndex]=true" >
+              Edit
+            </mat-button-toggle>
+            <mat-button-toggle value="center" (click)="editing[rowIndex]=false">
+              Save
+            </mat-button-toggle> -->
+            <mat-button-toggle value="right" (click)="deleteRow(row,rowIndex)">
+              Delete
+            </mat-button-toggle>
+          </mat-button-toggle-group>
+        </ng-template>
+
+      </ngx-datatable>
+
+    </div>
+<button class="w-20-p" fxFlex="100" mat-raised-button color="primary" (click)="submit()">Submit</button>
+
+  </div>
+

@@ -1,0 +1,49 @@
+<div class="mat-white-bg p-12 mr-12 mb-12" fxLayout="column" fxLayoutAlign="start" fxFlex="1 0 auto">
+  <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+    <ngx-datatable fxFlex="100" #myTable class='material fullscreen expandable' [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50"
+      [rowHeight]="auto" [rows]=rows [columns]=columnsRef [limit]="20">
+
+      <ng-template #cellEditTextTmpl let-rowIndex="rowIndex" let-column="column" let-value="value" let-row="row" ngx-datatable-cell-template>
+        <!-- <span title="Double click to edit" *ngIf="!editing[rowIndex]">
+                {{value}}
+              </span> -->
+        <!-- <mat-form-field class="example-full-width" *ngIf="editing[rowIndex]"> -->
+        <mat-form-field class="example-full-width">
+          <input matInput [value]="value" (change)="updateValue($event, column.prop, rowIndex)" (blur)="updateValue($event, column.prop, rowIndex)"
+            (keyup)="updateValue($event, column.prop, rowIndex)">
+        </mat-form-field>
+      </ng-template>
+
+      <ng-template #cellActionTmpl let-row="row" let-value="value" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+        <mat-button-toggle-group #group="matButtonToggleGroup">
+          <mat-button-toggle value="left" (click)="addRow()">
+            <mat-icon>add</mat-icon>
+          </mat-button-toggle>
+          <!-- <mat-button-toggle value="left" (click)="editing[rowIndex]=true" >
+                  Edit
+                </mat-button-toggle>
+                <mat-button-toggle value="center" (click)="editing[rowIndex]=false">
+                  Save
+                </mat-button-toggle> -->
+          <mat-button-toggle value="right" (click)="deleteRow(row,rowIndex)">
+            <mat-icon>delete</mat-icon>
+          </mat-button-toggle>
+        </mat-button-toggle-group>
+
+
+      </ng-template>
+
+    </ngx-datatable>
+  </div>
+
+  <div class="pt-12" fxLayout="row" fxLayoutAlign="center center" fxFlex="1 0 auto">
+    <button class="w-20-p" fxFlex="30" mat-raised-button color="primary" (click)="quotePrices()">quote</button>
+  </div>
+
+  <div class="pt-12" fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+    <mat-radio-group fxFlex="100" >
+      <mat-radio-button value="{{shipping.shippingMethod_id}}" (click)="updateShippingInfo(shipping.shippingMethod_id, shipping.shippingMethod_cost)" *ngFor="let shipping of shippingMethods">{{shipping.shippingMethod_name}} : $ {{ shipping.shippingMethod_cost }}</mat-radio-button>
+    </mat-radio-group>
+  </div>
+
+</div>

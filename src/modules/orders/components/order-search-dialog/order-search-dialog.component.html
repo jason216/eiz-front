@@ -1,0 +1,68 @@
+<h1 mat-dialog-title>Advanced Search</h1>
+
+<div mat-dialog-content>
+    <div fxLayout="row wrap" fxLayoutAlign="start left">
+
+      <mat-form-field class="ml-8 mr-8" fxFlex="25">
+        <mat-select placeholder="Search in" [(ngModel)]="selectedSearchScopes">
+          <mat-option *ngFor="let searchItem of searchScopes" [value]="searchItem.value">
+            {{ searchItem.viewValue }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="w-60-p ml-8 mr-8" fxFlex="60">
+        <input id="search" matInput #filter placeholder="Search with key words" [(ngModel)]="keywords">
+      </mat-form-field>
+<!--
+      <mat-form-field class="ml-8 mr-8" fxFlex="40">
+        <mat-select placeholder="Status">
+          <mat-option *ngFor="let food of foods" [value]="food.value">
+            {{ food.viewValue }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field class="ml-8 mr-8" fxFlex="40">
+        <mat-select placeholder="Courier">
+          <mat-option *ngFor="let food of foods" [value]="food.value">
+            {{ food.viewValue }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="ml-8 mr-8" fxFlex="40">
+        <mat-select placeholder="Store">
+          <mat-option *ngFor="let food of foods" [value]="food.value">
+            {{ food.viewValue }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field class="ml-8 mr-8" fxFlex="40">
+        <mat-select placeholder="Manifested/Printed">
+          <mat-option *ngFor="let food of foods" [value]="food.value">
+            {{ food.viewValue }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="ml-8 mr-8" fxFlex="40">
+        <input matInput [matDatepicker]="picker1" placeholder="Paid Date From">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field class="ml-8 mr-8" fxFlex="40">
+        <input matInput [matDatepicker]="picker2" placeholder="To">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field> -->
+    </div>
+</div>
+
+<div mat-dialog-actions fxLayout="row wrap" fxLayoutAlign="end right">
+  <button mat-raised-button color="primary" (click)="onNoClick()">No Thanks</button>
+  <button mat-raised-button color="primary" (click)="onClick()" cdkFocusInitial>Filter</button>
+  <!-- <button mat-raised-button color="primary" [mat-dialog-close]="data.animal" cdkFocusInitial>Filter</button> -->
+</div>
+
+

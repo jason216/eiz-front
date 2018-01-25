@@ -1,0 +1,5 @@
+<mat-list>
+  <mat-list-item *ngFor="let orderline of orderlines">
+   {{orderline.quantity | json}} X {{orderline.itemtitle | json}}  ${{orderline.saleprice | json}}
+  </mat-list-item>
+</mat-list>

@@ -1,0 +1,35 @@
+
+<div class="fuse-card">
+
+  <img *ngIf="plugin.img" [src]="plugin.img">
+  <img *ngIf="!plugin.img" src="assets/images/cards/card1.jpg">
+
+  <div class="p-16">
+    <div class="h1">{{plugin.name}}</div>
+    <div class="h4 secondary-text">{{plugin.highlight}}</div>
+  </div>
+
+  <div class="p-8 pt-0" fxLayout="row" fxLayoutAlign="space-between center">
+
+    <div fxLayout="row" fxLayoutAlign="start center">
+      <button mat-button *ngIf="plugin.setting" color="accent"  (click)=openSetting()> Settings </button>
+      <mat-slide-toggle class="example-margin" [color]="color" [checked]="plugin.subscribed" (click)=changeSubscribed() labelPosition='before'>
+        <ng-container *ngIf="!plugin.subscribed">Unsubscribed</ng-container>
+        <ng-container *ngIf="plugin.subscribed">Subscribing</ng-container>
+      </mat-slide-toggle>
+    </div>
+
+    <button mat-icon-button aria-label="expand card" (click)="cardExpanded = !cardExpanded">
+      <mat-icon *ngIf="cardExpanded">keyboard_arrow_up</mat-icon>
+      <mat-icon *ngIf="!cardExpanded">keyboard_arrow_down</mat-icon>
+    </button>
+
+  </div>
+
+  <div class="card-expand-area" *ngIf="cardExpanded" [@expandCollapse]>
+    <div class="card-expanded-content">
+      {{ plugin.detail }}
+    </div>
+  </div>
+
+</div>
