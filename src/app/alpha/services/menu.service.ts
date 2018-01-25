@@ -20,7 +20,7 @@ export class MenuService {
       },
       {
         id: 'fulfillments',
-        children: [{ id: 'fulfillments.all' }, { id: 'fulfillments.new' }]
+        children: [{ id: 'fulfillments.all' }, { id: 'fulfillments.new' }, { id: 'fulfillments.despatch' }]
       }
     ]);
     // this.apiService.get("user", 'nav').subscribe(
