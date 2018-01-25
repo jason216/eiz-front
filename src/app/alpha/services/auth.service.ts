@@ -11,51 +11,42 @@ import { ApiService } from './api.service';
 @Injectable()
 export class AuthService {
 
-  constructor( private router: Router, private apiService: ApiService) {
-
-    if (this.isAuthenticated() ){
-      this.router.navigate(['default']);
-    }
-  }
+  constructor( private router: Router, private apiService: ApiService) {}
 
   public isAuthenticated(){
     if (!this.isActive()){
       this.renewToken();
+      console.log('not active');
     }
+    console.log(this.isLoggedIn());
     if (this.isLoggedIn() && this.isActive() ){
       return true;
     }
     return false;
   }
   private renewToken() {
-    this.apiService.post('auth', 'update').subscribe(
-      res => {
-        if (res['data']){
-          this.setSession(res['data']);
-        }
-      },
-      err => {
-        console.log(`Error in auth-renew-token: ${err}`);
-      },
-      () => {
-        console.log('auth-renew-token Completed');
-      }
-    );
+    // this.apiService.post('auth', 'update').toPromise.
+  //   this.apiService.post('auth', 'update').subscribe(
+  //     res => {
+  //       if (res['data']){
+  //         this.setSession(res['data']);
+  //       }
+  //     },
+  //     err => {
+  //       console.log(`Error in auth-renew-token: ${err}`);
+  //     },
+  //     () => {
+  //       console.log('auth-renew-token Completed');
+  //     }
+  //   );
   }
 
   public login(username: string, password: string ) {
-    this.apiService.post('auth', 'auth', { email: username, password: password }).subscribe(
+    return this.apiService.post('auth', 'auth', { email: username, password: password }).map(
       res => {
         if (res['data']) {
           this.setSession(res['data']);
-          this.router.navigate(['default']);
         }
-      },
-      err => {
-        console.log(`Error in auth-login: ${err}`);
-      },
-      () => {
-        console.log('auth-login Completed');
       }
     );
   }

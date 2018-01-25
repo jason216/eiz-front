@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router, ActivatedRoute } from '@angular/router';
 
 import { MatSnackBar } from '@angular/material';
 
@@ -27,7 +28,9 @@ export class LoginComponent implements OnInit {
     private fuseConfig: FuseConfigService,
     private formBuilder: FormBuilder,
     private authService: AuthService,
-    public snackBar: MatSnackBar
+    public snackBar: MatSnackBar,
+    private router: Router,
+    private route: ActivatedRoute,
   ) {
 
     this.fuseConfig.setSettings({
@@ -53,6 +56,8 @@ export class LoginComponent implements OnInit {
     this.loginForm.valueChanges.subscribe(() => {
       this.onLoginFormValuesChanged();
     });
+
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
   }
 
   onLoginFormValuesChanged()
@@ -80,6 +85,10 @@ export class LoginComponent implements OnInit {
   login(button){
     button.textContent = 'loading...';
     button.disabled = true;
-    this.authService.login(this.loginForm.get('username').value, this.loginForm.get('password').value);
+    this.authService.login(this.loginForm.get('username').value, this.loginForm.get('password').value).subscribe(
+      res => {
+        this.router.navigate([this.returnUrl]);
+      }
+    );
   }
 }

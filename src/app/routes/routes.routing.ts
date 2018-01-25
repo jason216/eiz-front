@@ -9,53 +9,41 @@ import { AuthGuard } from '../alpha/services/guard/auth.guard';
 
 const routes: Routes = [
   {
-    path: "",
-    component: FuseMainComponent,
-
-    children: [
-      {
-        path: "setting",
-        component: UserSettingComponent,
-        canActivate: [AuthGuard]
-      },
-      {
-        path: "orders",
-        loadChildren: "./../../modules/orders/orders.module#OrdersModule",
-        canActivate: [AuthGuard]
-      },
-      {
-        path: "fulfillments",
-        loadChildren:
-          "./../../modules/fulfillments/fulfillments.module#FulfillmentsModule",
-        canActivate: [AuthGuard]
-      },
-      {
-        path: "404",
-        component: PageNotFoundComponent
-      }
-    ]
-  },
-  // FullScreen Pages, Do not need Layouts
-  {
-    path: "login",
+    path: 'login',
     component: LoginComponent
   },
   {
-    path: "register",
+    path: 'register',
     component: RegisterComponent
   },
   {
-    path: "default",
-    redirectTo: "fulfillments/new"
+    path: '',
+    redirectTo: 'setting',
+    pathMatch: 'full'
   },
   {
-    path: "**",
-    redirectTo: "404"
+    path: 'setting',
+    component: UserSettingComponent,
+    canActivate: [AuthGuard]
   },
   {
-    path: "",
-    redirectTo: "login",
-    pathMatch: "full"
+    path: 'orders',
+    loadChildren: './../../modules/orders/orders.module#OrdersModule',
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'fulfillments',
+    loadChildren:
+      './../../modules/fulfillments/fulfillments.module#FulfillmentsModule',
+    canActivate: [AuthGuard]
+  },
+  {
+    path: '404',
+    component: PageNotFoundComponent
+  },
+  {
+    path: '**',
+    redirectTo: '404'
   }
 ];
 

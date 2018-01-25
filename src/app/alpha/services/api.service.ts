@@ -9,7 +9,7 @@ import 'rxjs/add/observable/throw';
 @Injectable()
 export class ApiService {
   private url: string;
-  private activeRequests= 0;
+  private activeRequests = 0;
 
   constructor(private httpClient: HttpClient) {
     this.url = environment.apiUrl;
@@ -31,7 +31,6 @@ export class ApiService {
     return this.httpClient
             .get(resourceUrl, {params: httpParams} )
       .catch((error: any) => this.handleError(error));
-      //.pipe(catchError((error: any) => this.handleError(error)));
   }
 
   public post(endpoint: string, target: string, data?: any): Observable<any> {

@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { RouterModule, Routes } from '@angular/router';
 import 'hammerjs';
 import { SharedModule } from './core/modules/shared.module';
 import { AppComponent } from './app.component';
@@ -23,7 +22,6 @@ import { ApiHeaderInterceptor } from './alpha/services/interceptor/api-header.in
     BrowserModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    RouterModule,
     SharedModule,
     TranslateModule.forRoot(),
     FuseMainModule,
