@@ -13,10 +13,8 @@ export class AuthService {
 
   constructor( private router: Router, private apiService: ApiService) {
 
-    //console.log(localStorage.getItem('token'));
     if (this.isAuthenticated() ){
       this.router.navigate(['default']);
-      //console.log('Autthhhhhhh');
     }
   }
 
@@ -56,7 +54,7 @@ export class AuthService {
       err => {
         console.log(`Error in auth-login: ${err}`);
       },
-      () =>{
+      () => {
         console.log('auth-login Completed');
       }
     );
@@ -95,13 +93,9 @@ export class AuthService {
   private isExpiration(){
     const expirationTime = this.getExpiration();
     const now = moment().subtract(1, 'm');
-    //console.log("now", now.valueOf());
-    //console.log("beforeDelete", expirationTime.valueOf());
     if (now.isBefore(expirationTime)) {
       return true;
     } else {
-      //console.log("Not expiration");
-      //console.log(localStorage.getItem('refresh_expires_at'));
       return false;
     }
   }
@@ -111,13 +105,9 @@ export class AuthService {
   private isActive() {
     const activeTime = this.getActive();
     const now = moment().subtract(1, 'm');
-    //console.log("now", now.valueOf());
-    //console.log("exprie", activeTime.valueOf());
     if (now.isBefore(activeTime)) {
       return true;
     }else{
-      //console.log("Not active");
-      //console.log(localStorage.getItem('expires_at'));
       return false;
     }
   }

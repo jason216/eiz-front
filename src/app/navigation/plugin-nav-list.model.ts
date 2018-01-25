@@ -45,6 +45,13 @@ export class PluginNavListModel implements FuseNavigationModelInterface{
         'type': 'item',
         'icon': 'email',
         'url': '/fulfillments/new',
+      },
+      {
+        'id': 'fulfillments.despatch',
+        'title': 'Despatch',
+        'type': 'item',
+        'icon': 'email',
+        'url': '/fulfillments/despatch',
       }
     ];
   }
