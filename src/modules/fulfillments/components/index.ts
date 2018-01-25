@@ -21,3 +21,4 @@ export const fulfillmentsFormComponents: any[] = [
 export * from './fulfillments-form/fulfillments-form.component';
 export * from './parcel-quote-form/parcel-quote-form.component';
 export * from './fulfillmentDespatch-dialog/fulfillmentDespatch-form/fulfillmentDespatch-form.component';
+export * from './fulfillmentDespatch-dialog/fulfillmentDespatch-dialog.component';

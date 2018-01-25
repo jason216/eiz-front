@@ -185,31 +185,25 @@ export class OrderListComponent implements OnInit, OnDestroy {
 
   setPage(pageInfo) {
     // console.log("click page info", pageInfo);
-    this.page.pageNumber = pageInfo.offset + 1;
-    // console.log("OFFSET", this.page.pageNumber);
     let params = '';
     params = params + this.encodeFilters(this.filters);
     params =
-      this.paginationService.encodeResponse(this.page.pageNumber) +
+      this.paginationService.encodeResponse(pageInfo.offset + 1) +
       '&' +
       params;
-    console.log('params', params);
 
     this.orderService
       .getOrders(params)
       .takeWhile(() => this.startSubscribe)
       .subscribe(
         res => {
-          let pagedData = this.paginationService.decodeResponse(res);
+          const pagedData = this.paginationService.decodeResponse(res);
           this.rows = [];
           this.rows = pagedData.data;
           this.rows = pagedData.data;
-          // console.log("after reset page", pagedData.page);
 
           this.page = pagedData.page;
-          // IMPORTANT NOTE: server-side page index start at 1, ngx-datatable page index start at 0
           this.page.pageNumber = this.page.pageNumber - 1;
-          // console.log('data', this.rows);
           this.table.recalculate();
         },
         err => {

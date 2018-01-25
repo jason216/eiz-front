@@ -34,9 +34,10 @@ export class AppComponent
         // Use a language
         this.translate.use('en');
 
-        this.fuseNavigationService.setNavigationModel(this.menuService.getUserMenu());
+        this.fuseNavigationService.setNavigationModel(new FuseNavigationModel());
+        this.menuService.loadFromRemote();
         // Set the navigation model
-        //this.fuseNavigationService.setNavigationModel(new FuseNavigationModel());
+
 
         // Set the navigation translations
         this.translationLoader.loadTranslations(navigationEnglish, navigationTurkish);

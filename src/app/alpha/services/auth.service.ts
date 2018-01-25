@@ -16,9 +16,7 @@ export class AuthService {
   public isAuthenticated(){
     if (!this.isActive()){
       this.renewToken();
-      console.log('not active');
     }
-    console.log(this.isLoggedIn());
     if (this.isLoggedIn() && this.isActive() ){
       return true;
     }
@@ -94,13 +92,14 @@ export class AuthService {
     return this.getStorageTime('expires_at');
   }
   private isActive() {
-    const activeTime = this.getActive();
-    const now = moment().subtract(1, 'm');
-    if (now.isBefore(activeTime)) {
-      return true;
-    }else{
-      return false;
-    }
+    // const activeTime = this.getActive();
+    // const now = moment().subtract(1, 'm');
+    // if (now.isBefore(activeTime)) {
+    //   return true;
+    // }else{
+    //   return false;
+    // }
+    return true;
   }
 
 }

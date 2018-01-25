@@ -33,6 +33,9 @@ import { FulfillmentsFormModule } from './shared/fulfillments-form.module';
   ],
   exports: [
     fromComponents.FulfillmentsFormComponent
+  ],
+  entryComponents: [
+    fromComponents.FulfillmentsDespatchDialogComponent
   ]
 })
 

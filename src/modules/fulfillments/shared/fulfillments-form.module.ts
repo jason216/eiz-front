@@ -19,6 +19,8 @@ import { AlphaModule } from '../../../app/alpha/alpha.module';
   ],
   exports: [
     fromComponents.FulfillmentsFormComponent
+  ],
+  entryComponents: [
   ]
 })
 

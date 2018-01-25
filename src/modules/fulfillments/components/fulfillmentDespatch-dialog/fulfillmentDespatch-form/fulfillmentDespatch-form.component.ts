@@ -25,10 +25,8 @@ export class FulfillmentDespatchFormComponent implements OnInit, OnDestroy {
     this.apiService.get('Fulfillments', 'consignments').subscribe(
       res => {
         this.consignment = res.data;
-        console.log(this.consignment);
       }
     );
-    console.log(this.consignment_id);
   }
 
   ngOnDestroy() {
@@ -36,11 +34,11 @@ export class FulfillmentDespatchFormComponent implements OnInit, OnDestroy {
   }
 
   despatch(){
-    this.apiService.post('Orders', 'getOrders').subscribe(
+    this.apiService.post('Fulfillments', 'despatch/'.concat(this.consignment_id), {'trackingNumber': this.trackingNumber.value}).subscribe(
       res => {
         this.onDespatched.emit({
           'trackingNumber' : this.trackingNumber.value,
-          'success': true,
+          'despatchSuccess': true,
         });
       },
       Error => {

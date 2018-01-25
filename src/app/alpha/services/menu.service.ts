@@ -10,10 +10,14 @@ export class MenuService {
 
   menuRef = new PluginNavListModel().model;
 
-  constructor(){ }
+  constructor(
+    private fuseNavigationService: FuseNavigationService,
+    private apiService: ApiService,
+  ){ }
 
-  public getUserMenu() {
-    return this.decodeMenu([
+  public loadFromRemote() {
+
+    const defaultMenu = [
       {
         id: 'orders',
         children: [{ id: 'orders.new' }, { id: 'orders.all' }]
@@ -22,63 +26,46 @@ export class MenuService {
         id: 'fulfillments',
         children: [{ id: 'fulfillments.all' }, { id: 'fulfillments.new' }, { id: 'fulfillments.despatch' }]
       }
-    ]);
-    // this.apiService.get("user", 'nav').subscribe(
-    //   res => {
-    //     if (res['data']) {
-    //       //this.setSession(res['data']);
-    //     }
-    //   },
-    //   err => {
-    //     console.log(`Error in get menu: ${err}`);
-    //   },
-    //   () => {
-    //     console.log('get server side menu Completed');
-    //   }
-    // );
+    ];
+
+    this.apiService.get('user', 'nav').subscribe(
+      res => {
+        if (res['data']) {
+          this.fuseNavigationService.setNavigationModel(res['data']);
+        }
+      },
+      err => {
+        this.fuseNavigationService.setNavigationModel(this.decodeMenu(defaultMenu));
+      },
+      () => {
+        this.fuseNavigationService.setNavigationModel(this.decodeMenu(defaultMenu));
+      }
+    );
   }
 
   decodeMenu(data: any[]){
-    let newMenu = [];
+    const newMenu = [];
 
     data.forEach(root => {
-      console.log('root is ', root);
-
-      let rootMenu = this.findMenuInRef(root['id']);
-      console.log('root menu is', rootMenu);
-
+      const rootMenu = this.findMenuInRef(root['id']);
       if (typeof root['children'] === 'undefined'){
       }else{
-
         root['children'].forEach(middle => {
-          console.log('middle is ', middle);
 
-          let midMenu = this.findMenuInRef(middle['id']);
-          console.log('middle Menu1 is ', midMenu);
+          const midMenu = this.findMenuInRef(middle['id']);
 
           if (typeof middle['children'] === 'undefined') {}
           else{
-            console.log('start loop' );
             middle['children'].forEach(leaf => {
-              console.log('leaf is ', leaf);
-              let leafMenu = this.findMenuInRef(leaf['id']);
+              const leafMenu = this.findMenuInRef(leaf['id']);
               midMenu['children'].push(leafMenu);
             });
-            console.log('end loop');
           }
-
-
-          console.log('middle Menuis ', midMenu);
-          console.log('root menu is', rootMenu);
           rootMenu['children'].push(midMenu);
         });
-
       }
-
       newMenu.push(rootMenu);
     });
-    console.log(newMenu);
-
     return {'model': newMenu};
   }
 
@@ -90,7 +77,6 @@ export class MenuService {
         menu = element;
       }
     });
-    console.log('find menu is ', menu);
     return menu;
   }
 
