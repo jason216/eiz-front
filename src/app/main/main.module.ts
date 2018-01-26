@@ -16,6 +16,7 @@ import { FuseThemeOptionsComponent } from '../core/components/theme-options/them
 import { FuseShortcutsModule } from '../core/components/shortcuts/shortcuts.module';
 import { FuseSearchBarModule } from '../core/components/search-bar/search-bar.module';
 import { BasicModule } from '../basic/basic.module';
+import { UserMenuComponent } from '../main/toolbar/user-menu/user-menu.component';
 
 @NgModule({
     declarations: [
@@ -27,7 +28,8 @@ import { BasicModule } from '../basic/basic.module';
         FuseToolbarComponent,
         FuseNavbarVerticalToggleDirective,
         FuseThemeOptionsComponent,
-        FuseQuickPanelComponent
+        FuseQuickPanelComponent,
+        UserMenuComponent
     ],
     imports     : [
         SharedModule,

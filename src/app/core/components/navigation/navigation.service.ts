@@ -32,8 +32,6 @@ export class FuseNavigationService
      */
     setNavigationModel(model)
     {
-      console.log('input menu model', model);
-
         this.navigationModel = model;
         this.onNavigationModelChange.next(this.navigationModel.model);
     }

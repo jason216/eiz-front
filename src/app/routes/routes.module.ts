@@ -9,7 +9,6 @@ import { BasicModule } from '../basic/basic.module';
 
 import { LoginComponent } from './auth/login/login.component';
 import { RegisterComponent } from './auth/register/register.component';
-import { UserSettingComponent } from './dashboard/user-setting/user-setting.component';
 import { PageNotFoundComponent } from './error/page-not-found/page-not-found.component';
 import { FuseShortcutsModule } from '../core/components/shortcuts/shortcuts.module';
 import { FuseSearchBarModule } from '../core/components/search-bar/search-bar.module';
@@ -25,7 +24,6 @@ import { FuseSearchBarModule } from '../core/components/search-bar/search-bar.mo
   declarations: [
     LoginComponent,
     RegisterComponent,
-    UserSettingComponent,
     PageNotFoundComponent
   ]
 })

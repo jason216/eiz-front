@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { NavigationEnd, NavigationStart, Router } from '@angular/router';
 import { FuseConfigService } from '../../core/services/config.service';
 import { TranslateService } from '@ngx-translate/core';
+import { AuthService } from '../../alpha/services/auth.service';
 
 @Component({
     selector   : 'fuse-toolbar',
@@ -16,11 +17,13 @@ export class FuseToolbarComponent
     selectedLanguage: any;
     showLoadingBar: boolean;
     horizontalNav: boolean;
+    user: any;
 
     constructor(
         private router: Router,
         private fuseConfig: FuseConfigService,
-        private translate: TranslateService
+        private translate: TranslateService,
+        private auth: AuthService,
     )
     {
         this.userStatusOptions = [
@@ -82,6 +85,7 @@ export class FuseToolbarComponent
             this.horizontalNav = settings.layout.navigation === 'top';
         });
 
+        this.user = this.auth.user;
     }
 
     search(value)

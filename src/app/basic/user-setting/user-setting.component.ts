@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { FuseConfigService } from '../../../core/services/config.service';
-import { fuseAnimations } from '../../../core/animations';
+import { FuseConfigService } from '../../core/services/config.service';
+import { fuseAnimations } from '../../core/animations';
 
 @Component({
   // tslint:disable-next-line:component-selector

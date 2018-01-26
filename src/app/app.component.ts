@@ -6,6 +6,8 @@ import { FuseTranslationLoaderService } from './core/services/translation-loader
 
 import { FuseNavigationService } from './core/components/navigation/navigation.service';
 import { FuseNavigationModel } from './navigation/navigation.model';
+import { AuthService } from './alpha/services/auth.service';
+import { User } from './alpha/models/user.model';
 import { locale as navigationEnglish } from './navigation/i18n/en';
 import { locale as navigationTurkish } from './navigation/i18n/tr';
 
@@ -22,7 +24,8 @@ export class AppComponent
         private fuseNavigationService: FuseNavigationService,
         private fuseSplashScreen: FuseSplashScreenService,
         private translate: TranslateService,
-        private translationLoader: FuseTranslationLoaderService
+        private translationLoader: FuseTranslationLoaderService,
+        private auth: AuthService,
     )
     {
         // Add languages
@@ -37,6 +40,9 @@ export class AppComponent
         this.fuseNavigationService.setNavigationModel(new FuseNavigationModel());
         this.menuService.loadFromRemote();
         // Set the navigation model
+
+        // Inistial Auth information
+        this.auth.user = new User();
 
 
         // Set the navigation translations

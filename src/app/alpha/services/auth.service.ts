@@ -8,8 +8,12 @@ import 'rxjs/add/operator/map';
 
 import { ApiService } from './api.service';
 
+import {User} from '../models/user.model';
+
 @Injectable()
 export class AuthService {
+
+  user: User;
 
   constructor( private router: Router, private apiService: ApiService) {}
 
@@ -66,6 +70,12 @@ export class AuthService {
 
   private isLoggedIn() {
     if (localStorage.getItem('token')){
+      this.apiService.get('auth', 'auth').subscribe(
+        // tslint:disable-next-line:no-shadowed-variable
+        res => {
+          this.user.loadFromAuth(res.data);
+        }
+      );
       return true;
     }
     return false;

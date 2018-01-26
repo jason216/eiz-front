@@ -17,13 +17,14 @@ import { PaginationService } from '../../../../app/alpha/services/pagination.ser
 import { FulfillmentsFormDialogComponent } from '../../../fulfillments/components/fulfillments-form-dialog/fulfillments-form-dialog.component';
 
 @Component({
+  // tslint:disable-next-line:component-selector
   selector: 'page-order-list',
   templateUrl: './order-list.component.html',
   styleUrls: ['./order-list.component.scss'],
   animations: fuseAnimations
 })
 export class OrderListComponent implements OnInit, OnDestroy {
-  private startSubscribe: boolean = true;
+  private startSubscribe = true;
   searchFormControl = new FormControl('');
   @ViewChild('myTable') table: any;
   @ViewChild('cellIconTmpl') cellIconTmpl: TemplateRef<any>;
@@ -88,7 +89,6 @@ export class OrderListComponent implements OnInit, OnDestroy {
         maxWidth: 150,
         ellTemplate: this.cellTagTmpl
       },
-      //{ prop: "customer.name", name: "Name" },
       { name: 'Actions', maxWidth: 100, cellTemplate: this.cellActionTmpl }
     ];
 
@@ -133,7 +133,7 @@ export class OrderListComponent implements OnInit, OnDestroy {
     if (this.searchFormControl.value) {
       this.filters['search'] = this.searchFormControl.value;
 
-      let params = this.encodeFilters(this.filters);
+      const params = this.encodeFilters(this.filters);
       this.handleSearch();
     }
   }
@@ -156,14 +156,14 @@ export class OrderListComponent implements OnInit, OnDestroy {
   }
 
   private handleSearch() {
-    let params = this.encodeFilters(this.filters);
+    const params = this.encodeFilters(this.filters);
     this.orderService
       .getOrders(params)
       .takeWhile(() => this.startSubscribe)
       .subscribe(
         res => {
           this.searchFormControl = new FormControl('');
-          let pagedData = this.paginationService.decodeResponse(res);
+          const pagedData = this.paginationService.decodeResponse(res);
           this.rows = [];
           this.rows = pagedData.data;
           this.rows = pagedData.data;
@@ -213,17 +213,17 @@ export class OrderListComponent implements OnInit, OnDestroy {
   }
 
   addRow() {
-    let row = this.rows[1];
+    const row = this.rows[1];
     console.log('add row', row);
 
-    let rows = [...this.rows];
+    const rows = [...this.rows];
     // rows.push(row);
     rows.splice(0, 0, row);
     this.rows = [...rows];
   }
   deleteRow(row, rowIndex) {
     console.log('delete index', rowIndex);
-    let rows = [...this.rows];
+    const rows = [...this.rows];
     rows.splice(rowIndex, 1);
     this.rows = [...rows];
   }
@@ -248,7 +248,6 @@ export class OrderListComponent implements OnInit, OnDestroy {
     console.log('Detail Toggled', event);
   }
 
-  //selected-bar
   deselectAll() {
     this.selected = [];
     this.hasSelectedOrders = false;

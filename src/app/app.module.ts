@@ -16,6 +16,8 @@ import { AlphaModule } from './alpha/alpha.module';
 import { BasicModule } from './basic/basic.module';
 import { RoutesModule } from './routes/routes.module';
 import { ApiHeaderInterceptor } from './alpha/services/interceptor/api-header.interceptor';
+
+import { AuthService } from './alpha/services';
 @NgModule({
   declarations: [AppComponent],
   imports: [
@@ -35,9 +37,11 @@ import { ApiHeaderInterceptor } from './alpha/services/interceptor/api-header.in
       useClass: ApiHeaderInterceptor,
       multi: true
     },
+
     FuseSplashScreenService,
     FuseConfigService,
-    FuseNavigationService
+    FuseNavigationService,
+    AuthService,
   ],
   bootstrap: [AppComponent]
 })

@@ -1,6 +1,8 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { SharedModule } from '../core/modules/shared.module';
+import { UserSettingComponent } from './user-setting/user-setting.component';
+import { PluginsComponent } from './plugins/plugins.component';
 
 // components
 import * as fromComponents from './components';
@@ -16,7 +18,9 @@ import { AuthGuard } from '../alpha/services/guard/auth.guard';
   ],
   declarations: [
     ...fromComponents.components,
-    ...fromContainers.containers
+    ...fromContainers.containers,
+    UserSettingComponent,
+    PluginsComponent,
   ],
   exports: [
     ...fromComponents.components,
