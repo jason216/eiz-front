@@ -29,7 +29,7 @@ import { AuthService } from './alpha/services';
     FuseMainModule,
     RoutesModule,
     AlphaModule.forRoot(),
-    BasicModule
+    BasicModule,
   ],
   providers: [
     {

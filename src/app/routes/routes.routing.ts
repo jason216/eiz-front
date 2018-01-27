@@ -6,7 +6,6 @@ import { UserSettingComponent } from '../basic/user-setting/user-setting.compone
 import { PageNotFoundComponent } from './error/page-not-found/page-not-found.component';
 import { FuseMainComponent } from '../main/main.component';
 import { AuthGuard } from '../alpha/services/guard/auth.guard';
-import { PluginsComponent } from '../basic/plugins/plugins.component';
 
 const routes: Routes = [
   {
@@ -29,7 +28,7 @@ const routes: Routes = [
   },
   {
     path: 'plugins',
-    component: PluginsComponent,
+    loadChildren: './../basic/plugins/plugins.module#PluginsModule',
     canActivate: [AuthGuard]
   },
   {

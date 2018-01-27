@@ -1,0 +1,101 @@
+<div id="academy-plugins" class="page-layout simple" fusePerfectScrollbar>
+
+    <!-- HEADER -->
+    <div class="header mat-accent-bg p-16 p-sm-24" fxLayout="column" fxLayoutAlign="center center">
+
+        <div class="hero-text">
+            <mat-icon class="hero-icon">school</mat-icon>
+            <h1>Plugins</h1>
+            <h3>
+                Our plugins will step you through the process of building a small application, or adding a new feature
+                to an existing application.
+            </h3>
+        </div>
+
+    </div>
+    <!-- / HEADER -->
+
+    <!-- CONTENT -->
+    <div class="content p-24">
+
+        <div fxLayout="column" fxLayoutAlign="center">
+
+            <div class="filters" fxLayout="column" fxLayoutAlign="center center"
+                 fxLayout.gt-xs="row" fxLayoutAlign.gt-xs="space-between center">
+
+                <mat-form-field class="plugin-search">
+
+                    <input matInput placeholder="Search for a plugin" [(ngModel)]="searchTerm"
+                           (input)="filterpluginsByTerm()">
+
+                </mat-form-field>
+
+                <mat-form-field class="category-selector">
+
+                    <mat-select placeholder="Select Category" [(ngModel)]="currentCategory"
+                                (change)="filterpluginsByCategory()">
+                        <mat-option [value]="'all'">
+                            All
+                        </mat-option>
+                        <mat-option *ngFor="let category of categories" [value]="category.value">
+                            {{ category.label }}
+                        </mat-option>
+                    </mat-select>
+
+                </mat-form-field>
+
+            </div>
+
+            <div class="plugins" fxLayout="row" fxLayoutAlign="center" fxLayoutWrap>
+
+                <div class="plugin" *ngFor="let plugin of filteredplugins" fxFlex="100" fxFlex.gt-xs="50"
+                     fxFlex.gt-sm="33" [ngClass]="plugin.name">
+
+                    <div class="plugin-content" fxLayout="column">
+
+                        <div class="header" fxLayout="row" fxLayoutAlign="center center"
+                             [ngClass]="plugin.name + '-bg'">
+
+                            <div class="category" fxFlex>
+                                {{plugin.title}}
+                            </div>
+
+                            <div class="length" fxLayout="row" fxLayoutAlign="center center">
+                                <mat-icon class="length-icon s-20">attach_money</mat-icon>
+                                <div class="min">{{plugin.fee}}</div>
+                            </div>
+
+                        </div>
+
+                        <div class="content" fxLayout="column" fxLayoutAlign="center center" fxFlex>
+                            <div class="h1">{{plugin.title}}</div>
+                            <div class="updated">{{plugin.description}}</div>
+                        </div>
+
+                        <div class="footer" fxLayout="row" fxLayoutAlign="center center">
+                            <button mat-button color="accent" *ngIf="!plugin.subscribed"
+                                    [routerLink]="'/apps/academy/plugins/' + plugin.id + '/' + plugin.name">
+                                Subscribe
+                            </button>
+                            <button mat-button color="accent" *ngIf="plugin.subscribed"
+                                    [routerLink]="'/apps/academy/plugins/' + plugin.id + '/' + plugin.name" disabled>
+                                Subscribed
+                            </button>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="no-plugins" *ngIf="filteredplugins.length === 0">
+                    No plugins found!
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+    <!-- / CONTENT -->
+
+</div>
