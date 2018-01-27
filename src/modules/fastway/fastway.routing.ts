@@ -2,8 +2,6 @@
 import { Routes, RouterModule } from '@angular/router';
 import { ModuleWithProviders } from '@angular/core';
 
-// containers
-import * as fromFulfillmentsContainers from './containers';
 
 
 const routes: Routes = [

@@ -2,13 +2,13 @@ import { Component, Input, Output, OnInit, OnDestroy, ViewChild, TemplateRef, El
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { TableColumn, ColumnMode } from '@swimlane/ngx-datatable';
 import { FulfillmentsService, PaginationService } from '../../../../app/alpha/services/index';
-import { Page } from '../../../../app/alpha/models/page.model';
-import "rxjs/add/operator/takeWhile";
+import 'rxjs/add/operator/takeWhile';
 
 @Component({
-  selector: "fulfillments-all",
-  templateUrl: "./fulfillments-all.component.html",
-  styleUrls: ["./fulfillments-all.component.scss"]
+  // tslint:disable-next-line:component-selector
+  selector: 'fastway-subscribe',
+  templateUrl: './fulfillments-all.component.html',
+  styleUrls: ['./fulfillments-all.component.scss']
 })
 export class FulfillmentsAllComponent implements OnInit, OnDestroy {
   private startSubscribe: boolean = true;
@@ -16,8 +16,8 @@ export class FulfillmentsAllComponent implements OnInit, OnDestroy {
   rows: any[] = [];
   columnsRef: any[] = [];
   page = new Page();
-  @ViewChild("myTable") table: any;
-  @ViewChild("cellActionTmpl") cellActionTmpl: TemplateRef<any>;
+  @ViewChild('myTable') table: any;
+  @ViewChild('cellActionTmpl') cellActionTmpl: TemplateRef<any>;
   @ViewChild('cellEditTextTmpl') cellEditTextTmpl: TemplateRef<any>;
 
   constructor(
