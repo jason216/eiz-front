@@ -1,0 +1,7 @@
+<h1 mat-dialog-title>Despatch</h1>
+
+<div mat-dialog-content>
+  <div fxLayout="row wrap" fxLayoutAlign="start left">
+      <fulfillmentDespatch-form (onDespatched)=closeDialog($event) [consignment_id] = 'consignment_id'></fulfillmentDespatch-form>
+  </div>
+</div>

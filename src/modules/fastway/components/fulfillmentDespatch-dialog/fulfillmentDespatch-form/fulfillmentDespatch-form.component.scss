@@ -1,0 +1,32 @@
+@import "src/app/core/scss/fuse";
+
+:host{
+  width: 100%;
+  .fulfillments-form-container {
+    width: 100%;
+    .form-wrapper{
+    @include mat-elevation(2);
+    .order-info{
+      padding: 12px;
+    }
+    @include mat-elevation(2);
+    .parcel-forms{
+      padding:12px;
+    }
+    }
+  }
+  .fulfillments-form-footer {
+    .summary-wrapper {
+      @include mat-elevation(2);
+      .summary-inner {
+        width: 100%;
+        height: 56px;
+        line-height: 56px;
+        padding: 12px;
+        .summary-total {
+          float: right;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,51 @@
+<div class="fulfillments-form-container" fxLayout="row" fxLayoutAlign="start start">
+  <div *ngIf="order" class="form-wrapper m-12 " fxFlex="30" fxLayout="row" fxLayoutAlign="start center">
+    <div class="order-info" fxFlex>
+      <div *ngFor="let orderline of order.orderlines">
+        {{orderline.quantity | json}} X {{orderline.itemtitle | json}}
+      </div>
+    </div>
+  </div>
+
+  <div class="form-wrapper m-12" fxFlex fxLayout="row" fxLayoutAlign="start center">
+    <div class="parcel-forms" fxFlex fxFlexFill>
+      <mat-tab-group class="w-100-p">
+        <mat-tab class="w-100-p" label="Parcel {{consignment.id}}" *ngFor="let consignment of consignments; let i = index">
+          {{ consignment | json }}
+          <parcel-quote-form [consignment]="consignment" *ngIf="consignment" (onUpdated)="updateConsignments(event)"></parcel-quote-form>
+        </mat-tab>
+        <mat-tab class="w-100-p" disabled>
+          <ng-template mat-tab-label>
+            <button (click)="newParcelTab()"> + </button>
+          </ng-template>
+        </mat-tab>
+      </mat-tab-group>
+
+    </div>
+  </div>
+</div>
+
+<div class="fulfillments-form-footer" fxLayout="row" fxLayoutAlign="start center">
+
+  <div class="summary-wrapper m-12" fxFlex fxLayout="row" fxLayoutAlign="start center">
+
+    <div class="summary-inner mat-white-bg" flex fxLayout="row" fxLayoutAlign="space-between center">
+      <div class="summary-actions">
+        <button mat-raised-button (click)="saveFulfillment()">
+          Save
+        </button>
+        <button mat-raised-button>
+          Save & get Label
+        </button>
+        <button mat-raised-button (click)="cancelFulfillment()">
+          Cancel
+        </button>
+      </div>
+
+      <div class="summary-total">
+        Total: $ {{totalCost}}
+      </div>
+    </div>
+  </div>
+
+</div>

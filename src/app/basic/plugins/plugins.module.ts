@@ -1,14 +1,13 @@
 import { NgModule } from '@angular/core';
 import { SharedModule } from '../../core/modules/shared.module';
-import { RouterModule } from '@angular/router';
+import { Routes, RouterModule } from '@angular/router';
 
 import { PluginsComponent } from './plugins/plugins.component';
-import { PluginComponent } from './pugin/plugin.component';
-import { PluginService } from './plugin.service';
+import { SubscribePluginComponent } from './subscribePugin/subscribePlugin.component';
 import { PluginsService } from './plugins.service';
 import { ApiService } from '../../alpha/services/api.service';
 
-const routes = [
+const routes: Routes = [
     {
         path     : '',
         component: PluginsComponent,
@@ -17,11 +16,14 @@ const routes = [
         }
     },
     {
-        path     : 'plugins/:courseId/:courseSlug',
-        component: PluginComponent,
-        resolve  : {
-            academy: PluginService
-        }
+        path     : 'subscribe',
+        component: SubscribePluginComponent,
+        children: [
+          {
+            path: 'fulfillments',
+            loadChildren: '../../../modules/fulfillments/fulfillments.module#FulfillmentsModule',
+          }
+        ]
     },
     {
         path      : '**',
@@ -36,10 +38,9 @@ const routes = [
     ],
     declarations: [
       PluginsComponent,
-      PluginComponent
+      SubscribePluginComponent,
     ],
     providers   : [
-      PluginService,
       PluginsService,
       ApiService
     ]
