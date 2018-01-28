@@ -6,15 +6,9 @@ import { PluginsComponent } from './plugins/plugins.component';
 import { SubscribePluginComponent } from './subscribePugin/subscribePlugin.component';
 import { PluginsService } from './plugins.service';
 import { ApiService } from '../../alpha/services/api.service';
+import { PluginService } from './plugin.service';
 
 const routes: Routes = [
-    {
-        path     : '',
-        component: PluginsComponent,
-        resolve  : {
-            academy: PluginsService
-        }
-    },
     {
         path     : 'subscribe',
         component: SubscribePluginComponent,
@@ -22,8 +16,19 @@ const routes: Routes = [
           {
             path: 'fulfillments',
             loadChildren: '../../../modules/fulfillments/fulfillments.module#FulfillmentsModule',
-          }
+          },
+          {
+            path: 'Fastway',
+            loadChildren: '../../../modules/fastway/fastway.module#FastwayModule',
+          },
         ]
+    },
+    {
+      path      : '',
+      component: PluginsComponent,
+      resolve  : {
+          academy: PluginsService
+      }
     },
     {
         path      : '**',
@@ -42,7 +47,8 @@ const routes: Routes = [
     ],
     providers   : [
       PluginsService,
-      ApiService
+      ApiService,
+      PluginService,
     ]
 })
 export class PluginsModule

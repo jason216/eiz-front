@@ -34,7 +34,7 @@ export class FulfillmentDespatchFormComponent implements OnInit, OnDestroy {
   }
 
   despatch(){
-    this.apiService.post('Fulfillments', 'despatch/'.concat(this.consignment_id), {'trackingNumber': this.trackingNumber.value}).subscribe(
+    this.apiService.post('Fulfillments', 'despatch/'.concat(this.consignment_id), null, {'trackingNumber': this.trackingNumber.value}).subscribe(
       res => {
         this.onDespatched.emit({
           'trackingNumber' : this.trackingNumber.value,

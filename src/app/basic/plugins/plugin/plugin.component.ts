@@ -1,5 +1,4 @@
 import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, QueryList, ViewChildren, ViewEncapsulation } from '@angular/core';
-import { PluginService } from '../plugin.service';
 import { Subscription } from 'rxjs/Subscription';
 import { FusePerfectScrollbarDirective } from '../../../core/directives/fuse-perfect-scrollbar/fuse-perfect-scrollbar.directive';
 import { fuseAnimations } from '../../../core/animations';
@@ -21,7 +20,6 @@ export class PluginComponent implements OnInit, OnDestroy, AfterViewInit
     @ViewChildren(FusePerfectScrollbarDirective) fuseScrollbarDirectives: QueryList<FusePerfectScrollbarDirective>;
 
     constructor(
-        private courseService: PluginService,
         private changeDetectorRef: ChangeDetectorRef
     )
     {
@@ -30,12 +28,7 @@ export class PluginComponent implements OnInit, OnDestroy, AfterViewInit
 
     ngOnInit()
     {
-        // Subscribe to courses
-        this.courseSubscription =
-            this.courseService.onCourseChanged
-                .subscribe(course => {
-                    this.course = course;
-                });
+
     }
 
     ngAfterViewInit()

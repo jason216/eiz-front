@@ -8,6 +8,8 @@ import { AlphaModule } from '../../app/alpha/alpha.module';
 // routing
 import { routing } from './fastway.routing';
 
+import { SubscribeComponent } from './containers/subscribe/subscribe.component';
+
 
 
 @NgModule({
@@ -19,7 +21,7 @@ import { routing } from './fastway.routing';
     AlphaModule,
   ],
   declarations: [
-
+    SubscribeComponent
   ],
   exports: [
 
@@ -29,7 +31,7 @@ import { routing } from './fastway.routing';
   ]
 })
 
-export class FulfillmentsModule {}
+export class FastwayModule {}
 
 
 

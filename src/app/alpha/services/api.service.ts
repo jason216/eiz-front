@@ -14,13 +14,16 @@ export class ApiService {
   constructor(private httpClient: HttpClient) {
     this.url = environment.apiUrl;
   }
-  public get(endpoint: string, target: string, params?: string): Observable<any> {
+  public get(endpoint: string, target: string, param?: string, query?: string): Observable<any> {
 
     let resourceUrl = this.url + '/' + endpoint + '/' + target;
+    if (param){
+      resourceUrl += '/' + param;
+    }
     let httpParams: HttpParams;
-    if (params) {
-      httpParams = new HttpParams({fromString: params});
-      resourceUrl = this.url + '/' + endpoint + '/' + target + '?' + params;
+    if (query) {
+      httpParams = new HttpParams({fromString: query});
+      resourceUrl = this.url + '/' + endpoint + '/' + target + '/' + param + '?' + query;
     }
 
     if (endpoint === 'auth') {
@@ -33,12 +36,17 @@ export class ApiService {
       .catch((error: any) => this.handleError(error));
   }
 
-  public post(endpoint: string, target: string, data?: any): Observable<any> {
+  public post(endpoint: string, target: string, param?: string, data?: any): Observable<any> {
 
     let resourceUrl = this.url + '/' + endpoint + '/' + target;
     if (endpoint === 'auth') {
       resourceUrl = this.url + '/' + target;
     }
+
+    if (param){
+      resourceUrl += '/' + param;
+    }
+
     ++this.activeRequests;
 
     return this.httpClient
@@ -46,6 +54,25 @@ export class ApiService {
       .catch((error: HttpErrorResponse) => this.handleError(error));
       //      .pipe(catchError((error: HttpErrorResponse) => this.handleError(error)));
   }
+
+  public put(endpoint: string, target: string, param?: string, data?: any): Observable<any> {
+
+    let resourceUrl = this.url + '/' + endpoint + '/' + target;
+    if (endpoint === 'auth') {
+      resourceUrl = this.url + '/' + target;
+    }
+
+    if (param){
+      resourceUrl += '/' + param;
+    }
+
+    ++this.activeRequests;
+
+    return this.httpClient
+            .put(resourceUrl, data)
+      .catch((error: HttpErrorResponse) => this.handleError(error));
+  }
+
   private handleError(error: HttpErrorResponse) {
     error = error.error;
     let errMsg = (error.message) ? error.message : error.status ? `${error.status} - ${error.statusText}` : 'Server error' ;

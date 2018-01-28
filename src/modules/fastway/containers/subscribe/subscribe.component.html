@@ -1,115 +1,67 @@
-<div class="page-layout carded left-sidenav tabbed" fusePerfectScrollbar>
+<div style="margin-left: 10px;">
+  <mat-horizontal-stepper [linear]="isLinear">
+    <mat-step>
+      <ng-template matStepLabel>Requirements</ng-template>
+      <strong>The following information is needed to success subscribe and activate the plugin:</strong>
+      <p>
+        Active Fastway Account<br/>
+        Fastway API key<br/>
+        Labels and their prices
+      </p>
+      <p><mat-checkbox [(ngModel)]="requirementCheck">I have all required information</mat-checkbox></p>
 
-  <!-- TOP BACKGROUND -->
-  <div class="top-bg mat-accent-bg"></div>
-  <!-- / TOP BACKGROUND -->
-
-  <mat-sidenav-container>
-
-    <!-- SIDENAV -->
-    <mat-sidenav class="sidenav" align="start" opened="true" mode="side" fuseMatSidenavHelper="carded-left-sidenav" mat-is-locked-open="gt-md">
-
-      <!-- SIDENAV HEADER -->
-      <div class="header p-24" ngClass="mat-accent-bg" ngClass.gt-md="white-fg">
-        <h2>Fulfillments</h2>
+      <div style="margin-top: 20px;"><button mat-button matStepperNext *ngIf="requirementCheck" mat-raised-button color="accent">Next</button></div>
+    </mat-step>
+    <mat-step [stepControl]="apiKeyFormGroup">
+        <form [formGroup]="apiKeyFormGroup">
+          <ng-template matStepLabel>API KEY</ng-template>
+          <mat-form-field>
+            <input matInput placeholder="Fastway API KEY" formControlName="apiKey" required>
+          </mat-form-field>
+          <div>
+            <button mat-button matStepperNext mat-raised-button color="accent">Next</button>
+          </div>
+        </form>
+      </mat-step>
+    <mat-step [stepControl]="shippingMethodsFormGroup">
+      <div [formGroup]="shippingMethodsFormGroup">
+        <ng-template matStepLabel>Select Labels</ng-template>
+        <mat-selection-list #list [(ngModel)]="selectedOptions" formControlName="shippingMethodsSelected">
+            <mat-list-option *ngFor="let shippingMethod of shippingMethods" [value]="shippingMethod">
+              {{shippingMethod.name}}
+            </mat-list-option>
+        </mat-selection-list>
       </div>
-      <!-- / SIDENAV HEADER -->
-
-      <!-- SIDENAV CONTENT -->
-      <div class="content p-24" fusePerfectScrollbar>
-
-        <div class="demo-sidenav">
-          <mat-list>
-            <h3 matSubheader>Couriers</h3>
-
-            <mat-list-item>
-              <button mat-menu-item> Fastway </button>
-            </mat-list-item>
-
-            <mat-divider></mat-divider>
-
-            <mat-list-item>
-              <button mat-menu-item> eParcel </button>
-            </mat-list-item>
-
-          </mat-list>
+        <div>
+          <button mat-button matStepperNext mat-raised-button color="accent">Next</button>
         </div>
-
-      </div>
-      <!-- / SIDENAV CONTENT -->
-
-    </mat-sidenav>
-    <!-- / SIDENAV -->
-
-    <!-- CENTER -->
-    <div class="center">
-
-      <!-- CONTENT HEADER -->
-      <div class="header white-fg p-24">
-
-        <div fxLayout="row" fxLayoutAlign="start center">
-
-          <button mat-button class="mat-icon-button sidenav-toggle mr-8" fuseMatSidenavToggler="carded-left-sidenav" fxHide.gt-md>
-            <mat-icon>menu</mat-icon>
-          </button>
-
-          <h2>Your fulfillments</h2>
-
+    </mat-step>
+    <mat-step [stepControl]="shippingMethodsPriceFormGroup">
+        <div [formGroup]="shippingMethodsPriceFormGroup">
+          <ng-template matStepLabel>Setup Price</ng-template>
+            <table>
+              <tr *ngFor="let shippingMethod of selectedOptions">
+                <td style="width: 200px;">{{shippingMethod?.name}}</td>
+                <td><mat-form-field>
+                <span matPrefix>$&nbsp;</span>
+                <input matInput placeholder="Label Price" formControlName="price" [(ngModel)]="shippingMethod.accountSettings.price" type="number">
+                <span matSuffix>/each&nbsp;</span>
+                </mat-form-field></td>
+              </tr>
+            </table>
         </div>
+          <div>
+            <button mat-button matStepperNext mat-raised-button color="accent">Next</button>
+          </div>
 
+      </mat-step>
+    <mat-step>
+      <ng-template matStepLabel>Finished</ng-template>
+      Your initial setup has complete. You can now click subscribe to start subscription.
+      <div>
+        <button mat-button mat-raised-button color="warn" (click)="submitSubscribe()">SUBSCRIBE</button>
+        <!-- <button mat-button matStepperPrevious>Back</button> -->
       </div>
-      <!-- / CONTENT HEADER -->
-
-      <!-- CONTENT CARD -->
-      <div class="content-card mat-white-bg">
-
-        <!-- CONTENT -->
-        <div class="content">
-
-          <ngx-datatable fxFlex="100" #myTable class='material fullscreen expandable' [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50"
-            [rowHeight]="auto" [rows]=rows [columns]=columnsRef [externalPaging]="true" [count]="page.totalElements" [offset]="page.pageNumber" [limit]="page.size"
-          (page)='setPage($event)'>
-
-            <ng-template #cellEditTextTmpl let-rowIndex="rowIndex" let-column="column" let-value="value" let-row="row" ngx-datatable-cell-template>
-              <!-- <span title="Double click to edit" *ngIf="!editing[rowIndex]">
-                          {{value}}
-                        </span> -->
-              <!-- <mat-form-field class="example-full-width" *ngIf="editing[rowIndex]"> -->
-              <mat-form-field class="example-full-width">
-                <input matInput [value]="value" (change)="updateValue($event, column.prop, rowIndex)" (blur)="updateValue($event, column.prop, rowIndex)"
-                  (keyup)="updateValue($event, column.prop, rowIndex)">
-              </mat-form-field>
-            </ng-template>
-
-            <ng-template #cellActionTmpl let-row="row" let-value="value" let-rowIndex="rowIndex" ngx-datatable-cell-template>
-              <mat-button-toggle-group #group="matButtonToggleGroup">
-                <mat-button-toggle value="left" (click)="addRow()">
-                  <mat-icon>add</mat-icon>
-                </mat-button-toggle>
-                <!-- <mat-button-toggle value="left" (click)="editing[rowIndex]=true" >
-                            Edit
-                          </mat-button-toggle>
-                          <mat-button-toggle value="center" (click)="editing[rowIndex]=false">
-                            Save
-                          </mat-button-toggle> -->
-                <mat-button-toggle value="right" (click)="deleteRow(row,rowIndex)">
-                  <mat-icon>delete</mat-icon>
-                </mat-button-toggle>
-              </mat-button-toggle-group>
-
-            </ng-template>
-
-          </ngx-datatable>
-
-        </div>
-        <!-- / CONTENT -->
-
-      </div>
-      <!-- / CONTENT CARD -->
-
-    </div>
-    <!-- / CENTER -->
-
-  </mat-sidenav-container>
-
+    </mat-step>
+  </mat-horizontal-stepper>
 </div>

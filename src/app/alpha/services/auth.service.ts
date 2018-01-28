@@ -44,7 +44,7 @@ export class AuthService {
   }
 
   public login(username: string, password: string ) {
-    return this.apiService.post('auth', 'auth', { email: username, password: password }).map(
+    return this.apiService.post('auth', 'auth', null, { email: username, password: password }).map(
       res => {
         if (res['data']) {
           this.setSession(res['data']);

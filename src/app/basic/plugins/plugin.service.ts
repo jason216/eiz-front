@@ -1,49 +1,32 @@
-import { Injectable } from '@angular/core';
+import { ApiService } from './../../alpha/services/api.service';
+import { Injectable, Output } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
-import { Observable } from 'rxjs/Observable';
-import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 @Injectable()
-export class PluginService implements Resolve<any>
-{
-    onCourseChanged: BehaviorSubject<any> = new BehaviorSubject({});
-
-    constructor(private http: HttpClient)
+export class PluginService{
+    plugin;
+    onPluginLoaded: BehaviorSubject<any> = new BehaviorSubject({});
+    constructor(private apiService: ApiService)
     {
+
     }
 
-    /**
-     * The Academy App Main Resolver
-     *
-     * @param {ActivatedRouteSnapshot} route
-     * @param {RouterStateSnapshot} state
-     * @returns {Observable<any> | Promise<any> | any}
-     */
-    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> | Promise<any> | any
-    {
-        return new Promise((resolve, reject) => {
-
-            Promise.all([
-                this.getCourse(route.params.courseId, route.params.courseSlug)
-            ]).then(
-                () => {
-                    resolve();
-                },
-                reject
-            );
-        });
+    loadByName(name: string){
+      console.log(name);
+      this.apiService.get('account', 'allPlugins', name).subscribe(
+        (res) => {
+          this.plugin = res.data;
+          this.onPluginLoaded.next(this.plugin);
+        }
+      );
     }
 
-    getCourse(courseId, courseSlug): Promise<any>
-    {
-        return new Promise((resolve, reject) => {
-            this.http.get('api/academy-course/' + courseId + '/' + courseSlug)
-                .subscribe((response: any) => {
-                    this.onCourseChanged.next(response);
-                    resolve(response);
-                }, reject);
-        });
+    subscribePlugin(){
+      return this.apiService.put('account', 'subscribePlugin', this.plugin['id']).map(
+        (res) => {
+          console.log(res);
+        }
+      );
     }
-
 }

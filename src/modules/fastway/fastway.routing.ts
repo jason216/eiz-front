@@ -1,22 +1,15 @@
 
 import { Routes, RouterModule } from '@angular/router';
 import { ModuleWithProviders } from '@angular/core';
+import { SubscribeComponent } from './containers/subscribe/subscribe.component';
 
 
 
 const routes: Routes = [
   {
-    path: 'all',
-    component: fromFulfillmentsContainers.FulfillmentsAllComponent
+    path: 'subscribe',
+    component: SubscribeComponent
   },
-  {
-    path: 'new',
-    component: fromFulfillmentsContainers.FulfillmentsNewComponent
-  },
-  {
-    path: 'despatch',
-    component: fromFulfillmentsContainers.FulfillmentsDespatchComponent
-  }
 ];
 
 export const routing: ModuleWithProviders = RouterModule.forChild(routes);

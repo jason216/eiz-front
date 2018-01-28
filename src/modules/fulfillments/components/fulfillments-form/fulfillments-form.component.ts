@@ -1,5 +1,5 @@
 import { FulfillmentsService } from './../../../../app/alpha/services/fulfillments.service';
-import { Consignment } from "./../../../../app/alpha/models/consignment.model";
+import { Consignment } from './../../../../app/alpha/models/consignment.model';
 import {
   Component,
   Input,
@@ -10,16 +10,17 @@ import {
   TemplateRef,
   ElementRef,
   EventEmitter
-} from "@angular/core";
-import { FormBuilder, FormGroup, FormControl } from "@angular/forms";
-import { TableColumn, ColumnMode } from "@swimlane/ngx-datatable";
-import { ConsignmentsService } from "../../../../app/alpha/services/index";
-import { Receiver } from "./../../../../app/alpha/models/Receiver.model";
+} from '@angular/core';
+import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
+import { TableColumn, ColumnMode } from '@swimlane/ngx-datatable';
+import { ConsignmentsService } from '../../../../app/alpha/services/index';
+import { Receiver } from './../../../../app/alpha/models/Receiver.model';
 
 @Component({
-  selector: "fulfillments-form",
-  templateUrl: "./fulfillments-form.component.html",
-  styleUrls: ["./fulfillments-form.component.scss"]
+  // tslint:disable-next-line:component-selector
+  selector: 'fulfillments-form',
+  templateUrl: './fulfillments-form.component.html',
+  styleUrls: ['./fulfillments-form.component.scss']
 })
 export class FulfillmentsFormComponent implements OnInit, OnDestroy {
   @Input() order: any;
@@ -33,18 +34,18 @@ export class FulfillmentsFormComponent implements OnInit, OnDestroy {
 
   totalCost = 0;
   defaultConsignment = {
-    shippingMethod_id: "1",
-    shipTo_ref: "1",
-    shipTo_name: "1",
-    shipTo_companyName: "1",
-    shipTo_phone: "1",
-    shipTo_email: "1",
-    shipTo_address1: "1",
-    shipTo_suburb: "1",
-    shipTo_state: "1",
-    shipTo_postcode: "1",
-    shipTo_country: "1",
-    shipTo_instruction1: "1",
+    shippingMethod_id: '1',
+    shipTo_ref: '1',
+    shipTo_name: '1',
+    shipTo_companyName: '1',
+    shipTo_phone: '1',
+    shipTo_email: '1',
+    shipTo_address1: '1',
+    shipTo_suburb: '1',
+    shipTo_state: '1',
+    shipTo_postcode: '1',
+    shipTo_country: '1',
+    shipTo_instruction1: '1',
     data: [{ qty: 0, length: 0, width: 0, height: 0 }]
   };
 
@@ -88,10 +89,10 @@ export class FulfillmentsFormComponent implements OnInit, OnDestroy {
   }
 
   saveFulfillment() {
-    let data = this.transOrder(this.order);
-    let list = this.transConsignments();
+    const data = this.transOrder(this.order);
+    const list = this.transConsignments();
     data['consignments'] = list;
-    console.log("final result", data);
+    console.log('final result', data);
 
     this.fulfillmentsService.newFulfillment(data);
     this.onCompleted.emit(true);
@@ -118,7 +119,7 @@ export class FulfillmentsFormComponent implements OnInit, OnDestroy {
 
   transConsignments(){
     let newConsignments = [];
-    for (let consignment of this.consignments){
+    for (const consignment of this.consignments){
       newConsignments.push(consignment.transToJson(this.order));
     }
     return newConsignments;
