@@ -118,7 +118,7 @@ export class FulfillmentsFormComponent implements OnInit, OnDestroy {
   }
 
   transConsignments(){
-    let newConsignments = [];
+    const newConsignments = [];
     for (const consignment of this.consignments){
       newConsignments.push(consignment.transToJson(this.order));
     }
