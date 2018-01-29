@@ -15,7 +15,6 @@ import { AuthGuard } from '../alpha/services/guard/auth.guard';
   imports: [
     RouterModule,
     SharedModule,
-    //PluginsModule,
   ],
   declarations: [
     ...fromComponents.components,

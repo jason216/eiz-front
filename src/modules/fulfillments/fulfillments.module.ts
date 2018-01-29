@@ -16,6 +16,7 @@ import * as fromContainers from './containers';
 
 // shared
 import { FulfillmentsFormModule } from './shared/fulfillments-form.module';
+import { ConsignmentsModule } from './containers/consignments/consignmentsModule';
 
 
 @NgModule({
@@ -25,7 +26,8 @@ import { FulfillmentsFormModule } from './shared/fulfillments-form.module';
     routing,
     BasicModule,
     AlphaModule,
-    FulfillmentsFormModule
+    FulfillmentsFormModule,
+    ConsignmentsModule,
   ],
   declarations: [
     fromComponents.components,

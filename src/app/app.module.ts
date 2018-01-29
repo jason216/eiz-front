@@ -10,6 +10,7 @@ import { FuseSplashScreenService } from './core/services/splash-screen.service';
 import { FuseConfigService } from './core/services/config.service';
 import { FuseNavigationService } from './core/components/navigation/navigation.service';
 import { TranslateModule } from '@ngx-translate/core';
+import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 
 // ours
 import { AlphaModule } from './alpha/alpha.module';
@@ -30,6 +31,7 @@ import { AuthService } from './alpha/services';
     RoutesModule,
     AlphaModule.forRoot(),
     BasicModule,
+    NgxDatatableModule
   ],
   providers: [
     {

@@ -18,6 +18,10 @@ const routes: Routes = [
   {
     path: 'despatch',
     component: fromFulfillmentsContainers.FulfillmentsDespatchComponent
+  },
+  {
+    path: 'consignments',
+    loadChildren: './containers/consignments/consignmentsModule#ConsignmentsModule'
   }
 ];
 
