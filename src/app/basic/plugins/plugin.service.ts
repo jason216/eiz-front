@@ -13,7 +13,6 @@ export class PluginService{
     }
 
     loadByName(name: string){
-      console.log(name);
       this.apiService.get('account', 'allPlugins', name).subscribe(
         (res) => {
           this.plugin = res.data;

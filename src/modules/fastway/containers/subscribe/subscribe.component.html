@@ -10,7 +10,7 @@
       </p>
       <p><mat-checkbox [(ngModel)]="requirementCheck">I have all required information</mat-checkbox></p>
 
-      <div style="margin-top: 20px;"><button mat-button matStepperNext *ngIf="requirementCheck" mat-raised-button color="accent">Next</button></div>
+      <div style="margin-top: 20px;"><button mat-button matStepperNext [disabled]="!requirementCheck" mat-raised-button color="accent">Next</button></div>
     </mat-step>
     <mat-step [stepControl]="apiKeyFormGroup">
         <form [formGroup]="apiKeyFormGroup">
@@ -18,8 +18,9 @@
           <mat-form-field>
             <input matInput placeholder="Fastway API KEY" formControlName="apiKey" required>
           </mat-form-field>
+          <button mat-button mat-raised-button color="accent" (click)="validateApiToken()">Validate</button>
           <div>
-            <button mat-button matStepperNext mat-raised-button color="accent">Next</button>
+            <button mat-button matStepperNext mat-raised-button color="accent" [disabled]="!generalSettings">Next</button>
           </div>
         </form>
       </mat-step>

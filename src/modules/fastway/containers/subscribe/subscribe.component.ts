@@ -21,8 +21,11 @@ export class SubscribeComponent implements OnInit, OnDestroy {
   shippingMethodsFormGroup: FormGroup;
   shippingMethodsPriceFormGroup: FormGroup;
   onPluginLoaded: Subscription;
+  userID: string;
 
   shippingMethods: [any];
+
+  generalSettings: any;
 
   selectedOptions;
 
@@ -60,6 +63,15 @@ export class SubscribeComponent implements OnInit, OnDestroy {
     this.onPluginLoaded.unsubscribe();
   }
 
+  validateApiToken(){
+    this.apiService.get('publicPlugin', 'Fastway', 'validate', {'apiKey': this.apiKeyFormGroup.get('apiKey').value}).subscribe(
+      (res) => {
+        this.generalSettings = res.data;
+        this.generalSettings.apiKey = this.apiKeyFormGroup.get('apiKey').value;
+      }
+    );
+  }
+
   submitSubscribe(){
     this.selectedOptions.forEach(element => {
       element.subscribed = true;
@@ -73,7 +85,7 @@ export class SubscribeComponent implements OnInit, OnDestroy {
     this.pluginService.subscribePlugin().subscribe(
       (res) => {
         this.apiService.put('Fastway', 'settings', null, {
-          'general': {apiKey: this.apiKeyFormGroup.get('apiKey').value},
+          'general': this.generalSettings,
           'shippingMethods': this.selectedOptions
         }).subscribe(
           (settings_res) => {

@@ -43,8 +43,4 @@ export class SubscribePluginComponent implements OnInit, OnDestroy, AfterViewIni
     ngOnDestroy(): void {
 
     }
-
-    componentAdded(event){
-      console.log(event);
-    }
 }

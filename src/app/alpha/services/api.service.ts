@@ -14,17 +14,17 @@ export class ApiService {
   constructor(private httpClient: HttpClient) {
     this.url = environment.apiUrl;
   }
-  public get(endpoint: string, target: string, param?: string, query?: string): Observable<any> {
+  public get(endpoint: string, target: string, param?: string, query?: any): Observable<any> {
 
     let resourceUrl = this.url + '/' + endpoint + '/' + target;
     if (param){
       resourceUrl += '/' + param;
     }
-    let httpParams: HttpParams;
-    if (query) {
-      httpParams = new HttpParams({fromString: query});
-      resourceUrl = this.url + '/' + endpoint + '/' + target + '/' + param + '?' + query;
-    }
+    // let httpParams: HttpParams;
+    // if (query) {
+    //   httpParams = new HttpParams({fromObject: query});
+    //   resourceUrl = this.url + '/' + endpoint + '/' + target + '/' + param + '?' + query;
+    // }
 
     if (endpoint === 'auth') {
       resourceUrl = this.url + '/' + target;
@@ -32,7 +32,7 @@ export class ApiService {
     ++this.activeRequests;
 
     return this.httpClient
-            .get(resourceUrl, {params: httpParams} )
+            .get(resourceUrl, {params: query} )
       .catch((error: any) => this.handleError(error));
   }
 
