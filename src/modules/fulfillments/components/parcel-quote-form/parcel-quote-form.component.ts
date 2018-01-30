@@ -1,7 +1,7 @@
 import { Component, Input, Output, OnInit, OnDestroy, ViewChild, TemplateRef, ElementRef, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { TableColumn, ColumnMode } from '@swimlane/ngx-datatable';
-import { FulfillmentsService, ConsignmentService } from '../../../../app/alpha/services';
+import { FulfillmentsService, ConsignmentService, ApiService } from '../../../../app/alpha/services';
 import { Consignment } from '../../../../app/alpha/models/consignment.model';
 
 
@@ -15,26 +15,10 @@ export class ParcelQuoteFormComponent implements OnInit, OnDestroy {
   private startSubscribe: boolean = true;
   @ViewChild("cellActionTmpl") cellActionTmpl: TemplateRef<any>;
   @ViewChild("cellEditTextTmpl") cellEditTextTmpl: TemplateRef<any>;
-  parcel = '{ "qty": 0, "length": 0, "width": 0, "height": 0}';
+  parcel = '{ "qty": 0, "weight": 0,"length": 0, "width": 0, "height": 0}';
   rows: any[] = [];
   columnsRef: any[] = [];
-  shippingMethods = [
-    {
-      shippingMethod_id: 1,
-      shippingMethod_name: "fastway",
-      shippingMethod_cost: 11
-    },
-    {
-      shippingMethod_id: 2,
-      shippingMethod_name: "fastway2",
-      shippingMethod_cost: 22
-    },
-    {
-      shippingMethod_id: 3,
-      shippingMethod_name: "fastway3",
-      shippingMethod_cost: 33
-    }
-  ];
+  shippingMethods = [];
 
   selectedShippingMethod: any;
   get consignment(): Consignment {
@@ -51,18 +35,25 @@ export class ParcelQuoteFormComponent implements OnInit, OnDestroy {
 
   constructor(
     private consignmentService: ConsignmentService,
-    private fulfillmentsService: FulfillmentsService
+    private fulfillmentsService: FulfillmentsService,
+    private apiService: ApiService,
   ) {}
   ngOnInit() {
     console.log("table data is", this.consignment.data);
 
     this.rows = this.consignment.data;
     this.rows = [...this.rows];
-    //this.rows.push(JSON.parse(this.parcel));
+
     this.columnsRef = [
       {
         prop: "qty",
         name: "Qty",
+        editable: true,
+        cellTemplate: this.cellEditTextTmpl
+      },
+      {
+        prop: "weight",
+        name: "Weight",
         editable: true,
         cellTemplate: this.cellEditTextTmpl
       },
@@ -98,26 +89,17 @@ export class ParcelQuoteFormComponent implements OnInit, OnDestroy {
   }
 
   quotePrices() {
-    // this.fulfillmentsService
-    //   .getConsignment(this.rows)
-    //   .takeWhile(() => this.startSubscribe)
-    //   .subscribe(
-    //     res => {
-    //       let pagedData = this.paginationService.decodeResponse(res);
-    //       this.rows = [];
-    //       this.rows = pagedData.data;
-    //       this.rows = pagedData.data;
-    //       // console.log("after reset page", pagedData.page);
-    //       this.page = pagedData.page;
-    //       // IMPORTANT NOTE: server-side page index start at 1, ngx-datatable page index start at 0
-    //       this.page.pageNumber = this.page.pageNumber - 1;
-    //       // console.log('data', this.rows);
-    //       this.table.recalculate();
-    //     },
-    //     err => {
-    //       console.log(`Error in order-get-orders: ${err}`);
-    //     }
-    //   );
+    this.apiService.post('Fastway', 'quote', null, {'parcels': this.rows, 'suburb': 'ROWVILLE', 'postcode': '3178'}).subscribe(
+      (res) => {
+        res.data.forEach(shippingMethod => {
+          this.shippingMethods.push(    {
+            shippingMethod_id: shippingMethod.shippingMethod.id,
+            shippingMethod_name: shippingMethod.shippingMethod.name,
+            shippingMethod_cost: shippingMethod.amount,
+          });
+        });
+      }
+    );
   }
 
   updateValue(event, cell, rowIndex) {

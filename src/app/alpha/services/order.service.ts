@@ -9,12 +9,12 @@ export class OrderService {
 
   constructor(private apiService: ApiService){}
 
-  public getOrders(params?: string): Observable<any>{
-      return this.apiService.get('orders', 'orders', params);
+  public getOrders(params?: any): Observable<any>{
+      return this.apiService.get('orders', 'orders', null, params);
   }
 
   public newOrder(data: any) {
-    this.apiService.post('orders', 'orders', data).subscribe(
+    this.apiService.post('orders', 'orders', null, data).subscribe(
       res => {
         if (res['data']) {
           console.log('order create return ', res['data']);

@@ -11,7 +11,6 @@
     <div class="parcel-forms" fxFlex fxFlexFill>
       <mat-tab-group class="w-100-p">
         <mat-tab class="w-100-p" label="Parcel {{consignment.id}}" *ngFor="let consignment of consignments; let i = index">
-          {{ consignment | json }}
           <parcel-quote-form [consignment]="consignment" *ngIf="consignment" (onUpdated)="updateConsignments(event)"></parcel-quote-form>
         </mat-tab>
         <mat-tab class="w-100-p" disabled>
@@ -31,10 +30,10 @@
 
     <div class="summary-inner mat-white-bg" flex fxLayout="row" fxLayoutAlign="space-between center">
       <div class="summary-actions">
-        <button mat-raised-button (click)="saveFulfillment()">
+        <button mat-raised-button (click)="saveFulfillment(false)">
           Save
         </button>
-        <button mat-raised-button>
+        <button mat-raised-button (click)="saveFulfillment(true)">
           Save & get Label
         </button>
         <button mat-raised-button (click)="cancelFulfillment()">

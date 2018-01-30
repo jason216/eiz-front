@@ -13,7 +13,7 @@ import {
 } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { TableColumn, ColumnMode } from '@swimlane/ngx-datatable';
-import { ConsignmentsService } from '../../../../app/alpha/services/index';
+import { ConsignmentsService, ApiService } from '../../../../app/alpha/services/index';
 import { Receiver } from './../../../../app/alpha/models/Receiver.model';
 
 @Component({
@@ -46,10 +46,14 @@ export class FulfillmentsFormComponent implements OnInit, OnDestroy {
     shipTo_postcode: '1',
     shipTo_country: '1',
     shipTo_instruction1: '1',
-    data: [{ qty: 0, length: 0, width: 0, height: 0 }]
+    data: [{ qty: 0, weight: 0, length: 0, width: 0, height: 0 }]
   };
 
-  constructor(private consignmentsService: ConsignmentsService, private fulfillmentsService: FulfillmentsService) {
+  constructor(
+    private consignmentsService: ConsignmentsService,
+    private fulfillmentsService: FulfillmentsService,
+    private apiService: ApiService,
+  ) {
     this.parcels = [];
 
     this.parcelIndex = 1;
@@ -88,13 +92,27 @@ export class FulfillmentsFormComponent implements OnInit, OnDestroy {
       });
   }
 
-  saveFulfillment() {
+  saveFulfillment(consolid: boolean) {
     const data = this.transOrder(this.order);
     const list = this.transConsignments();
     data['consignments'] = list;
     console.log('final result', data);
 
-    this.fulfillmentsService.newFulfillment(data);
+    this.fulfillmentsService.newFulfillment(data).subscribe(
+      (res) => {
+        if (consolid){
+          const ids = [];
+          res.data.consignments.forEach(consignment => {
+            ids.push(consignment.id);
+          });
+          this.apiService.post('Fulfillments', 'solidConsignments', null, {'ids': ids}).subscribe(
+            (res_solidate) => {
+
+            }
+          );
+        }
+      }
+    );
     this.onCompleted.emit(true);
     this.consignmentsService.deleteConsignments();
   }

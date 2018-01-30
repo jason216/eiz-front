@@ -5,7 +5,9 @@ import { SharedModule } from '../../../../app/core/modules/shared.module';
 import { FuseMainModule } from '../../../../app/main/main.module';
 import { BasicModule } from '../../../../app/basic/basic.module';
 import { ConsignmentsAllComponent } from './consignments-all/consignments-all.component';
+import { ConsignmentsComponent as ConsignmentsComponent_fastway} from '../../../fastway/containers/consignments/consignments.component';
 import { Routes, RouterModule } from '@angular/router';
+import { ConsignmentsSideNavComponent } from './side-nav/side-nav.component';
 
 const routes: Routes = [
   {
@@ -15,7 +17,11 @@ const routes: Routes = [
       {
         path: '',
         component: ConsignmentsAllComponent,
-      }
+      },
+      {
+        path: 'fastway',
+        component: ConsignmentsComponent_fastway,
+      },
     ]
   },
 ];
@@ -30,6 +36,8 @@ const routes: Routes = [
   declarations: [
     ConsignmentsAllComponent,
     ConsignmentsComponent,
+    ConsignmentsSideNavComponent,
+    ConsignmentsComponent_fastway,
   ],
   exports: [
     RouterModule,

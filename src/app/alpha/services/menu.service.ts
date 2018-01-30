@@ -24,7 +24,7 @@ export class MenuService {
       },
       {
         id: 'fulfillments',
-        children: [{ id: 'fulfillments.all' }, { id: 'fulfillments.new' }, { id: 'fulfillments.despatch' }]
+        children: [{ id: 'fulfillments.consignments' }, { id: 'fulfillments.new' }, { id: 'fulfillments.despatch' }]
       }
     ];
 
