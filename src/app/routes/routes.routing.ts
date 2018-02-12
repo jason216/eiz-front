@@ -18,7 +18,7 @@ const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: 'settings',
+    redirectTo: 'orders/all',
     pathMatch: 'full'
   },
   {
