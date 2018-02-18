@@ -1,0 +1,75 @@
+<div style="margin-left: 10px;">
+  <mat-horizontal-stepper [linear]="isLinear">
+    <mat-step>
+      <ng-template matStepLabel>Requirements</ng-template>
+      <strong>The following information is needed to success subscribe and activate the plugin:</strong>
+      <p>
+        Active eParcel Account<br/>
+        eParcel API key<br/>
+        eParcel API password<br/>
+        eParcel API account number
+      </p>
+      <p><mat-checkbox [(ngModel)]="requirementCheck">I have all required information</mat-checkbox></p>
+
+      <div style="margin-top: 20px;"><button mat-button matStepperNext [disabled]="!requirementCheck" mat-raised-button color="accent">Next</button></div>
+    </mat-step>
+    <mat-step [stepControl]="apiKeyFormGroup">
+        <form [formGroup]="apiKeyFormGroup">
+          <ng-template matStepLabel>API KEY</ng-template>
+          <mat-form-field>
+            <input matInput placeholder="eParcel API KEY" formControlName="apiKey" required><br/>
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput placeholder="eParcel API Password" formControlName="apiPass" required><br/>
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput placeholder="eParcel API Account Number" formControlName="apiAccount" required>
+          </mat-form-field>
+          <button mat-button mat-raised-button color="accent" (click)="validateApiToken()">Validate</button>
+          <div>
+            <button mat-button matStepperNext mat-raised-button color="accent" [disabled]="!generalSettings">Next</button>
+          </div>
+        </form>
+      </mat-step>
+    <mat-step [stepControl]="shippingMethodsFormGroup">
+      <div [formGroup]="shippingMethodsFormGroup">
+        <ng-template matStepLabel>Select Labels</ng-template>
+        <mat-selection-list #list [(ngModel)]="selectedOptions" formControlName="shippingMethodsSelected">
+            <mat-list-option *ngFor="let shippingMethod of shippingMethods" [value]="shippingMethod">
+              {{shippingMethod.name}}
+            </mat-list-option>
+        </mat-selection-list>
+      </div>
+        <div>
+          <button mat-button matStepperNext mat-raised-button color="accent">Next</button>
+        </div>
+    </mat-step>
+    <mat-step [stepControl]="shippingMethodsPriceFormGroup">
+        <div [formGroup]="shippingMethodsPriceFormGroup">
+          <ng-template matStepLabel>Setup Price</ng-template>
+            <table>
+              <tr *ngFor="let shippingMethod of selectedOptions">
+                <td style="width: 200px;">{{shippingMethod?.name}}</td>
+                <td><mat-form-field>
+                <span matPrefix>$&nbsp;</span>
+                <input matInput placeholder="Label Price" formControlName="price" [(ngModel)]="shippingMethod.accountSettings.price" type="number">
+                <span matSuffix>/each&nbsp;</span>
+                </mat-form-field></td>
+              </tr>
+            </table>
+        </div>
+          <div>
+            <button mat-button matStepperNext mat-raised-button color="accent">Next</button>
+          </div>
+
+      </mat-step>
+    <mat-step>
+      <ng-template matStepLabel>Finished</ng-template>
+      Your initial setup has complete. You can now click subscribe to start subscription.
+      <div>
+        <button mat-button mat-raised-button color="warn" (click)="submitSubscribe()">SUBSCRIBE</button>
+        <!-- <button mat-button matStepperPrevious>Back</button> -->
+      </div>
+    </mat-step>
+  </mat-horizontal-stepper>
+</div>

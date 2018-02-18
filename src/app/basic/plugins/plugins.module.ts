@@ -21,6 +21,10 @@ const routes: Routes = [
             path: 'Fastway',
             loadChildren: '../../../modules/fastway/fastway.module#FastwayModule',
           },
+          {
+            path: 'eParcel',
+            loadChildren: '../../../modules/eparcel/eparcel.module#EparcelModule',
+          },
         ]
     },
     {
