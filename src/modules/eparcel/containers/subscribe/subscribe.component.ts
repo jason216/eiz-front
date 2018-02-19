@@ -79,19 +79,13 @@ export class SubscribeComponent implements OnInit, OnDestroy {
         res.data.postage_products.forEach(postage_product => {
           this.shippingMethods.forEach(shippingMethod => {
             if (shippingMethod.indexName === postage_product.type){
-              shippingMethod.subscribed = true;
               shippingMethod.accountSettings = postage_product;
               this.selectedOptions.push(shippingMethod);
             }
           });
         });
-        console.log(this.selectedOptions);
       }
     );
-  }
-
-  test(){
-    console.log(this.selectedOptions);
   }
 
   submitSubscribe(){
@@ -106,7 +100,7 @@ export class SubscribeComponent implements OnInit, OnDestroy {
 
     this.pluginService.subscribePlugin().subscribe(
       (res) => {
-        this.apiService.put('Fastway', 'settings', null, {
+        this.apiService.put('eParcel', 'settings', null, {
           'general': this.generalSettings,
           'shippingMethods': this.selectedOptions
         }).subscribe(

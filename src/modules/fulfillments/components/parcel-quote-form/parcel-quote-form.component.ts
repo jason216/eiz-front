@@ -6,15 +6,16 @@ import { Consignment } from '../../../../app/alpha/models/consignment.model';
 
 
 @Component({
-  selector: "parcel-quote-form",
-  templateUrl: "./parcel-quote-form.component.html",
-  styleUrls: ["./parcel-quote-form.component.scss"],
+  // tslint:disable-next-line:component-selector
+  selector: 'parcel-quote-form',
+  templateUrl: './parcel-quote-form.component.html',
+  styleUrls: ['./parcel-quote-form.component.scss'],
   providers: [ConsignmentService]
 })
 export class ParcelQuoteFormComponent implements OnInit, OnDestroy {
-  private startSubscribe: boolean = true;
-  @ViewChild("cellActionTmpl") cellActionTmpl: TemplateRef<any>;
-  @ViewChild("cellEditTextTmpl") cellEditTextTmpl: TemplateRef<any>;
+  private startSubscribe = true;
+  @ViewChild('cellActionTmpl') cellActionTmpl: TemplateRef<any>;
+  @ViewChild('cellEditTextTmpl') cellEditTextTmpl: TemplateRef<any>;
   parcel = '{ "qty": 0, "weight": 0,"length": 0, "width": 0, "height": 0}';
   rows: any[] = [];
   columnsRef: any[] = [];
@@ -39,44 +40,44 @@ export class ParcelQuoteFormComponent implements OnInit, OnDestroy {
     private apiService: ApiService,
   ) {}
   ngOnInit() {
-    console.log("table data is", this.consignment.data);
+    console.log('table data is', this.consignment.data);
 
     this.rows = this.consignment.data;
     this.rows = [...this.rows];
 
     this.columnsRef = [
       {
-        prop: "qty",
-        name: "Qty",
+        prop: 'qty',
+        name: 'Qty',
         editable: true,
         cellTemplate: this.cellEditTextTmpl
       },
       {
-        prop: "weight",
-        name: "Weight",
+        prop: 'weight',
+        name: 'Weight',
         editable: true,
         cellTemplate: this.cellEditTextTmpl
       },
       {
-        prop: "length",
-        name: "L",
+        prop: 'length',
+        name: 'L',
         editable: true,
         cellTemplate: this.cellEditTextTmpl
       },
       {
-        prop: "width",
-        name: "W",
+        prop: 'width',
+        name: 'W',
         editable: true,
         cellTemplate: this.cellEditTextTmpl
       },
       {
-        prop: "height",
-        name: "H",
+        prop: 'height',
+        name: 'H',
         editable: true,
         cellTemplate: this.cellEditTextTmpl
       },
       {
-        name: "Actions",
+        name: 'Actions',
         minWidth: 160,
         maxWidth: 160,
         cellTemplate: this.cellActionTmpl
@@ -132,12 +133,12 @@ export class ParcelQuoteFormComponent implements OnInit, OnDestroy {
   }
 
   deleteRow(row, rowIndex) {
-    //console.log('delete index', rowIndex);
-    let rows = [...this.rows];
+    // console.log('delete index', rowIndex);
+    const rows = [...this.rows];
     rows.splice(rowIndex, 1);
     this.rows = [...rows];
 
-    //console.log('delete index', rowIndex);
+    // console.log('delete index', rowIndex);
     this.consignment.data = [...this.rows];
     this.consignmentService.saveConsignment();
     this.onUpdated.emit(true);
