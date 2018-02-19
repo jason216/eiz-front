@@ -27,7 +27,7 @@ export class SubscribeComponent implements OnInit, OnDestroy {
 
   generalSettings: any;
 
-  selectedOptions;
+  selectedOptions = new Array();
 
 
   constructor(
@@ -77,10 +77,21 @@ export class SubscribeComponent implements OnInit, OnDestroy {
         this.generalSettings.apiPass = this.apiKeyFormGroup.get('apiPass').value;
         this.generalSettings.apiAccount = this.apiKeyFormGroup.get('apiAccount').value;
         res.data.postage_products.forEach(postage_product => {
-          console.log(postage_product);
+          this.shippingMethods.forEach(shippingMethod => {
+            if (shippingMethod.indexName === postage_product.type){
+              shippingMethod.subscribed = true;
+              shippingMethod.accountSettings = postage_product;
+              this.selectedOptions.push(shippingMethod);
+            }
+          });
         });
+        console.log(this.selectedOptions);
       }
     );
+  }
+
+  test(){
+    console.log(this.selectedOptions);
   }
 
   submitSubscribe(){

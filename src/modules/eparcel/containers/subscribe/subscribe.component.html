@@ -31,30 +31,14 @@
           </div>
         </form>
       </mat-step>
-    <mat-step [stepControl]="shippingMethodsFormGroup">
-      <div [formGroup]="shippingMethodsFormGroup">
-        <ng-template matStepLabel>Select Labels</ng-template>
-        <mat-selection-list #list [(ngModel)]="selectedOptions" formControlName="shippingMethodsSelected">
-            <mat-list-option *ngFor="let shippingMethod of shippingMethods" [value]="shippingMethod">
-              {{shippingMethod.name}}
-            </mat-list-option>
-        </mat-selection-list>
-      </div>
+    <mat-step>
         <div>
-          <button mat-button matStepperNext mat-raised-button color="accent">Next</button>
-        </div>
-    </mat-step>
-    <mat-step [stepControl]="shippingMethodsPriceFormGroup">
-        <div [formGroup]="shippingMethodsPriceFormGroup">
           <ng-template matStepLabel>Setup Price</ng-template>
+            <h3>Services:</h3>
             <table>
               <tr *ngFor="let shippingMethod of selectedOptions">
                 <td style="width: 200px;">{{shippingMethod?.name}}</td>
-                <td><mat-form-field>
-                <span matPrefix>$&nbsp;</span>
-                <input matInput placeholder="Label Price" formControlName="price" [(ngModel)]="shippingMethod.accountSettings.price" type="number">
-                <span matSuffix>/each&nbsp;</span>
-                </mat-form-field></td>
+                <td>{{shippingMethod?.accountSettings.product_id}}</td>
               </tr>
             </table>
         </div>
