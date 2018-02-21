@@ -4,6 +4,7 @@ import { TableColumn, ColumnMode } from '@swimlane/ngx-datatable';
 
 
 @Component({
+  // tslint:disable-next-line:component-selector
   selector: 'fulfillments-new',
   templateUrl: './fulfillments-new.component.html',
   styleUrls: ['./fulfillments-new.component.scss']

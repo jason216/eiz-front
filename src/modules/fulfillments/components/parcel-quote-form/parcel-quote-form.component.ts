@@ -90,7 +90,7 @@ export class ParcelQuoteFormComponent implements OnInit, OnDestroy {
   }
 
   quotePrices() {
-    this.apiService.post('Fastway', 'quote', null, {'parcels': this.rows, 'suburb': 'ROWVILLE', 'postcode': '3178'}).subscribe(
+    this.apiService.post('Fulfillments', 'quote', null, {'parcels': this.rows, 'suburb': 'ROWVILLE', 'postcode': '3178'}).subscribe(
       (res) => {
         res.data.forEach(shippingMethod => {
           this.shippingMethods.push(    {
@@ -104,7 +104,7 @@ export class ParcelQuoteFormComponent implements OnInit, OnDestroy {
   }
 
   updateValue(event, cell, rowIndex) {
-    var val = event instanceof Date ? event : event.target.value;
+    const val = event instanceof Date ? event : event.target.value;
     this.rows[rowIndex][cell] = val;
     this.rows = [...this.rows];
 
@@ -116,7 +116,7 @@ export class ParcelQuoteFormComponent implements OnInit, OnDestroy {
     // this.consignment.data = [...this.consignment.data];
   }
   addRow() {
-    let rows = [...this.rows];
+    const rows = [...this.rows];
     rows.push(JSON.parse(this.parcel));
     this.rows = [...rows];
     // const tmp: HTMLInputElement = document.createElement("input");
