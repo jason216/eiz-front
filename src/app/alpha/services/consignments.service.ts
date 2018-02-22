@@ -19,7 +19,7 @@ export class ConsignmentsService {
   }
   getConsignment(id): Observable<Consignment> {
     return new Observable<Consignment>((observer: Observer<Consignment>) => {
-      let foundItem = this.consignments.find(t => t.id === id);
+      const foundItem = this.consignments.find(t => t.id === id);
       // if can not find item in array return a new item
       observer.next(foundItem || new Consignment(id));
       observer.complete();
@@ -33,7 +33,7 @@ export class ConsignmentsService {
   }
   saveConsignment(consignment: Consignment): Observable<Consignment> {
     return new Observable<Consignment>((observer: Observer<Consignment>) => {
-      let foundItem = this.consignments.find(t => t.id === consignment.id);
+      const foundItem = this.consignments.find(t => t.id === consignment.id);
       if (foundItem) {
         consignment = Object.assign(foundItem, consignment); // update consignment in array
       } else {
@@ -47,7 +47,7 @@ export class ConsignmentsService {
   getConsignmentTotalCost(): Observable<number> {
     let cost = 0;
     return new Observable<number>((observer: Observer<number>) => {
-      for (let consignment of this.consignments){
+      for (const consignment of this.consignments){
         cost = cost + consignment.shippingMethod_cost;
       }
       observer.next(cost);

@@ -42,6 +42,7 @@ export class OrderListComponent implements OnInit, OnDestroy {
   expanded: any = {};
   timeout: any;
   filters = [];
+  tableDataOnLoading = false;
 
   constructor(
     public dialog: MatDialog,
@@ -184,13 +185,12 @@ export class OrderListComponent implements OnInit, OnDestroy {
   // Order Table Related functions
 
   setPage(pageInfo) {
-    // console.log("click page info", pageInfo);
-    let params = '';
-    params = params + this.encodeFilters(this.filters);
-    params =
-      this.paginationService.encodeResponse(pageInfo.offset + 1) +
-      '&' +
-      params;
+    this.tableDataOnLoading = true;
+    const params = {page: pageInfo.offset + 1};
+
+    this.filters.forEach(([key, value]) => {
+      params[key] = value;
+    });
 
     this.orderService
       .getOrders(params)
@@ -205,6 +205,7 @@ export class OrderListComponent implements OnInit, OnDestroy {
           this.page = pagedData.page;
           this.page.pageNumber = this.page.pageNumber - 1;
           this.table.recalculate();
+          this.tableDataOnLoading = false;
         },
         err => {
           console.log(`Error in order-get-orders: ${err}`);

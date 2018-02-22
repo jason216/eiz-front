@@ -156,8 +156,8 @@
       <div class="content mat-white-bg mat-elevation-z4" fxLayout="row">
 
         <ngx-datatable #myTable fxFlex="100" class='material fullscreen expandable' [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50"
-          [rowHeight]="auto" [rows]=rows [columns]=columnsRef [selected]="selected" [selectionType]="'checkbox'" (activate)="onActivate($event)"
-          (select)='onSelect($event)' [externalPaging]="true" [count]="page.totalElements" [offset]="page.pageNumber" [limit]="page.size"
+          [rowHeight]="'auto'" [rows]=rows [columns]=columnsRef [selected]="selected" [selectionType]="'checkbox'" (activate)="onActivate($event)"
+          (select)='onSelect($event)' [externalPaging]="true" [loadingIndicator]="tableDataOnLoading" [count]="page.totalElements" [offset]="page.pageNumber" [limit]="page.size"
           (page)='setPage($event)'>
 
           <!-- Row Detail Template -->
@@ -215,7 +215,7 @@
           </ng-template>
 
           <ng-template #cellOrderlinesTmpl let-row="row" let-value="value" ngx-datatable-cell-template>
-            <table-orderlines-cell [orderlines]="value"> </table-orderlines-cell>
+            <div><table-orderlines-cell [orderlines]="value"> </table-orderlines-cell></div>
           </ng-template>
 
         </ngx-datatable>

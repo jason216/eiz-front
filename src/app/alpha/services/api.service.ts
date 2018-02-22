@@ -75,7 +75,7 @@ export class ApiService {
 
   private handleError(error: HttpErrorResponse) {
     error = error.error;
-    let errMsg = (error.message) ? error.message : error.status ? `${error.status} - ${error.statusText}` : 'Server error' ;
+    const errMsg = (error.message) ? error.message : error.status ? `${error.status} - ${error.statusText}` : 'Server error' ;
 
     return Observable.throw(errMsg);
   }
