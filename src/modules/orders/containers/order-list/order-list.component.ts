@@ -2,6 +2,7 @@
 
 import { DatatableComponent } from '@swimlane/ngx-datatable';
 import { TableColumn, ColumnMode } from '@swimlane/ngx-datatable';
+import {GridOptions} from 'ag-grid/main';
 
 import { Component, ElementRef, TemplateRef, OnInit, OnDestroy, ViewChild} from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
@@ -43,6 +44,46 @@ export class OrderListComponent implements OnInit, OnDestroy {
   timeout: any;
   filters = [];
   tableDataOnLoading = false;
+  public gridOptions: GridOptions;
+
+  columnDefs = [
+    {
+      headerName: '',
+      width: 20,
+      sortable: false,
+      draggable: false,
+      cellTemplate: this.cellIconTmpl
+    },
+    {
+      field: 'id',
+      headerName: 'ID',
+      width: 70,
+      sortable: false,
+      draggable: false,
+      cellTemplate: this.cellCheckboxTmpl,
+      headerTemplate: this.headCheckboxTmpl
+    },
+    { field: 'salesRecordNumber', headerName: 'SRN', width: 70 },
+    { field: 'shipTo_name', headerName: 'Customer', width: 150 },
+    {
+      field: 'orderlines',
+      headerName: 'Orderlines',
+      cellTemplate: this.cellOrderlinesTmpl
+    },
+    {
+      field: 'paymentStatus',
+      headerName: 'Payment',
+      width: 100,
+      cellTemplate: this.cellTagTmpl
+    },
+    {
+      field: 'status',
+      headerName: 'Status',
+      width: 100,
+      ellTemplate: this.cellTagTmpl
+    },
+    { headerName: 'Actions', width: 100, cellTemplate: this.cellActionTmpl }
+  ];
 
   constructor(
     public dialog: MatDialog,
@@ -51,49 +92,35 @@ export class OrderListComponent implements OnInit, OnDestroy {
   ) {
     this.page.pageNumber = 0;
     this.page.size = 12;
+    this.gridOptions = <GridOptions>{
+      // domLayout: 'autoHeight',
+      enableRangeSelection: true,
+      debug: true,
+      enableColResize: true,
+      pagination: true,
+      paginationAutoPageSize: true,
+
+      onGridReady: () => {
+          this.gridOptions.api.doLayout();
+          this.gridOptions.api.sizeColumnsToFit();
+
+          this.orderService
+          .getOrders({size: 99999})
+          .takeWhile(() => this.startSubscribe)
+          .subscribe(
+            res => {
+              this.gridOptions.api.setRowData(res.data);
+            },
+            err => {
+              console.log(`Error in order-get-orders: ${err}`);
+            }
+          );
+      }
+    };
   }
 
   ngOnInit() {
-    this.columnsRef = [
-      {
-        name: '',
-        maxWidth: 20,
-        sortable: false,
-        draggable: false,
-        cellTemplate: this.cellIconTmpl
-      },
-      {
-        prop: 'id',
-        name: 'ID',
-        maxWidth: 70,
-        sortable: false,
-        draggable: false,
-        cellTemplate: this.cellCheckboxTmpl,
-        headerTemplate: this.headCheckboxTmpl
-      },
-      { prop: 'salesRecordNumber', name: 'SRN', maxWidth: 150 },
-      { prop: 'shipTo_name', name: 'Customer', maxWidth: 150 },
-      {
-        prop: 'orderlines',
-        name: 'Orderlines',
-        cellTemplate: this.cellOrderlinesTmpl
-      },
-      {
-        prop: 'paymentStatus',
-        name: 'Payment',
-        maxWidth: 150,
-        cellTemplate: this.cellTagTmpl
-      },
-      {
-        prop: 'status',
-        name: 'Status',
-        maxWidth: 150,
-        ellTemplate: this.cellTagTmpl
-      },
-      { name: 'Actions', maxWidth: 100, cellTemplate: this.cellActionTmpl }
-    ];
-
-    this.setPage({ offset: 0 });
+    // this.setPage({ offset: 0 });
   }
   ngOnDestroy() {
     this.startSubscribe = false;
@@ -204,7 +231,6 @@ export class OrderListComponent implements OnInit, OnDestroy {
 
           this.page = pagedData.page;
           this.page.pageNumber = this.page.pageNumber - 1;
-          this.table.recalculate();
           this.tableDataOnLoading = false;
         },
         err => {

@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 import { SharedModule } from '../../app/core/modules/shared.module';
 import { FuseMainModule } from '../../app/main/main.module';
@@ -19,6 +19,7 @@ import * as fromContainers from './containers';
 // dependency
 import { FulfillmentsFormModule } from '../fulfillments/shared/fulfillments-form.module';
 import { FulfillmentsFormDialogComponent } from '../fulfillments/components/fulfillments-form-dialog/fulfillments-form-dialog.component';
+import { AgGridModule } from 'ag-grid-angular';
 
 @NgModule({
   imports: [
@@ -27,7 +28,8 @@ import { FulfillmentsFormDialogComponent } from '../fulfillments/components/fulf
     routing,
     BasicModule,
     AlphaModule,
-    FulfillmentsFormModule
+    FulfillmentsFormModule,
+    AgGridModule.withComponents([/*optional Angular Components to be used in the grid*/]),
   ],
   declarations: [
     fromComponents.components,

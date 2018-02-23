@@ -154,71 +154,21 @@
 
       <!-- CONTENT -->
       <div class="content mat-white-bg mat-elevation-z4" fxLayout="row">
+          <ag-grid-angular #agGrid style="width: 100%; min-height: 600px;" class="ag-theme-material"
 
-        <ngx-datatable #myTable fxFlex="100" class='material fullscreen expandable' [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50"
-          [rowHeight]="'auto'" [rows]=rows [columns]=columnsRef [selected]="selected" [selectionType]="'checkbox'" (activate)="onActivate($event)"
-          (select)='onSelect($event)' [externalPaging]="true" [loadingIndicator]="tableDataOnLoading" [count]="page.totalElements" [offset]="page.pageNumber" [limit]="page.size"
-          (page)='setPage($event)'>
+          [gridOptions]="gridOptions"
+          [columnDefs]="columnDefs"
 
-          <!-- Row Detail Template -->
-          <ngx-datatable-row-detail [rowHeight]="100" #myDetailRow (toggle)="onDetailToggle($event)">
-            <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
-              <div style="padding-left:35px;">
-                <div>
-                  <strong>Address</strong>
-                  {{row | json}}
-                </div>
-              </div>
-            </ng-template>
-          </ngx-datatable-row-detail>
+          [rowData]="rows"
 
-          <ng-template #cellIconTmpl let-row="row" let-expanded="expanded" ngx-datatable-cell-template>
-            <a href="javascript:void(0)" [class.datatable-icon-right]="!expanded" [class.datatable-icon-down]="expanded" title="Expand/Collapse Row"
-              (click)="toggleExpandRow(row)">
-            </a>
-          </ng-template>
 
-          <ng-template #headCheckboxTmpl let-column="column" let-allRowsSelected="allRowsSelected" let-selectFn="selectFn" ngx-datatable-header-template>
-            <mat-checkbox [checked]="allRowsSelected" (change)="selectFn(!allRowsSelected)"></mat-checkbox>
-          </ng-template>
-          <ng-template #cellCheckboxTmpl let-row="row" let-value="value" let-isSelected="isSelected" let-onCheckboxChangeFn="onCheckboxChangeFn"
-            ngx-datatable-cell-template>
-            <mat-checkbox [checked]="isSelected" (change)="onCheckboxChangeFn($event)"></mat-checkbox>
-          </ng-template>
 
-          <ng-template #cellTagTmpl let-row="row" let-value="value" ngx-datatable-cell-template>
-            <mat-chip color="accent">{{value}}</mat-chip>
-          </ng-template>
+          rowHeight="48"
+          rowSelection="multiple">
 
-          <ng-template #cellActionTmpl let-row="row" let-value="value" let-rowIndex="rowIndex" ngx-datatable-cell-template>
-            <button mat-icon-button [matMenuTriggerFor]="menu">
-              <mat-icon>more_vert</mat-icon>
-            </button>
-            <mat-menu #menu="matMenu">
-              <button mat-menu-item>
-                <mat-icon>notifications_off</mat-icon>
-                <span>Detail</span>
-              </button>
-              <button mat-menu-item (click)="openFulfillments(row)">
-                <mat-icon>notifications_off</mat-icon>
-                <span>Fulfillments</span>
-              </button>
-              <button mat-menu-item (click)="modifyRow(row)">
-                <mat-icon>voicemail</mat-icon>
-                <span>Modify</span>
-              </button>
-              <button mat-menu-item (click)="deleteRow(row, rowIndex)">
-                <mat-icon>voicemail</mat-icon>
-                <span>Archive</span>
-              </button>
-            </mat-menu>
-          </ng-template>
+        </ag-grid-angular>
 
-          <ng-template #cellOrderlinesTmpl let-row="row" let-value="value" ngx-datatable-cell-template>
-            <div><table-orderlines-cell [orderlines]="value"> </table-orderlines-cell></div>
-          </ng-template>
 
-        </ngx-datatable>
 
       </div>
       <!-- / CONTENT -->
