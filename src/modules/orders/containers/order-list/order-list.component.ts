@@ -16,6 +16,7 @@ import { FormControl } from '@angular/forms';
 import { Page } from '../../../../app/alpha/models/page.model';
 import { PaginationService } from '../../../../app/alpha/services/pagination.service';
 import { FulfillmentsFormDialogComponent } from '../../../fulfillments/components/fulfillments-form-dialog/fulfillments-form-dialog.component';
+import { TableOrderlinesCellComponent, TableActionCellComponent } from '../../components';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -49,40 +50,32 @@ export class OrderListComponent implements OnInit, OnDestroy {
   columnDefs = [
     {
       headerName: '',
-      width: 20,
-      sortable: false,
-      draggable: false,
-      cellTemplate: this.cellIconTmpl
+      width: 10,
+      checkboxSelection: true,
+      headerCheckboxSelection: true
     },
-    {
-      field: 'id',
-      headerName: 'ID',
-      width: 70,
-      sortable: false,
-      draggable: false,
-      cellTemplate: this.cellCheckboxTmpl,
-      headerTemplate: this.headCheckboxTmpl
-    },
-    { field: 'salesRecordNumber', headerName: 'SRN', width: 70 },
-    { field: 'shipTo_name', headerName: 'Customer', width: 150 },
+    { field: 'salesRecordNumber', headerName: 'SRN', width: 25 },
+    { field: 'shipTo_name', headerName: 'Customer', width: 40 },
     {
       field: 'orderlines',
       headerName: 'Orderlines',
-      cellTemplate: this.cellOrderlinesTmpl
+      width: 150,
+      cellRendererFramework: TableOrderlinesCellComponent,
+      cellStyle: {padding: 0}
     },
     {
       field: 'paymentStatus',
       headerName: 'Payment',
-      width: 100,
+      width: 30,
       cellTemplate: this.cellTagTmpl
     },
     {
       field: 'status',
       headerName: 'Status',
-      width: 100,
+      width: 30,
       ellTemplate: this.cellTagTmpl
     },
-    { headerName: 'Actions', width: 100, cellTemplate: this.cellActionTmpl }
+    { headerName: 'Actions', width: 30, cellRendererFramework: TableActionCellComponent, }
   ];
 
   constructor(
@@ -99,7 +92,13 @@ export class OrderListComponent implements OnInit, OnDestroy {
       enableColResize: true,
       pagination: true,
       paginationAutoPageSize: true,
-
+      suppressCellSelection: true,
+      suppressRowClickSelection: true,
+      rowSelection: 'multiple',
+      context: { componentParent: this },
+      getRowHeight: function(params) {
+        return 48 * (params.data.orderlines.length);
+      },
       onGridReady: () => {
           this.gridOptions.api.doLayout();
           this.gridOptions.api.sizeColumnsToFit();

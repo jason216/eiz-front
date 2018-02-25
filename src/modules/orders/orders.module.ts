@@ -20,6 +20,7 @@ import * as fromContainers from './containers';
 import { FulfillmentsFormModule } from '../fulfillments/shared/fulfillments-form.module';
 import { FulfillmentsFormDialogComponent } from '../fulfillments/components/fulfillments-form-dialog/fulfillments-form-dialog.component';
 import { AgGridModule } from 'ag-grid-angular';
+import { TableOrderlinesCellComponent, TableActionCellComponent } from './components';
 
 @NgModule({
   imports: [
@@ -29,7 +30,7 @@ import { AgGridModule } from 'ag-grid-angular';
     BasicModule,
     AlphaModule,
     FulfillmentsFormModule,
-    AgGridModule.withComponents([/*optional Angular Components to be used in the grid*/]),
+    AgGridModule.withComponents([TableOrderlinesCellComponent, TableActionCellComponent]),
   ],
   declarations: [
     fromComponents.components,

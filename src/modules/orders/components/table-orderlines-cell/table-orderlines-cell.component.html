@@ -1,5 +1,7 @@
-<mat-list>
-  <mat-list-item *ngFor="let orderline of orderlines">
-   <img src='{{orderline.listing.cover}}'/>{{orderline.quantity | json}} X {{orderline.itemtitle | json}}{{orderline.itemtitle | json}}  ${{orderline.saleprice | json}}
-  </mat-list-item>
-</mat-list>
+<div>
+    <div *ngFor="let orderline of orderlines" style="white-space: normal; line-height: initial;">
+     <img src='{{orderline.listing.cover}}' style="float:left; height: 48px; margin-right: 10px;"/>
+     {{orderline.itemtitle}} <br/>
+     Qty: {{orderline.quantity | json}} ${{orderline.saleprice | json}}
+  </div>
+</div>
