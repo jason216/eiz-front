@@ -1,7 +1,7 @@
 export class Consignment {
     id: number;
-    shippingMethod_id: number = 0;
-    shippingMethod_cost: number = 0;
+    shippingMethod_id = 0;
+    shippingMethod_cost = 0;
     data: any[] = [{ qty: 1, weight: 0.5, length: 12, width: 12, height: 12}];
 
     constructor(id: number, shippingMethod_id?: number, shippingMethod_cost?: number, data?: any[]){

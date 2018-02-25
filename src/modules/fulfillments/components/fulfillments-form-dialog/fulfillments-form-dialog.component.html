@@ -1,7 +1,61 @@
-<h1 mat-dialog-title>Check Fulfillments</h1>
+<h1 mat-dialog-title>Create Fulfillment</h1>
 
 <div mat-dialog-content>
-  <div fxLayout="row wrap" fxLayoutAlign="start left">
+  <!-- <div fxLayout="row wrap" fxLayoutAlign="start left">
     <fulfillments-form [order]="data" (onCompleted)= "closeDialog($event)" ></fulfillments-form>
-  </div>
+  </div> -->
+  <mat-vertical-stepper [linear]="true" #stepper>
+    <mat-step [completed]="addressCheckComplete" [optional]="false" label="Shipping Address">
+      <div>
+        <mat-form-field><input matInput placeholder="Receiver Name" [(ngModel)]="shipTo.shipTo_name"></mat-form-field>
+        <mat-form-field><input matInput placeholder="Company Name" [(ngModel)]="shipTo.shipTo_companyName"></mat-form-field>
+        <mat-form-field><input matInput placeholder="Phone Number" [(ngModel)]="shipTo.shipTo_phone"></mat-form-field>
+        <mat-form-field><input matInput placeholder="Email" [(ngModel)]="shipTo.shipTo_email"></mat-form-field>
+        <mat-form-field><input matInput placeholder="Address 1" [(ngModel)]="shipTo.shipTo_address1"></mat-form-field>
+        <mat-form-field><input matInput placeholder="Address 2" [(ngModel)]="shipTo.shipTo_address2"></mat-form-field>
+        <mat-form-field><input matInput placeholder="Address 3" [(ngModel)]="shipTo.shipTo_address3"></mat-form-field>
+        <mat-form-field><input matInput placeholder="Address 4" [(ngModel)]="shipTo.shipTo_address4"></mat-form-field>
+        <mat-form-field><input matInput placeholder="Suburb" [(ngModel)]="shipTo.shipTo_suburb"></mat-form-field>
+        <mat-form-field><input matInput placeholder="State" [(ngModel)]="shipTo.shipTo_state"></mat-form-field>
+        <mat-form-field><input matInput placeholder="Postcode" [(ngModel)]="shipTo.shipTo_postcode"></mat-form-field>
+        <mat-form-field><input matInput placeholder="Country" [(ngModel)]="shipTo.shipTo_country"></mat-form-field>
+      </div>
+      <div>
+        <button mat-button (click)="checkAddress()">Continue</button>
+      </div>
+    </mat-step>
+    <mat-step [completed]="false" [optional]="false" label="Packages">
+        <div><button mat-button (click)="newConsignment()">New Group</button></div>
+        <div>
+            <div dnd-sortable-container [sortableData]="consignments" [dropZones]="['consignment-dropZone']">
+                <mat-card class="col-sm3"
+                        *ngFor="let consignment of consignments; let i = index"
+                        dnd-sortable-container [sortableData]="consignment.packages" [dropZones]="['package-dropZone']"
+                        style="margin-bottom: 5px;"
+                        >
+                        <div class="panel-heading">
+                            Consignment <button mat-button (click)="newPackage(consignment)">New Package</button>
+                        </div>
+                        <div class="panel-body">
+                            <mat-list>
+                                <mat-list-item *ngFor="let package of consignment.packages; let x = index"
+                                    dnd-sortable [sortableIndex]="x" [dragEnabled]="true"
+                                    [dragData]="package">
+                                    <mat-icon class="handle mr-16" dnd-sortable-handle fxFlex="0 1 auto" fxHide.xs>
+                                        drag_handle
+                                    </mat-icon>
+                                    <mat-form-field><input matInput placeholder="Qty" [(ngModel)]="package.qty"></mat-form-field>
+                                    <mat-form-field><input matInput placeholder="Weight" [(ngModel)]="package.weight"></mat-form-field>
+                                    <mat-form-field><input matInput placeholder="L" [(ngModel)]="package.length"></mat-form-field>
+                                    <mat-form-field><input matInput placeholder="W" [(ngModel)]="package.weight"></mat-form-field>
+                                    <mat-form-field><input matInput placeholder="H" [(ngModel)]="package.height"></mat-form-field>
+                                    {{package.qty}}
+                                  </mat-list-item>
+                            </mat-list>
+                        </div>
+                  </mat-card>
+            </div>
+        </div>
+    </mat-step>
+  </mat-vertical-stepper>
 </div>

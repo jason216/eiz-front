@@ -17,6 +17,7 @@ import * as fromContainers from './containers';
 // shared
 import { FulfillmentsFormModule } from './shared/fulfillments-form.module';
 import { ConsignmentsModule } from './containers/consignments/consignmentsModule';
+import { DndModule } from 'ng2-dnd';
 
 
 @NgModule({
@@ -28,13 +29,15 @@ import { ConsignmentsModule } from './containers/consignments/consignmentsModule
     AlphaModule,
     FulfillmentsFormModule,
     ConsignmentsModule,
+    DndModule
   ],
   declarations: [
     fromComponents.components,
     fromContainers.containers
   ],
   exports: [
-    fromComponents.FulfillmentsFormComponent
+    fromComponents.FulfillmentsFormComponent,
+    DndModule
   ],
   entryComponents: [
     fromComponents.FulfillmentsDespatchDialogComponent
