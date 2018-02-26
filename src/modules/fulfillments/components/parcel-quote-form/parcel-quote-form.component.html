@@ -1,7 +1,7 @@
 <div class="mat-white-bg p-12 mr-12 mb-12" fxLayout="column" fxLayoutAlign="start" fxFlex="1 0 auto">
   <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
     <ngx-datatable fxFlex="100" #myTable class='material fullscreen expandable' [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50"
-      [rowHeight]="auto" [rows]=rows [columns]=columnsRef [limit]="20">
+      [rowHeight]="'auto'" [rows]=rows [columns]=columnsRef [limit]="20">
 
       <ng-template #cellEditTextTmpl let-rowIndex="rowIndex" let-column="column" let-value="value" let-row="row" ngx-datatable-cell-template>
         <!-- <span title="Double click to edit" *ngIf="!editing[rowIndex]">

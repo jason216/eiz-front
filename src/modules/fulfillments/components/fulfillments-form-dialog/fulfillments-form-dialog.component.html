@@ -24,7 +24,7 @@
         <button mat-button (click)="checkAddress()">Continue</button>
       </div>
     </mat-step>
-    <mat-step [completed]="false" [optional]="false" label="Packages">
+    <mat-step [completed]="packageCheckComplete" [optional]="false" label="Packages">
         <div><button mat-button (click)="newConsignment()">New Group</button></div>
         <div>
             <div dnd-sortable-container [sortableData]="consignments" [dropZones]="['consignment-dropZone']">
@@ -56,6 +56,26 @@
                   </mat-card>
             </div>
         </div>
+        <div>
+          <button mat-button (click)="checkPackage()">Continue</button>
+        </div>
+    </mat-step>
+    <mat-step [completed]="false" [optional]="false" label="Quotes">
+      <div>
+        <mat-list>
+          <mat-list-item *ngFor="let consignment of consignments">
+            <div matLine *ngFor="let package of consignment.packages">
+              {{package.qty}} x {{package.weight}} {{package.length}} {{package.width}} {{package.height}}
+            </div>
+            <div matLine *ngIf="!consignment.quotes">Quoting...</div>
+            <mat-select placeholder="Favorite food" matLine *ngIf="consignment.quotes" [(ngModel)]="consignment.quoteSelected">
+              <mat-option *ngFor="let quote of consignment.quotes" [value]="quote">
+                {{quote.shippingMethod.name}} ${{quote.amount}}
+              </mat-option>
+            </mat-select>
+          </mat-list-item>
+        </mat-list>
+      </div>
     </mat-step>
   </mat-vertical-stepper>
 </div>

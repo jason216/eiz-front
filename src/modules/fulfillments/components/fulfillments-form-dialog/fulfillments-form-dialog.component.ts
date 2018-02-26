@@ -11,6 +11,7 @@ import { ApiService } from '../../../../app/alpha/services';
 
 export class FulfillmentsFormDialogComponent {
   addressCheckComplete = false;
+  packageCheckComplete = false;
 
   order: any;
   shipTo: any;
@@ -57,6 +58,25 @@ export class FulfillmentsFormDialogComponent {
 
       }
     );
+  }
+
+  checkPackage(){
+    this.packageCheckComplete = true;
+    this.stepper.next();
+    this.consignments.forEach(consignment => {
+      // tslint:disable-next-line:max-line-length
+      this.apiService.post('Fulfillments', 'quote', null, {'parcels': consignment.packages, 'suburb': this.shipTo.shipTo_suburb, 'postcode': this.shipTo.shipTo_postcode, 'postcode_id': this.shipTo.postcode_id}).subscribe(
+        (res) => {
+          consignment.quoteSelected = res.data[0];
+          consignment.quotes = res.data;
+          consignment.quotes.forEach(quote => {
+            if (consignment.quoteSelected.amount > quote.amount){
+              consignment.quoteSelected = quote;
+            }
+          });
+        }
+      );
+    });
   }
 
   closeDialog(completed: boolean) {
