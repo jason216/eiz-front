@@ -77,13 +77,11 @@
           </mat-list-item>
         </mat-list>
       </div>
+      <iframe #myIframe id="myIframe" (load)="pdfLoad(myIframe)" src="https://s3.ap-southeast-2.amazonaws.com/eiz.labels/labels/2018/02/27/5a9541baab4c8.pdf"></iframe>
       <div *ngIf="quoteCheckComplete">
-        <button mat-button (click)="checkPackage()" >Save</button>
-        <button mat-button (click)="checkPackage()" >Save & Create Labels</button>
+        <button mat-button (click)="saveFulfillment()" >Save</button>
+        <button mat-button (click)="saveFulfillment(true)" >Save & Create Labels</button>
       </div>
-    </mat-step>
-    <mat-step>
-
     </mat-step>
   </mat-vertical-stepper>
 </div>

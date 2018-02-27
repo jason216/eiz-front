@@ -1,3 +1,4 @@
+import { Consignment } from './../../../../app/alpha/models/consignment.model';
 import { Component, Inject, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatStepper } from '@angular/material';
 import { ApiService } from '../../../../app/alpha/services';
@@ -15,9 +16,10 @@ export class FulfillmentsFormDialogComponent {
   // tslint:disable-next-line:no-inferrable-types
   quoteCheckComplete: boolean = false;
 
-  order: any;
+  orders: any;
   shipTo: any;
   @ViewChild('stepper', {read: MatStepper}) stepper: MatStepper;
+  @ViewChild('myIframe', {read: HTMLIFrameElement}) iframe: HTMLIFrameElement;
 
   consignments: Array<any> = [
       new ConsignmentGroup([new Package(1, 0.5, 12, 12, 12)])
@@ -47,8 +49,7 @@ export class FulfillmentsFormDialogComponent {
         shipTo_country: this.data[0].shipTo_country
       };
     }
-
-    console.log(data);
+    this.orders = this.data;
   }
 
   checkAddress(){
@@ -79,7 +80,9 @@ export class FulfillmentsFormDialogComponent {
             if (consignment.quoteSelected.amount > quote.amount){
               consignment.quoteSelected = quote;
             }
+            // console.log(consignment.quoteSelected);
           });
+
           this.quoteCheckComplete = this.checkQuoteComplete();
         }
       );
@@ -114,7 +117,36 @@ export class FulfillmentsFormDialogComponent {
     consignment.packages.push(new Package(1, 0.5, 12, 12, 12));
   }
 
+  pdfLoad(myIframe){
+    myIframe.contentWindow.print();
+  }
+
   saveFulfillment(createLabels){
+    const orderIds = [];
+    this.orders.forEach(order => {
+      orderIds.push(order.id);
+    });
+    const consignemntData = [];
+    this.consignments.forEach(consignment => {
+      consignemntData.push({
+        'shipTo_name': this.shipTo.shipTo_name,
+        'shipTo_companyName': this.shipTo.shipTo_companyName,
+        'shipTo_phone': this.shipTo.shipTo_phone,
+        'shipTo_email': this.shipTo.shipTo_email,
+        'shipTo_address1': this.shipTo.shipTo_address1,
+        'shipTo_address2': this.shipTo.shipTo_address2,
+        'shipTo_address3': this.shipTo.shipTo_address3,
+        'shipTo_address4': this.shipTo.shipTo_address4,
+        'shipTo_suburb': this.shipTo.shipTo_suburb,
+        'shipTo_state': this.shipTo.shipTo_state,
+        'shipTo_postcode': this.shipTo.shipTo_postcode,
+        'shipTo_country': this.shipTo.shipTo_country,
+        'shipTo_instruction1': this.shipTo.shipTo_instruction1,
+        'shipTo_instruction2': this.shipTo.shipTo_instruction2,
+        'data': consignment.packages,
+        'shippingMethod_id': consignment.quoteSelected.shippingMethod.id,
+      });
+    });
     const data = {
       'shipTo_ref': '1234',
       'shipTo_name': this.shipTo.shipTo_name,
@@ -131,20 +163,34 @@ export class FulfillmentsFormDialogComponent {
       'shipTo_country': this.shipTo.shipTo_country,
       'shipTo_instruction1': this.shipTo.shipTo_instruction1,
       'shipTo_instruction2': this.shipTo.shipTo_instruction2,
-      'orderIds': [1],
+      'orderIds': orderIds,
+      'consignments': consignemntData,
     };
-    this.apiService.post('fulfillments', 'fulfillments', null, null);
-    this.apiService.post('fulfillments', 'solidConsignments', null).subscribe(
-      res => {
-        if (res['data']) {
-          console.log('solid consignment return ', res['data']);
+    this.apiService.post('fulfillments', 'fulfillments', null, data).subscribe(
+      res_fulfillment => {
+        const consignmentsIds = [];
+        res_fulfillment.data.consignments.forEach(consignment => {
+          consignmentsIds.push(consignment.id);
+        });
+
+        if (createLabels){
+          this.apiService.post('fulfillments', 'solidConsignments', null, {'ids': consignmentsIds}).subscribe(
+            res_labels => {
+              console.log(res_labels);
+              if (res_labels['data']) {
+                console.log('solid consignment return ', res_labels['data']);
+              }
+            },
+            err => {
+              console.log(`Error in solid consignment: ${err}`);
+            },
+            () => {
+              console.log('solid consignment Completed');
+            }
+          );
+        }else{
+          this.dialogRef.close();
         }
-      },
-      err => {
-        console.log(`Error in solid consignment: ${err}`);
-      },
-      () => {
-        console.log('solid consignment Completed');
       }
     );
   }
