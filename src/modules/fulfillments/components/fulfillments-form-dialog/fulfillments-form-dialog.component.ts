@@ -12,6 +12,8 @@ import { ApiService } from '../../../../app/alpha/services';
 export class FulfillmentsFormDialogComponent {
   addressCheckComplete = false;
   packageCheckComplete = false;
+  // tslint:disable-next-line:no-inferrable-types
+  quoteCheckComplete: boolean = false;
 
   order: any;
   shipTo: any;
@@ -26,23 +28,27 @@ export class FulfillmentsFormDialogComponent {
 
   constructor(
     public dialogRef: MatDialogRef<FulfillmentsFormDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any,
+    @Inject(MAT_DIALOG_DATA) public data: [any],
     private apiService: ApiService,
   ) {
-    this.shipTo = {
-      shipTo_name: this.data.shipTo_name,
-      shipTo_companyName: this.data.shipTo_companyName,
-      shipTo_phone: this.data.shipTo_phone,
-      shipTo_email: this.data.shipTo_email,
-      shipTo_address1: this.data.shipTo_address1,
-      shipTo_address2: this.data.shipTo_address2,
-      shipTo_address3: this.data.shipTo_address3,
-      shipTo_address4: this.data.shipTo_address4,
-      shipTo_suburb: this.data.shipTo_suburb,
-      shipTo_state: this.data.shipTo_state,
-      shipTo_postcode: this.data.shipTo_postcode,
-      shipTo_country: this.data.shipTo_country
-    };
+    if (this.data.length === 1){
+      this.shipTo = {
+        shipTo_name: this.data[0].shipTo_name,
+        shipTo_companyName: this.data[0].shipTo_companyName,
+        shipTo_phone: this.data[0].shipTo_phone,
+        shipTo_email: this.data[0].shipTo_email,
+        shipTo_address1: this.data[0].shipTo_address1,
+        shipTo_address2: this.data[0].shipTo_address2,
+        shipTo_address3: this.data[0].shipTo_address3,
+        shipTo_address4: this.data[0].shipTo_address4,
+        shipTo_suburb: this.data[0].shipTo_suburb,
+        shipTo_state: this.data[0].shipTo_state,
+        shipTo_postcode: this.data[0].shipTo_postcode,
+        shipTo_country: this.data[0].shipTo_country
+      };
+    }
+
+    console.log(data);
   }
 
   checkAddress(){
@@ -74,9 +80,18 @@ export class FulfillmentsFormDialogComponent {
               consignment.quoteSelected = quote;
             }
           });
+          this.quoteCheckComplete = this.checkQuoteComplete();
         }
       );
     });
+  }
+
+  checkQuoteComplete(){
+    let status = true;
+    this.consignments.forEach(consignment => {
+      status = status && consignment.hasOwnProperty('quoteSelected');
+    });
+    return status;
   }
 
   closeDialog(completed: boolean) {
@@ -97,6 +112,41 @@ export class FulfillmentsFormDialogComponent {
 
   newPackage(consignment: ConsignmentGroup){
     consignment.packages.push(new Package(1, 0.5, 12, 12, 12));
+  }
+
+  saveFulfillment(createLabels){
+    const data = {
+      'shipTo_ref': '1234',
+      'shipTo_name': this.shipTo.shipTo_name,
+      'shipTo_companyName': this.shipTo.shipTo_companyName,
+      'shipTo_phone': this.shipTo.shipTo_phone,
+      'shipTo_email': this.shipTo.shipTo_email,
+      'shipTo_address1': this.shipTo.shipTo_address1,
+      'shipTo_address2': this.shipTo.shipTo_address2,
+      'shipTo_address3': this.shipTo.shipTo_address3,
+      'shipTo_address4': this.shipTo.shipTo_address4,
+      'shipTo_suburb': this.shipTo.shipTo_suburb,
+      'shipTo_state': this.shipTo.shipTo_state,
+      'shipTo_postcode': this.shipTo.shipTo_postcode,
+      'shipTo_country': this.shipTo.shipTo_country,
+      'shipTo_instruction1': this.shipTo.shipTo_instruction1,
+      'shipTo_instruction2': this.shipTo.shipTo_instruction2,
+      'orderIds': [1],
+    };
+    this.apiService.post('fulfillments', 'fulfillments', null, null);
+    this.apiService.post('fulfillments', 'solidConsignments', null).subscribe(
+      res => {
+        if (res['data']) {
+          console.log('solid consignment return ', res['data']);
+        }
+      },
+      err => {
+        console.log(`Error in solid consignment: ${err}`);
+      },
+      () => {
+        console.log('solid consignment Completed');
+      }
+    );
   }
 }
 

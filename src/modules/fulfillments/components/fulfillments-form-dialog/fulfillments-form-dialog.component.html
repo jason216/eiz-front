@@ -57,7 +57,8 @@
             </div>
         </div>
         <div>
-          <button mat-button (click)="checkPackage()">Continue</button>
+          <button mat-button *ngIf="!packageCheckComplete" (click)="checkPackage()">Continue</button>
+          <button mat-button *ngIf="packageCheckComplete" matStepperNext>Next</button>
         </div>
     </mat-step>
     <mat-step [completed]="false" [optional]="false" label="Quotes">
@@ -76,6 +77,13 @@
           </mat-list-item>
         </mat-list>
       </div>
+      <div *ngIf="quoteCheckComplete">
+        <button mat-button (click)="checkPackage()" >Save</button>
+        <button mat-button (click)="checkPackage()" >Save & Create Labels</button>
+      </div>
+    </mat-step>
+    <mat-step>
+
     </mat-step>
   </mat-vertical-stepper>
 </div>

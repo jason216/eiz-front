@@ -23,6 +23,6 @@ export class TableActionCellComponent implements ICellRendererAngularComp{
   }
 
   openFulfillments() {
-    this.params.context.componentParent.openFulfillments(this.order);
+    this.params.context.componentParent.openFulfillments([this.order]);
   }
 }
