@@ -1,7 +1,8 @@
 import { Consignment } from './../../../../app/alpha/models/consignment.model';
-import { Component, Inject, ViewChild } from '@angular/core';
+import { Component, Inject, ViewChild, Injectable } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatStepper } from '@angular/material';
 import { ApiService } from '../../../../app/alpha/services';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -16,10 +17,12 @@ export class FulfillmentsFormDialogComponent {
   // tslint:disable-next-line:no-inferrable-types
   quoteCheckComplete: boolean = false;
 
+  solidConsignments: any;
+
   orders: any;
   shipTo: any;
   @ViewChild('stepper', {read: MatStepper}) stepper: MatStepper;
-  @ViewChild('myIframe', {read: HTMLIFrameElement}) iframe: HTMLIFrameElement;
+  @ViewChild('myIframe') iframe;
 
   consignments: Array<any> = [
       new ConsignmentGroup([new Package(1, 0.5, 12, 12, 12)])
@@ -32,6 +35,7 @@ export class FulfillmentsFormDialogComponent {
     public dialogRef: MatDialogRef<FulfillmentsFormDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: [any],
     private apiService: ApiService,
+    public sanitizer: DomSanitizer,
   ) {
     if (this.data.length === 1){
       this.shipTo = {
@@ -117,8 +121,17 @@ export class FulfillmentsFormDialogComponent {
     consignment.packages.push(new Package(1, 0.5, 12, 12, 12));
   }
 
-  pdfLoad(myIframe){
-    myIframe.contentWindow.print();
+  pdfLoad(){
+    // this.iframe.nativeElement.src = 'https://s3.ap-southeast-2.amazonaws.com/eiz.labels/labels/2018/02/27/5a9541baab4c8.pdf';
+    // this.iframe.nativeElement.onload = this.printIframe();
+    // console.log(this.iframe);
+    window.open('https://s3.ap-southeast-2.amazonaws.com/eiz.labels/labels/2018/02/27/5a9541baab4c8.pdf');
+
+    // return this.sanitizer.bypassSecurityTrustUrl('https://s3.ap-southeast-2.amazonaws.com/eiz.labels/labels/2018/02/27/5a9541baab4c8.pdf');
+  }
+
+  printIframe(){
+    // this.iframe.nativeElement.contentWindow.print();
   }
 
   saveFulfillment(createLabels){
@@ -178,7 +191,13 @@ export class FulfillmentsFormDialogComponent {
             res_labels => {
               console.log(res_labels);
               if (res_labels['data']) {
-                console.log('solid consignment return ', res_labels['data']);
+                this.solidConsignments = res_labels['data'];
+                console.log(this.solidConsignments);
+                this.apiService.get('fulfillments', 'printConsignments', null, {'ids[]': consignmentsIds}).subscribe(
+                  res => {
+                    window.open(res.data.url);
+                  }
+                );
               }
             },
             err => {

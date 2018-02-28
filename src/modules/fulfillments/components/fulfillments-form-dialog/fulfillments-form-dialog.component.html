@@ -62,25 +62,34 @@
         </div>
     </mat-step>
     <mat-step [completed]="false" [optional]="false" label="Quotes">
-      <div>
-        <mat-list>
-          <mat-list-item *ngFor="let consignment of consignments">
-            <div matLine *ngFor="let package of consignment.packages">
-              {{package.qty}} x {{package.weight}} {{package.length}} {{package.width}} {{package.height}}
-            </div>
-            <div matLine *ngIf="!consignment.quotes">Quoting...</div>
-            <mat-select placeholder="Favorite food" matLine *ngIf="consignment.quotes" [(ngModel)]="consignment.quoteSelected">
-              <mat-option *ngFor="let quote of consignment.quotes" [value]="quote">
-                {{quote.shippingMethod.name}} ${{quote.amount}}
-              </mat-option>
-            </mat-select>
-          </mat-list-item>
-        </mat-list>
+      <div *ngIf="!solidConsignments">
+        <div>
+          <mat-list>
+            <mat-list-item *ngFor="let consignment of consignments">
+              <div matLine *ngFor="let package of consignment.packages">
+                {{package.qty}} x {{package.weight}} {{package.length}} {{package.width}} {{package.height}}
+              </div>
+              <div matLine *ngIf="!consignment.quotes">Quoting...</div>
+              <mat-select placeholder="Favorite food" matLine *ngIf="consignment.quotes" [(ngModel)]="consignment.quoteSelected">
+                <mat-option *ngFor="let quote of consignment.quotes" [value]="quote">
+                  {{quote.shippingMethod.name}} ${{quote.amount}}
+                </mat-option>
+              </mat-select>
+            </mat-list-item>
+          </mat-list>
+        </div>
+        <div *ngIf="quoteCheckComplete">
+            <button mat-button (click)="pdfLoad()" >test</button>
+          <button mat-button (click)="saveFulfillment()" >Save</button>
+          <button mat-button (click)="saveFulfillment(true)" >Save & Create Labels</button>
+        </div>
       </div>
-      <iframe #myIframe id="myIframe" (load)="pdfLoad(myIframe)" src="https://s3.ap-southeast-2.amazonaws.com/eiz.labels/labels/2018/02/27/5a9541baab4c8.pdf"></iframe>
-      <div *ngIf="quoteCheckComplete">
-        <button mat-button (click)="saveFulfillment()" >Save</button>
-        <button mat-button (click)="saveFulfillment(true)" >Save & Create Labels</button>
+      <div *ngIf="solidConsignments">
+          <mat-list *ngFor="let consignment of solidConsignments">
+            <mat-list-item *ngFor="let label of consignment.labels">
+              {{label.labelNumber}}
+            </mat-list-item>
+          </mat-list>
       </div>
     </mat-step>
   </mat-vertical-stepper>
