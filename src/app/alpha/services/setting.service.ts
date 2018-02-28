@@ -35,7 +35,7 @@ export class SettingService {
      * Disable Custom Scrollbars if Browser is Mobile
      */
     if (this.platform.ANDROID || this.platform.IOS) {
-      //this.defaultSettings.customScrollbars = false;
+      //  this.defaultSettings.customScrollbars = false;
     }
 
     // Set the settings from the default settings

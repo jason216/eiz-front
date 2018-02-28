@@ -1,3 +1,4 @@
+import { ActiveContentService } from './alpha/services/activeContent.service';
 import { MenuService } from './alpha/services/menu.service';
 import { Component } from '@angular/core';
 import { FuseSplashScreenService } from './core/services/splash-screen.service';
@@ -26,6 +27,7 @@ export class AppComponent
         private translate: TranslateService,
         private translationLoader: FuseTranslationLoaderService,
         private auth: AuthService,
+        private activeContent: ActiveContentService,
     )
     {
         // Add languages
@@ -43,6 +45,8 @@ export class AppComponent
 
         // Inistial Auth information
         this.auth.user = new User();
+
+        // this.activeContent.getOrders();
 
 
         // Set the navigation translations

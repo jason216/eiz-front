@@ -1,3 +1,4 @@
+import { ActiveContentService } from './../../../../app/alpha/services/activeContent.service';
 
 
 import { DatatableComponent } from '@swimlane/ngx-datatable';
@@ -81,7 +82,8 @@ export class OrderListComponent implements OnInit, OnDestroy {
   constructor(
     public dialog: MatDialog,
     public orderService: OrderService,
-    public paginationService: PaginationService
+    public paginationService: PaginationService,
+    public activeContentService: ActiveContentService,
   ) {
     this.page.pageNumber = 0;
     this.page.size = 12;
@@ -102,18 +104,18 @@ export class OrderListComponent implements OnInit, OnDestroy {
       onGridReady: () => {
           this.gridOptions.api.doLayout();
           this.gridOptions.api.sizeColumnsToFit();
-
-          this.orderService
-          .getOrders({size: 99999})
-          .takeWhile(() => this.startSubscribe)
-          .subscribe(
-            res => {
-              this.gridOptions.api.setRowData(res.data);
-            },
-            err => {
-              console.log(`Error in order-get-orders: ${err}`);
-            }
-          );
+          this.gridOptions.api.setRowData(activeContentService.orders);
+          // this.orderService
+          // .getOrders({size: 99999})
+          // .takeWhile(() => this.startSubscribe)
+          // .subscribe(
+          //   res => {
+          //     this.gridOptions.api.setRowData(res.data);
+          //   },
+          //   err => {
+          //     console.log(`Error in order-get-orders: ${err}`);
+          //   }
+          // );
       }
     };
   }

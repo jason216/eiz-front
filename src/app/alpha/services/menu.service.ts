@@ -1,3 +1,4 @@
+import { ActiveContentService } from './activeContent.service';
 import { FuseNavigationModelInterface } from './../../core/components/navigation/navigation.model';
 import { FuseNavigationService } from './../../core/components/navigation/navigation.service';
 import { Injectable } from '@angular/core';
@@ -8,12 +9,16 @@ import { PluginNavListModel } from './../../navigation/plugin-nav-list.model';
 @Injectable()
 export class MenuService {
 
-  menuRef = new PluginNavListModel().model;
+  menuRef;
 
   constructor(
     private fuseNavigationService: FuseNavigationService,
     private apiService: ApiService,
-  ){ }
+    public activeContentService: ActiveContentService
+  ){
+    this.menuRef = new PluginNavListModel(activeContentService).model;
+
+  }
 
   public loadFromRemote() {
 

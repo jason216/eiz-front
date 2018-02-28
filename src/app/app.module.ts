@@ -1,3 +1,4 @@
+import { MenuService } from './alpha/services/menu.service';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -20,6 +21,7 @@ import { RoutesModule } from './routes/routes.module';
 import { ApiHeaderInterceptor } from './alpha/services/interceptor/api-header.interceptor';
 
 import { AuthService } from './alpha/services';
+import { ActiveContentService } from './alpha/services/activeContent.service';
 @NgModule({
   declarations: [AppComponent],
   imports: [
@@ -41,11 +43,13 @@ import { AuthService } from './alpha/services';
       useClass: ApiHeaderInterceptor,
       multi: true
     },
-
+    MenuService,
+    ActiveContentService,
     FuseSplashScreenService,
     FuseConfigService,
     FuseNavigationService,
     AuthService,
+
   ],
   bootstrap: [AppComponent]
 })

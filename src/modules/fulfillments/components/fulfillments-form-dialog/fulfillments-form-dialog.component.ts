@@ -93,6 +93,14 @@ export class FulfillmentsFormDialogComponent {
     });
   }
 
+  removePackage(consignment, item: Package){
+    const index = consignment.packages.indexOf(item);
+    consignment.packages.splice(index, 1);
+    if (consignment.packages.length === 0){
+      this.consignments.splice(this.consignments.indexOf(consignment), 1);
+    }
+  }
+
   checkQuoteComplete(){
     let status = true;
     this.consignments.forEach(consignment => {

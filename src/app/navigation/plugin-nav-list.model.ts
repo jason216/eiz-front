@@ -1,10 +1,13 @@
+import { ActiveContentService } from './../alpha/services/activeContent.service';
 import { FuseNavigationModelInterface } from '../core/components/navigation/navigation.model';
 
 export class PluginNavListModel implements FuseNavigationModelInterface{
 
   public model: any[];
 
-  constructor() {
+  constructor(
+    public activeContentService: ActiveContentService,
+  ) {
     this.model = [
       {
         'id': 'orders',
@@ -18,6 +21,11 @@ export class PluginNavListModel implements FuseNavigationModelInterface{
         'type': 'item',
         'icon': 'email',
         'url': '/orders/all',
+        'badge'    : {
+          'title'    : activeContentService.orders.length,
+          'bg'       : '#F44336',
+          'fg'       : '#FFFFFF'
+        }
       },
       {
         'id': 'orders.new',

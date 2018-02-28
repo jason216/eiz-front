@@ -44,13 +44,15 @@
                                     <mat-icon class="handle mr-16" dnd-sortable-handle fxFlex="0 1 auto" fxHide.xs>
                                         drag_handle
                                     </mat-icon>
-                                    <mat-form-field><input matInput placeholder="Qty" [(ngModel)]="package.qty"></mat-form-field>
-                                    <mat-form-field><input matInput placeholder="Weight" [(ngModel)]="package.weight"></mat-form-field>
-                                    <mat-form-field><input matInput placeholder="L" [(ngModel)]="package.length"></mat-form-field>
-                                    <mat-form-field><input matInput placeholder="W" [(ngModel)]="package.weight"></mat-form-field>
-                                    <mat-form-field><input matInput placeholder="H" [(ngModel)]="package.height"></mat-form-field>
-                                    {{package.qty}}
-                                  </mat-list-item>
+                                    <mat-form-field style="width: 40px;"><input matInput placeholder="Qty" [(ngModel)]="package.qty" size="1"></mat-form-field>
+                                    <mat-form-field style="width: 60px;"><input matInput placeholder="Weight" [(ngModel)]="package.weight"></mat-form-field>
+                                    <mat-form-field style="width: 60px;"><input matInput placeholder="L" [(ngModel)]="package.length"></mat-form-field>
+                                    <mat-form-field style="width: 60px;"><input matInput placeholder="W" [(ngModel)]="package.width"></mat-form-field>
+                                    <mat-form-field style="width: 60px;"><input matInput placeholder="H" [(ngModel)]="package.height"></mat-form-field>
+                                    <mat-icon fxFlex="0 1 auto" (click)="removePackage(consignment, package)" fxHide.xs>
+                                      delete
+                                    </mat-icon>
+                                </mat-list-item>
                             </mat-list>
                         </div>
                   </mat-card>
