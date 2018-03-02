@@ -43,11 +43,12 @@ import { ActiveContentService } from './alpha/services/activeContent.service';
       useClass: ApiHeaderInterceptor,
       multi: true
     },
-    MenuService,
+
     ActiveContentService,
     FuseSplashScreenService,
     FuseConfigService,
     FuseNavigationService,
+    MenuService,
     AuthService,
 
   ],

@@ -5,24 +5,22 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { ApiService } from './api.service';
 import { PluginNavListModel } from './../../navigation/plugin-nav-list.model';
+import { Subscription } from 'rxjs/Subscription';
 
 @Injectable()
 export class MenuService {
 
   menuRef;
+  onOrdersChangeSubscription: Subscription;
+  menu;
+
 
   constructor(
     private fuseNavigationService: FuseNavigationService,
     private apiService: ApiService,
     public activeContentService: ActiveContentService
   ){
-    this.menuRef = new PluginNavListModel(activeContentService).model;
-
-  }
-
-  public loadFromRemote() {
-
-    const defaultMenu = [
+    this.menu = [
       {
         id: 'orders',
         children: [{ id: 'orders.new' }, { id: 'orders.all' }]
@@ -32,20 +30,32 @@ export class MenuService {
         children: [{ id: 'fulfillments.consignments' }, { id: 'fulfillments.new' }, { id: 'fulfillments.despatch' }]
       }
     ];
+    this.onOrdersChangeSubscription = this.activeContentService.onOrdersChange.subscribe(
+      (orders) => {
+        this.setMenu();
+      }
+    );
+  }
 
+  public loadFromRemote() {
     this.apiService.get('user', 'nav').subscribe(
       res => {
         if (res['data']) {
-          this.fuseNavigationService.setNavigationModel(res['data']);
+          this.menu = res['data'];
         }
       },
       err => {
-        this.fuseNavigationService.setNavigationModel(this.decodeMenu(defaultMenu));
+
       },
       () => {
-        this.fuseNavigationService.setNavigationModel(this.decodeMenu(defaultMenu));
+        this.setMenu();
       }
     );
+  }
+
+  setMenu(){
+    this.menuRef = new PluginNavListModel(this.activeContentService).model;
+    this.fuseNavigationService.setNavigationModel(this.decodeMenu(this.menu));
   }
 
   decodeMenu(data: any[]){

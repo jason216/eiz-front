@@ -18,6 +18,7 @@ import { Page } from '../../../../app/alpha/models/page.model';
 import { PaginationService } from '../../../../app/alpha/services/pagination.service';
 import { FulfillmentsFormDialogComponent } from '../../../fulfillments/components/fulfillments-form-dialog/fulfillments-form-dialog.component';
 import { TableOrderlinesCellComponent, TableActionCellComponent } from '../../components';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -47,6 +48,7 @@ export class OrderListComponent implements OnInit, OnDestroy {
   filters = [];
   tableDataOnLoading = false;
   public gridOptions: GridOptions;
+  ordersUpdateSubscription: Subscription;
 
   columnDefs = [
     {
@@ -104,7 +106,14 @@ export class OrderListComponent implements OnInit, OnDestroy {
       onGridReady: () => {
           this.gridOptions.api.doLayout();
           this.gridOptions.api.sizeColumnsToFit();
-          this.gridOptions.api.setRowData(activeContentService.orders);
+          this.ordersUpdateSubscription = this.activeContentService.onOrdersChange.subscribe(
+            (orders) => {
+              if (orders.constructor === Array){
+                this.gridOptions.api.setRowData(orders);
+              }
+            }
+          );
+          // this.gridOptions.api.setRowData(activeContentService.orders);
           // this.orderService
           // .getOrders({size: 99999})
           // .takeWhile(() => this.startSubscribe)
@@ -121,10 +130,11 @@ export class OrderListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    // this.setPage({ offset: 0 });
+
   }
   ngOnDestroy() {
     this.startSubscribe = false;
+    this.ordersUpdateSubscription.unsubscribe();
   }
 
   resetFilter() {
