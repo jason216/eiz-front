@@ -100,8 +100,13 @@ export class OrderListComponent implements OnInit, OnDestroy {
       suppressRowClickSelection: true,
       rowSelection: 'multiple',
       context: { componentParent: this },
+
       getRowHeight: function(params) {
         return 48 * (params.data.orderlines.length);
+      },
+      deltaRowDataMode: true,
+      getRowNodeId: function(data){
+        return data.id;
       },
       onGridReady: () => {
           this.gridOptions.api.doLayout();

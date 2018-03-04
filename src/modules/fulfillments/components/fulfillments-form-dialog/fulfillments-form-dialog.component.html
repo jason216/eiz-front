@@ -59,8 +59,7 @@
             </div>
         </div>
         <div>
-          <button mat-button *ngIf="!packageCheckComplete" (click)="checkPackage()">Continue</button>
-          <button mat-button *ngIf="packageCheckComplete" matStepperNext>Next</button>
+          <button mat-button (click)="checkPackage()">Continue</button>
         </div>
     </mat-step>
     <mat-step [completed]="false" [optional]="false" label="Quotes">

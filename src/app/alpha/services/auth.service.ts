@@ -1,3 +1,4 @@
+import { ActiveContentService } from './activeContent.service';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient, HttpInterceptor, HttpRequest, HttpHandler, HttpEvent } from '@angular/common/http';
@@ -15,7 +16,11 @@ export class AuthService {
 
   user: User;
 
-  constructor( private router: Router, private apiService: ApiService) {}
+  constructor(
+    private router: Router,
+    private apiService: ApiService,
+    private activeContentService: ActiveContentService,
+  ) {}
 
   public isAuthenticated(){
     if (!this.isActive()){
@@ -57,6 +62,7 @@ export class AuthService {
     localStorage.removeItem('token');
     localStorage.removeItem('refresh_expires_at');
     localStorage.removeItem('expires_at');
+    this.activeContentService.endActiveContent();
     this.router.navigate(['/login']);
   }
 
@@ -74,6 +80,7 @@ export class AuthService {
         // tslint:disable-next-line:no-shadowed-variable
         res => {
           this.user.loadFromAuth(res.data);
+          this.activeContentService.startActiveContent();
         }
       );
       return true;
@@ -102,14 +109,14 @@ export class AuthService {
     return this.getStorageTime('expires_at');
   }
   private isActive() {
-    // const activeTime = this.getActive();
-    // const now = moment().subtract(1, 'm');
-    // if (now.isBefore(activeTime)) {
-    //   return true;
-    // }else{
-    //   return false;
-    // }
-    return true;
+    const activeTime = this.getActive();
+    const now = moment().subtract(1, 'm');
+    if (now.isBefore(activeTime)) {
+      return true;
+    }else{
+      return false;
+    }
+    // return true;
   }
 
 }

@@ -59,7 +59,7 @@ export class FulfillmentsFormDialogComponent {
   checkAddress(){
     this.apiService.get('Fulfillments', 'checkAddress', null, this.shipTo).subscribe(
       (res) => {
-        this.addressCheckComplete = true;
+        this.stepper.selected.completed = true;
         this.stepper.next();
       },
       (err) => {
@@ -72,7 +72,7 @@ export class FulfillmentsFormDialogComponent {
   }
 
   checkPackage(){
-    this.packageCheckComplete = true;
+    this.stepper.selected.completed = true;
     this.stepper.next();
     this.consignments.forEach(consignment => {
       // tslint:disable-next-line:max-line-length

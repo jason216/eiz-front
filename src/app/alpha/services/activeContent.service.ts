@@ -1,7 +1,7 @@
 import { MenuService } from './menu.service';
 import { Injectable } from '@angular/core';
 // tslint:disable-next-line:import-blacklist
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import 'rxjs/add/observable/fromPromise';
 import { ApiService } from '../../../app/alpha/services/api.service';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
@@ -11,16 +11,25 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 export class ActiveContentService {
 
   orders = [];
+  private subscription: Subscription;
   public onOrdersChange: BehaviorSubject<any> = new BehaviorSubject({});
   timer = Observable.timer(0, 1000);
 
   constructor(
     private apiService: ApiService,
   ){
+
+  }
+
+  public startActiveContent(){
     this.getOrders();
-    Observable.interval(30000).subscribe((v) => {
+    this.subscription = Observable.interval(30000).subscribe((v) => {
       this.getOrders();
     });
+  }
+
+  public endActiveContent(){
+    this.subscription.unsubscribe();
   }
 
   public getOrders(){
