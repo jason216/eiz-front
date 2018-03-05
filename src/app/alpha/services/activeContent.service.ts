@@ -33,7 +33,7 @@ export class ActiveContentService {
   }
 
   public getOrders(){
-      this.apiService.get('orders', 'orders', null, {size: 99999}).subscribe(
+      this.apiService.get('orders', 'orders', null, {size: 99999, 'tags[]': 3}).subscribe(
         res => {
           this.orders = res.data;
           this.onOrdersChange.next(this.orders);

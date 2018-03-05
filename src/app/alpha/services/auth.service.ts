@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient, HttpInterceptor, HttpRequest, HttpHandler, HttpEvent } from '@angular/common/http';
 
-import * as moment from 'moment';
+import * as moment from 'moment-timezone';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 
@@ -23,29 +23,29 @@ export class AuthService {
   ) {}
 
   public isAuthenticated(){
-    if (!this.isActive()){
-      this.renewToken();
+    if (!localStorage.getItem('token') || !this.isExpiration){
+      return false;
     }
-    if (this.isLoggedIn() && this.isActive() ){
+    if (this.isActive() && this.user && this.user.account){
       return true;
     }
-    return false;
+
+    return this.renewToken();
   }
-  private renewToken() {
-    // this.apiService.post('auth', 'update').toPromise.
-  //   this.apiService.post('auth', 'update').subscribe(
-  //     res => {
-  //       if (res['data']){
-  //         this.setSession(res['data']);
-  //       }
-  //     },
-  //     err => {
-  //       console.log(`Error in auth-renew-token: ${err}`);
-  //     },
-  //     () => {
-  //       console.log('auth-renew-token Completed');
-  //     }
-  //   );
+
+  private async renewToken() {
+    await this.apiService.post('auth', 'update').toPromise().catch().then(
+      res => {
+        if (res['data']){
+          this.setSession(res['data']);
+          return true;
+        }
+      },
+      err => {
+        console.log(`Error in auth-renew-token: ${err}`);
+        return false;
+      }
+    );
   }
 
   public login(username: string, password: string ) {
@@ -58,6 +58,7 @@ export class AuthService {
     );
   }
 
+
   public logout() {
     localStorage.removeItem('token');
     localStorage.removeItem('refresh_expires_at');
@@ -67,37 +68,27 @@ export class AuthService {
   }
 
   private setSession(authResult) {
-    const expiresAt = moment().add(authResult['expires_at'], 'second');
-    const activeAt = moment().add(authResult['refresh_expires_at'] , 'second');
+    const expiresAt = moment.tz(authResult['expires_at'], 'Australia/Melbourne'); // moment().add(authResult['expires_at'], 'second');
+    const activeAt = moment.tz(authResult['refresh_expires_at'], 'Australia/Melbourne'); // moment().add(authResult['refresh_expires_at'] , 'second');
     localStorage.setItem('token', authResult['token']);
     localStorage.setItem('refresh_expires_at', JSON.stringify(activeAt.valueOf()) );
     localStorage.setItem('expires_at', JSON.stringify(expiresAt.valueOf()) );
-  }
-
-  private isLoggedIn() {
-    if (localStorage.getItem('token')){
-      this.apiService.get('auth', 'auth').subscribe(
-        // tslint:disable-next-line:no-shadowed-variable
-        res => {
-          this.user.loadFromAuth(res.data);
-          this.activeContentService.startActiveContent();
-        }
-      );
-      return true;
-    }
-    return false;
+    this.apiService.get('auth', 'auth').subscribe(
+      // tslint:disable-next-line:no-shadowed-variable
+      res => {
+        this.user.loadFromAuth(res.data);
+        this.activeContentService.startActiveContent();
+      }
+    );
   }
 
   private getStorageTime(itemName: string){
     const item = JSON.parse(localStorage.getItem(itemName));
     return moment(item);
   }
-  private getExpiration() {
-    return this.getStorageTime('refresh_expires_at');
-  }
 
   private isExpiration(){
-    const expirationTime = this.getExpiration();
+    const expirationTime = this.getStorageTime('refresh_expires_at');
     const now = moment().subtract(1, 'm');
     if (now.isBefore(expirationTime)) {
       return true;
@@ -105,11 +96,9 @@ export class AuthService {
       return false;
     }
   }
-  private getActive() {
-    return this.getStorageTime('expires_at');
-  }
+
   private isActive() {
-    const activeTime = this.getActive();
+    const activeTime = this.getStorageTime('expires_at');
     const now = moment().subtract(1, 'm');
     if (now.isBefore(activeTime)) {
       return true;
