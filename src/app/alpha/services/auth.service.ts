@@ -10,6 +10,8 @@ import 'rxjs/add/operator/map';
 import { ApiService } from './api.service';
 
 import {User} from '../models/user.model';
+import { resolve } from 'q';
+import {MatSnackBar} from '@angular/material';
 
 @Injectable()
 export class AuthService {
@@ -20,32 +22,43 @@ export class AuthService {
     private router: Router,
     private apiService: ApiService,
     private activeContentService: ActiveContentService,
+    public snackBar: MatSnackBar,
   ) {}
 
-  public isAuthenticated(){
-    if (!localStorage.getItem('token') || !this.isExpiration){
-      return false;
-    }
-    if (this.isActive() && this.user && this.user.account){
-      return true;
-    }
-
-    return this.renewToken();
+  public isAuthenticated(): Promise<boolean> {
+    // tslint:disable-next-line:no-shadowed-variable
+    return new Promise((resolve, reject) => {
+      if (!localStorage.getItem('token') || !this.isExpiration){
+        resolve(false);
+      }else if (this.isActive() && this.user && this.user.account){
+        resolve(true);
+      }else{
+        this.renewToken().subscribe(
+          res => {
+              resolve(true);
+          },
+          err => {
+            this.snackBar.open('123', 'Got it', {
+              duration: 2000,
+            });
+            resolve(false);
+          }
+        );
+      }
+    });
   }
 
-  private async renewToken() {
-    await this.apiService.post('auth', 'update').toPromise().catch().then(
-      res => {
-        if (res['data']){
-          this.setSession(res['data']);
-          return true;
+  private renewToken(){
+    return this.apiService.post('auth', 'update').map(
+        res => {
+          if (res['data']){
+            this.setSession(res['data']);
+          }
+        },
+        err => {
+          console.log(`Error in auth-renew-token: ${err}`);
         }
-      },
-      err => {
-        console.log(`Error in auth-renew-token: ${err}`);
-        return false;
-      }
-    );
+      );
   }
 
   public login(username: string, password: string ) {

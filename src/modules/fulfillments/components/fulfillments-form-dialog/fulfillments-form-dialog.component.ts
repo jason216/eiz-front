@@ -1,6 +1,6 @@
 import { Consignment } from './../../../../app/alpha/models/consignment.model';
 import { Component, Inject, ViewChild, Injectable } from '@angular/core';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatStepper } from '@angular/material';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatStepper, MatSnackBar } from '@angular/material';
 import { ApiService } from '../../../../app/alpha/services';
 import { DomSanitizer } from '@angular/platform-browser';
 
@@ -36,6 +36,7 @@ export class FulfillmentsFormDialogComponent {
     @Inject(MAT_DIALOG_DATA) public data: [any],
     private apiService: ApiService,
     public sanitizer: DomSanitizer,
+    public snackBar: MatSnackBar,
   ) {
     if (this.data.length === 1){
       this.shipTo = {
@@ -59,11 +60,17 @@ export class FulfillmentsFormDialogComponent {
   checkAddress(){
     this.apiService.get('Fulfillments', 'checkAddress', null, this.shipTo).subscribe(
       (res) => {
-        this.stepper.selected.completed = true;
-        this.stepper.next();
+        if (res.message){
+          this.snackBar.open(res.message, 'Got it', {
+            duration: 2000,
+          });
+        }else{
+          this.stepper.selected.completed = true;
+          this.stepper.next();
+        }
       },
       (err) => {
-
+        console.log(err);
       },
       () => {
 

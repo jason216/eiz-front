@@ -69,12 +69,6 @@ export class OrderListComponent implements OnInit, OnDestroy {
       cellStyle: {padding: 0}
     },
     {
-      field: 'paymentStatus',
-      headerName: 'Payment',
-      width: 30,
-      cellTemplate: this.cellTagTmpl
-    },
-    {
       field: 'status',
       headerName: 'Status',
       width: 30,
@@ -173,8 +167,12 @@ export class OrderListComponent implements OnInit, OnDestroy {
   openFulfillments(row): void {
     const dialogRef = this.dialog.open(FulfillmentsFormDialogComponent, {
       width: '1000px',
-      height: '700px',
+      height: '580px',
       data: row
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.activeContentService.getOrders();
     });
 
     // dialogRef
