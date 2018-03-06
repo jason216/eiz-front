@@ -123,21 +123,30 @@
 
               <div class="nav">
 
-                <div class="nav-item" aria-label="inbox">
+                <div class="nav-item" aria-label="inbox" (click)="setCurrentOrders('awaitFulfill')">
                   <a class="nav-link" matRipple>
-                    <span class="title">All Orders</span>
+                    <span class="title">Paid & awaiting postage</span>
+                    <span class="nav-link-badge" *ngIf="orders.awaitFulfill?.length" [ngStyle]="{'background-color': 'blue','color': 'white'}">
+                        {{orders.awaitFulfill.length}}
+                    </span>
                   </a>
                 </div>
 
-                <div class="nav-item" aria-label="frequently contacted">
+                <div class="nav-item" aria-label="frequently contacted" (click)="setCurrentOrders('hold')">
                   <a class="nav-link" matRipple>
-                    <div class="title">Freequently orders</div>
+                    <span class="title">Onhold</span>
+                    <span class="nav-link-badge" *ngIf="orders.hold?.length" [ngStyle]="{'background-color': 'blue','color': 'white'}">
+                      {{orders.hold.length}}
+                  </span>
                   </a>
                 </div>
 
-                <div class="nav-item" aria-label="starred">
+                <div class="nav-item" aria-label="starred" (click)="setCurrentOrders('unpaid')">
                   <a class="nav-link" matRipple>
-                    <div class="title">Starred Orders</div>
+                    <span class="title">Unpaid</span>
+                    <span class="nav-link-badge" *ngIf="orders.unpaid?.length" [ngStyle]="{'background-color': 'blue','color': 'white'}">
+                      {{orders.unpaid.length}}
+                  </span>
                   </a>
                 </div>
               </div>

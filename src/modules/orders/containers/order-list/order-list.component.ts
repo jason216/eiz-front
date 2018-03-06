@@ -17,7 +17,7 @@ import { FormControl } from '@angular/forms';
 import { Page } from '../../../../app/alpha/models/page.model';
 import { PaginationService } from '../../../../app/alpha/services/pagination.service';
 import { FulfillmentsFormDialogComponent } from '../../../fulfillments/components/fulfillments-form-dialog/fulfillments-form-dialog.component';
-import { TableOrderlinesCellComponent, TableActionCellComponent } from '../../components';
+import { TableOrderlinesCellComponent, TableActionCellComponent, TableStatusCellComponent } from '../../components';
 import { Subscription } from 'rxjs/Subscription';
 
 @Component({
@@ -39,7 +39,7 @@ export class OrderListComponent implements OnInit, OnDestroy {
   @ViewChild('cellOrderlinesTmpl') cellOrderlinesTmpl: TemplateRef<any>;
 
   rows: any[] = [];
-  selected = [];
+  selected: any = [];
   hasSelectedOrders = false;
   columnsRef = [];
   page = new Page();
@@ -49,6 +49,8 @@ export class OrderListComponent implements OnInit, OnDestroy {
   tableDataOnLoading = false;
   public gridOptions: GridOptions;
   ordersUpdateSubscription: Subscription;
+  orders;
+  currentOrders;
 
   columnDefs = [
     {
@@ -76,7 +78,7 @@ export class OrderListComponent implements OnInit, OnDestroy {
       field: 'status',
       headerName: 'Status',
       width: 30,
-      ellTemplate: this.cellTagTmpl
+      cellRendererFramework: TableStatusCellComponent
     },
     { headerName: 'Actions', width: 30, cellRendererFramework: TableActionCellComponent, }
   ];
@@ -108,14 +110,22 @@ export class OrderListComponent implements OnInit, OnDestroy {
       getRowNodeId: function(data){
         return data.id;
       },
+      onSelectionChanged: () => {
+        this.selected = this.gridOptions.api.getSelectedRows();
+        if (this.selected.length){
+          this.hasSelectedOrders = true;
+        }else{
+          this.hasSelectedOrders = false;
+        }
+      },
       onGridReady: () => {
           this.gridOptions.api.doLayout();
           this.gridOptions.api.sizeColumnsToFit();
+          this.currentOrders = 'awaitFulfill';
           this.ordersUpdateSubscription = this.activeContentService.onOrdersChange.subscribe(
             (orders) => {
-              if (orders.constructor === Array){
-                this.gridOptions.api.setRowData(orders);
-              }
+              this.orders = orders;
+              this.gridOptions.api.setRowData(orders[this.currentOrders]);
             }
           );
           // this.gridOptions.api.setRowData(activeContentService.orders);
@@ -140,6 +150,11 @@ export class OrderListComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.startSubscribe = false;
     this.ordersUpdateSubscription.unsubscribe();
+  }
+
+  setCurrentOrders(tag){
+    this.currentOrders = tag;
+    this.gridOptions.api.setRowData(this.orders[this.currentOrders]);
   }
 
   resetFilter() {
@@ -293,6 +308,7 @@ export class OrderListComponent implements OnInit, OnDestroy {
 
   deselectAll() {
     this.selected = [];
+    this.gridOptions.api.deselectAll();
     this.hasSelectedOrders = false;
   }
 }

@@ -10,15 +10,15 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 @Injectable()
 export class ActiveContentService {
 
-  orders = [];
+  orders: any = {};
   private subscription: Subscription;
   public onOrdersChange: BehaviorSubject<any> = new BehaviorSubject({});
-  timer = Observable.timer(0, 1000);
+
 
   constructor(
     private apiService: ApiService,
   ){
-
+    this.initialOrders();
   }
 
   public startActiveContent(){
@@ -35,10 +35,37 @@ export class ActiveContentService {
   public getOrders(){
       this.apiService.get('orders', 'orders', null, {size: 99999, 'tags[]': 3}).subscribe(
         res => {
-          this.orders = res.data;
+          this.initialOrders();
+          this.orders.all = res.data;
+          this.orders.all.forEach(order => {
+            order.tags.forEach(tag => {
+              switch (tag.id){
+                case 4: {
+                  this.orders.hold.push(order);
+                  break;
+                }
+                case 3: {
+                  this.orders.awaitFulfill.push(order);
+                  break;
+                }
+                default: {
+                  this.orders.unpaid.push(order);
+                  break;
+                }
+
+              }
+            });
+          });
           this.onOrdersChange.next(this.orders);
         }
       );
+  }
+
+  initialOrders(){
+    this.orders.all = [];
+    this.orders.hold = [];
+    this.orders.awaitFulfill = [];
+    this.orders.unpaid = [];
   }
 
 }

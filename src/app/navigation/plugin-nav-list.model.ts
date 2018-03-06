@@ -22,7 +22,7 @@ export class PluginNavListModel implements FuseNavigationModelInterface{
         'icon': 'email',
         'url': '/orders/all',
         'badge'    : {
-          'title'    : activeContentService.orders.length,
+          'title'    : activeContentService.orders.all.length,
           'bg'       : '#F44336',
           'fg'       : '#FFFFFF'
         }
