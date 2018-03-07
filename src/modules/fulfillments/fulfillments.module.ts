@@ -19,6 +19,7 @@ import { FulfillmentsFormModule } from './shared/fulfillments-form.module';
 import { ConsignmentsModule } from './containers/consignments/consignmentsModule';
 import { DndModule } from 'ng2-dnd';
 import { AgGridModule } from 'ag-grid-angular';
+import { TableActionCellComponent } from './containers/consignments/table-cell/table-action-cell/table-action-cell.component';
 
 
 @NgModule({
@@ -31,7 +32,6 @@ import { AgGridModule } from 'ag-grid-angular';
     FulfillmentsFormModule,
     ConsignmentsModule,
     DndModule,
-    AgGridModule.withComponents([]),
   ],
   declarations: [
     fromComponents.components,

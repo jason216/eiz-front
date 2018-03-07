@@ -17,10 +17,18 @@ export class ConsignmentsService {
 
   }
 
-  getConsignments(){
-    this.apiService.get('Fulfillments', 'consignments').subscribe(
+  printConsignments(ids: [any]){
+    this.apiService.get('Fulfillments', 'printConsignments', null, {'ids[]': ids}).subscribe(
       (res) => {
-        this.onConsignmentsUpdate.next(res);
+        window.open(res.data.url);
+      }
+    );
+  }
+
+  solidConsignments(ids: [any]){
+    this.apiService.post('Fulfillments', 'solidConsignments', null, {'ids': ids}).subscribe(
+      (res) => {
+        console.log(res);
       }
     );
   }

@@ -14,6 +14,8 @@ export class ActiveContentService {
   orders: any = {};
   consignments: any = {};
   private subscription: Subscription;
+  // private onChangeSubscription: Subscription;
+  public onChanges: BehaviorSubject<any> = new BehaviorSubject({});
   public onOrdersChange: BehaviorSubject<any> = new BehaviorSubject({});
   public onConsignmentsChange: BehaviorSubject<any> = new BehaviorSubject({});
 
@@ -22,6 +24,7 @@ export class ActiveContentService {
     private apiService: ApiService,
   ){
     this.initialOrders();
+    this.initialConsigments();
   }
 
   public startActiveContent(){
@@ -62,6 +65,7 @@ export class ActiveContentService {
             });
           });
           this.onOrdersChange.next(this.orders);
+          this.onChanges.next(true);
         }
       );
   }
@@ -69,22 +73,30 @@ export class ActiveContentService {
   public getConsignments(){
     this.apiService.get('Fulfillments', 'consignments', null, {}).subscribe(
       res => {
-        this.initialOrders();
+        this.initialConsigments();
         this.consignments.all = res.data;
         this.consignments.all.forEach(consignment => {
           if (!consignment.processed){
             this.consignments.pending.push(consignment);
           }else if (consignment.errors){
             this.consignments.issue.push(consignment);
-          }else if (consignment.printed){
+          }else if (!consignment.printed){
             this.consignments.solid.push(consignment);
           }else{
-
+            this.consignments.printed.push(consignment);
           }
         });
         this.onConsignmentsChange.next(this.consignments);
+        this.onChanges.next(true);
       }
     );
+  }
+
+  public getData(){
+    return {
+      consignments: this.consignments,
+      orders: this.orders
+    };
   }
 
   initialOrders(){
@@ -92,7 +104,9 @@ export class ActiveContentService {
     this.orders.hold = [];
     this.orders.awaitFulfill = [];
     this.orders.unpaid = [];
+  }
 
+  initialConsigments(){
     this.consignments.all = [];
     this.consignments.pending = [];
     this.consignments.issue = [];

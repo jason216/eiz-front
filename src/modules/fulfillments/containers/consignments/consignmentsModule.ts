@@ -1,3 +1,7 @@
+import { ConsignmentsPrintedComponent } from './consignments-printed/consignments-printed.component';
+import { ConsignmentsSolidComponent } from './consignments-solid/consignments-solid.component';
+import { ConsignmentsErrorComponent } from './consignments-error/consignments-error.component';
+import { TableActionCellComponent } from './table-cell/table-action-cell/table-action-cell.component';
 import { ConsignmentsComponent } from './consignments.component';
 import { NgModule, ModuleWithProviders } from '@angular/core';
 
@@ -8,6 +12,8 @@ import { ConsignmentsAllComponent } from './consignments-all/consignments-all.co
 import { ConsignmentsComponent as ConsignmentsComponent_fastway} from '../../../fastway/containers/consignments/consignments.component';
 import { Routes, RouterModule } from '@angular/router';
 import { ConsignmentsSideNavComponent } from './side-nav/side-nav.component';
+import { AgGridModule } from 'ag-grid-angular';
+import { ConsignmentsPendingComponent } from './consignments-pending/consignments-pending.component';
 
 const routes: Routes = [
   {
@@ -17,6 +23,22 @@ const routes: Routes = [
       {
         path: '',
         component: ConsignmentsAllComponent,
+      },
+      {
+        path: 'pending',
+        component: ConsignmentsPendingComponent,
+      },
+      {
+        path: 'error',
+        component: ConsignmentsErrorComponent,
+      },
+      {
+        path: 'solid',
+        component: ConsignmentsSolidComponent,
+      },
+      {
+        path: 'printed',
+        component: ConsignmentsPrintedComponent,
       },
       {
         path: 'fastway',
@@ -32,12 +54,18 @@ const routes: Routes = [
     FuseMainModule,
     BasicModule,
     RouterModule.forChild(routes),
+    AgGridModule.withComponents([TableActionCellComponent]),
   ],
   declarations: [
     ConsignmentsAllComponent,
+    ConsignmentsPendingComponent,
+    ConsignmentsErrorComponent,
+    ConsignmentsSolidComponent,
+    ConsignmentsPrintedComponent,
     ConsignmentsComponent,
     ConsignmentsSideNavComponent,
     ConsignmentsComponent_fastway,
+    TableActionCellComponent,
   ],
   exports: [
     RouterModule,

@@ -14,7 +14,7 @@ import { DndModule } from 'ng2-dnd';
     SharedModule,
     BasicModule,
     AlphaModule,
-    DndModule
+    DndModule,
   ],
   declarations: [
     fromComponents.fulfillmentsFormComponents,

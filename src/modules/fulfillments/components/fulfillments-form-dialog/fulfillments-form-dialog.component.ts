@@ -54,6 +54,16 @@ export class FulfillmentsFormDialogComponent {
         shipTo_country: this.data[0].shipTo_country
       };
     }
+    if (this.data.length === 1 && this.data[0].orderlines.length === 1 && this.data[0].orderlines[0].listing && this.data[0].orderlines[0].listing.package){
+      const packages = this.data[0].orderlines[0].listing.package;
+      this.consignments = [];
+      packages.forEach(pack => {
+        this.consignments.push(
+          new ConsignmentGroup([new Package(pack.qty, pack.weight, pack.length, pack.width, pack.height)])
+        );
+      });
+
+    }
     this.orders = this.data;
   }
 

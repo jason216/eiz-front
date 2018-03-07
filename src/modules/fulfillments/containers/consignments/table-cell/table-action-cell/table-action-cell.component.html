@@ -1,0 +1,15 @@
+<div>
+    <button mat-icon-button [matMenuTriggerFor]="menu">
+      <mat-icon>more_vert</mat-icon>
+  </button>
+  <mat-menu #menu="matMenu">
+      <button mat-menu-item *ngIf="consignment.processed" (click)="pirntConsignment()">
+          <mat-icon>local_shipping</mat-icon>
+          <span>Print</span>
+      </button>
+      <button mat-menu-item *ngIf="!consignment.processed" (click)="solidConsignment()">
+          <mat-icon>local_shipping</mat-icon>
+          <span>Solid</span>
+      </button>
+  </mat-menu>
+</div>

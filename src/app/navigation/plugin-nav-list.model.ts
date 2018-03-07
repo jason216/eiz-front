@@ -6,7 +6,7 @@ export class PluginNavListModel implements FuseNavigationModelInterface{
   public model: any[];
 
   constructor(
-    public activeContentService: ActiveContentService,
+    public data: any,
   ) {
     this.model = [
       {
@@ -22,7 +22,7 @@ export class PluginNavListModel implements FuseNavigationModelInterface{
         'icon': 'email',
         'url': '/orders/all',
         'badge'    : {
-          'title'    : activeContentService.orders.all.length,
+          'title'    : data.orders.all.length,
           'bg'       : '#F44336',
           'fg'       : '#FFFFFF'
         }
@@ -67,6 +67,11 @@ export class PluginNavListModel implements FuseNavigationModelInterface{
         'type': 'item',
         'icon': 'email',
         'url': '/fulfillments/consignments',
+        'badge'    : {
+          'title'    : data.consignments.all.length,
+          'bg'       : '#F44336',
+          'fg'       : '#FFFFFF'
+        }
       },
     ];
   }

@@ -21,6 +21,7 @@ import { FulfillmentsFormModule } from '../fulfillments/shared/fulfillments-form
 import { FulfillmentsFormDialogComponent } from '../fulfillments/components/fulfillments-form-dialog/fulfillments-form-dialog.component';
 import { AgGridModule } from 'ag-grid-angular';
 import { TableOrderlinesCellComponent, TableActionCellComponent, TableStatusCellComponent } from './components';
+import { FulfillmentsBulkDialogComponent } from '../fulfillments/components/fulfillments-bulk-dialog/fulfillments-bulk-dialog.component';
 
 @NgModule({
   imports: [
@@ -34,11 +35,13 @@ import { TableOrderlinesCellComponent, TableActionCellComponent, TableStatusCell
   ],
   declarations: [
     fromComponents.components,
-    fromContainers.containers
+    fromContainers.containers,
+    FulfillmentsBulkDialogComponent
   ],
   entryComponents: [
     fromComponents.OrderSearchDialogComponent,
-    FulfillmentsFormDialogComponent
+    FulfillmentsFormDialogComponent,
+    FulfillmentsBulkDialogComponent
   ]
 })
 

@@ -34,8 +34,6 @@
     <!-- / APP TITLE -->
     <!-- SEARCH -->
     <div class="search-input-wrapper mt-16 ml-8 m-sm-0" fxLayout="row" fxLayoutAlign="start center">
-      <button mat-raised-button color="primary" (click)="resetFilter()">Clean Results</button>
-      <button mat-raised-button color="primary" (click)="openAdvancedSearch()">Advanced Search</button>
       <label for="search" class="mr-8">
         <mat-icon (click)="handleBasicSearch()">search</mat-icon>
       </label>
@@ -75,15 +73,7 @@
             <button mat-menu-item>Deselect all</button>
           </mat-menu>
 
-          <button mat-raised-button class="mb-4" color="primary">Print</button>
-          <button mat-raised-button class="mb-4" color="primary">Complete</button>
-          <button mat-raised-button class="mb-4" color="primary">Process</button>
-          <button mat-raised-button class="mb-4" color="primary">Export to Courier</button>
-          <button mat-raised-button class="mb-4" color="primary">Export CSV</button>
-          <button mat-raised-button class="mb-4" color="primary">Analysis</button>
-          <button mat-raised-button class="mb-4" color="primary">Mark as Un-Manifested</button>
-          <button mat-raised-button class="mb-4" color="primary">Mark as Manifested</button>
-          <button mat-raised-button class="mb-4" color="primary">Mark as Shipped</button>
+          <button mat-raised-button class="mb-4" color="primary" (click)="bulkProcess()">Bulk Process</button>
         </div>
 
         <div class="multi-select-actions">

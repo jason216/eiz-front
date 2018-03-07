@@ -12,14 +12,14 @@ import { TableActionCellComponent } from '../table-cell/table-action-cell/table-
 
 @Component({
   // tslint:disable-next-line:component-selector
-  selector: 'consignments-all',
-  templateUrl: './consignments-all.component.html',
-  styleUrls: ['./consignments-all.component.scss'],
+  selector: 'consignments-printed',
+  templateUrl: './consignments-printed.component.html',
+  styleUrls: ['./consignments-printed.component.scss'],
   providers: [
     ConsignmentsService,
   ],
 })
-export class ConsignmentsAllComponent implements OnInit, OnDestroy {
+export class ConsignmentsPrintedComponent implements OnInit, OnDestroy {
   consignments;
   public gridOptions: GridOptions;
   selected: any;
@@ -94,7 +94,7 @@ export class ConsignmentsAllComponent implements OnInit, OnDestroy {
           this.consignmentsSubscription = this.activeContentService.onConsignmentsChange.subscribe(
             (consignments) => {
               this.consignments = consignments;
-              this.gridOptions.api.setRowData(this.activeContentService.consignments.all);
+              this.gridOptions.api.setRowData(this.activeContentService.consignments.printed);
             }
           );
           this.activeContentService.getConsignments();

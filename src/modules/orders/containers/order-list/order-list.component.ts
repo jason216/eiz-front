@@ -19,6 +19,7 @@ import { PaginationService } from '../../../../app/alpha/services/pagination.ser
 import { FulfillmentsFormDialogComponent } from '../../../fulfillments/components/fulfillments-form-dialog/fulfillments-form-dialog.component';
 import { TableOrderlinesCellComponent, TableActionCellComponent, TableStatusCellComponent } from '../../components';
 import { Subscription } from 'rxjs/Subscription';
+import { FulfillmentsBulkDialogComponent } from '../../../fulfillments/components/fulfillments-bulk-dialog/fulfillments-bulk-dialog.component';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -88,7 +89,6 @@ export class OrderListComponent implements OnInit, OnDestroy {
     this.gridOptions = <GridOptions>{
       // domLayout: 'autoHeight',
       enableRangeSelection: true,
-      debug: true,
       enableColResize: true,
       pagination: true,
       paginationAutoPageSize: true,
@@ -122,6 +122,7 @@ export class OrderListComponent implements OnInit, OnDestroy {
               this.gridOptions.api.setRowData(orders[this.currentOrders]);
             }
           );
+          this.activeContentService.getOrders();
           // this.gridOptions.api.setRowData(activeContentService.orders);
           // this.orderService
           // .getOrders({size: 99999})
@@ -174,18 +175,21 @@ export class OrderListComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed().subscribe(result => {
       this.activeContentService.getOrders();
     });
-
-    // dialogRef
-    //   .afterClosed()
-    //   .takeWhile(() => this.startSubscribe)
-    //   .subscribe(result => {
-    //     console.log('The dialog was closed');
-    //     if (result) {
-    //       this.filters = result;
-    //       this.handleSearch();
-    //     }
-    //   });
   }
+
+  bulkProcess(){
+    const orders = this.gridOptions.api.getSelectedRows();
+    const dialogRef = this.dialog.open(FulfillmentsBulkDialogComponent, {
+      width: '1000px',
+      height: '580px',
+      data: orders
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.activeContentService.getOrders();
+    });
+  }
+
   handleBasicSearch() {
     if (this.searchFormControl.value) {
       this.filters['search'] = this.searchFormControl.value;

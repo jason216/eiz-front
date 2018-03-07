@@ -30,8 +30,8 @@ export class MenuService {
         children: [{ id: 'fulfillments.consignments' }, { id: 'fulfillments.new' }, { id: 'fulfillments.despatch' }]
       }
     ];
-    this.onOrdersChangeSubscription = this.activeContentService.onOrdersChange.subscribe(
-      (orders) => {
+    this.onOrdersChangeSubscription = this.activeContentService.onChanges.subscribe(
+      (res) => {
         this.setMenu();
       }
     );
@@ -54,7 +54,7 @@ export class MenuService {
   }
 
   setMenu(){
-    this.menuRef = new PluginNavListModel(this.activeContentService).model;
+    this.menuRef = new PluginNavListModel(this.activeContentService.getData()).model;
     this.fuseNavigationService.setNavigationModel(this.decodeMenu(this.menu));
   }
 
