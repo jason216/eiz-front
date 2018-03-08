@@ -18,6 +18,14 @@
           <mat-form-field>
             <input matInput placeholder="Fastway API KEY" formControlName="apiKey" required>
           </mat-form-field>
+          <br/>
+          <mat-form-field>
+            <mat-select placeholder="Loaction" formControlName="location">
+              <mat-option *ngFor="let location of locations" [value]="location.value" required>
+                {{ location.viewValue }}
+              </mat-option>
+          </mat-select>
+          </mat-form-field>
           <button mat-button mat-raised-button color="accent" (click)="validateApiToken()">Validate</button>
           <div>
             <button mat-button matStepperNext mat-raised-button color="accent" [disabled]="!generalSettings">Next</button>

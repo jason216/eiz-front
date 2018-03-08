@@ -67,15 +67,18 @@
         <div>
           <mat-list>
             <mat-list-item *ngFor="let consignment of consignments">
-              <div matLine *ngFor="let package of consignment.packages">
-                {{package.qty}} x {{package.weight}} {{package.length}} {{package.width}} {{package.height}}
+              <div style="float: left;"><mat-icon style="font-size: 40px;">layers</mat-icon></div>
+              <div style="float: left; margin-left: 20px;">
+                <div matLine *ngFor="let package of consignment.packages">
+                  {{package.qty}} x {{package.weight}}kg {{package.length}}cm x {{package.width}}cm x {{package.height}}cm
+                </div>
+                <div matLine *ngIf="!consignment.quotes"><mat-spinner [diameter]="18">Quoting...</mat-spinner></div>
+                <mat-select placeholder="Favorite food" matLine *ngIf="consignment.quotes" [(ngModel)]="consignment.quoteSelected">
+                  <mat-option *ngFor="let quote of consignment.quotes" [value]="quote">
+                      <div style="float: left;">[{{quote.shippingMethod.serviceProvider}}] {{quote.shippingMethod.name}}</div> <div style="float: right;">${{quote.amount}}</div>
+                  </mat-option>
+                </mat-select>
               </div>
-              <div matLine *ngIf="!consignment.quotes">Quoting...</div>
-              <mat-select placeholder="Favorite food" matLine *ngIf="consignment.quotes" [(ngModel)]="consignment.quoteSelected">
-                <mat-option *ngFor="let quote of consignment.quotes" [value]="quote">
-                  {{quote.shippingMethod.name}} ${{quote.amount}}
-                </mat-option>
-              </mat-select>
             </mat-list-item>
           </mat-list>
         </div>

@@ -3,6 +3,7 @@ import { Component, Inject, ViewChild, Injectable } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatStepper, MatSnackBar } from '@angular/material';
 import { ApiService } from '../../../../app/alpha/services';
 import { DomSanitizer } from '@angular/platform-browser';
+import { FulfillmentsSelectAddressDialogComponent } from '../fulfillments-selectAddress-dialog/fulfillments-selectAddress-dialog.component';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -37,6 +38,7 @@ export class FulfillmentsFormDialogComponent {
     private apiService: ApiService,
     public sanitizer: DomSanitizer,
     public snackBar: MatSnackBar,
+    public dialog: MatDialog,
   ) {
     if (this.data.length === 1){
       this.shipTo = {
@@ -71,6 +73,25 @@ export class FulfillmentsFormDialogComponent {
     this.apiService.get('Fulfillments', 'checkAddress', null, this.shipTo).subscribe(
       (res) => {
         if (res.message){
+          if (res.similarAddress){
+            const checkAddressDia = this.dialog.open(FulfillmentsSelectAddressDialogComponent, {
+              width: '1000px',
+              height: '580px',
+              data: res.similarAddress
+            });
+
+            checkAddressDia.afterClosed().subscribe(address => {
+              this.shipTo.shipTo_address1 = address.StreetLine;
+              this.shipTo.shipTo_address2 = '';
+              this.shipTo.shipTo_address3 = '';
+              this.shipTo.shipTo_address4 = '';
+              this.shipTo.shipTo_suburb = address.Suburb;
+              this.shipTo.shipTo_postcode = address.Postcode;
+              this.shipTo.shipTo_state = address.State;
+              this.stepper.selected.completed = true;
+              this.stepper.next();
+            });
+          }
           this.snackBar.open(res.message, 'Got it', {
             duration: 2000,
           });
