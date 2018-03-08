@@ -9,12 +9,14 @@ import { Subscription } from 'rxjs/Subscription';
 import { ConsignmentsService } from '../../../services/consignments.service';
 import { GridOptions } from 'ag-grid';
 import { TableActionCellComponent } from '../table-cell/table-action-cell/table-action-cell.component';
+import { fuseAnimations } from '../../../../../app/core/animations';
 
 @Component({
   // tslint:disable-next-line:component-selector
   selector: 'consignments-solid',
   templateUrl: './consignments-solid.component.html',
   styleUrls: ['./consignments-solid.component.scss'],
+  animations: fuseAnimations,
   providers: [
     ConsignmentsService,
   ],
@@ -60,6 +62,7 @@ export class ConsignmentsSolidComponent implements OnInit, OnDestroy {
 
   constructor(
     private activeContentService: ActiveContentService,
+    public consignmentsService: ConsignmentsService
   ) {
     this.gridOptions = <GridOptions>{
       domLayout: 'autoHeight',
@@ -80,12 +83,7 @@ export class ConsignmentsSolidComponent implements OnInit, OnDestroy {
         return data.id;
       },
       onSelectionChanged: () => {
-        // this.selected = this.gridOptions.api.getSelectedRows();
-        // if (this.selected.length){
-        //   this.hasSelectedOrders = true;
-        // }else{
-        //   this.hasSelectedOrders = false;
-        // }
+        this.selected = this.gridOptions.api.getSelectedRows();
       },
       onGridReady: () => {
           this.gridOptions.api.doLayout();
@@ -101,6 +99,16 @@ export class ConsignmentsSolidComponent implements OnInit, OnDestroy {
       }
     };
   }
+
+  printSelected(){
+    const ids = [];
+    this.selected.forEach(consignment => {
+      ids.push(consignment.id);
+    });
+    this.consignmentsService.printConsignments(ids);
+    this.activeContentService.getConsignments();
+  }
+
   ngOnInit() {
 
   }

@@ -63,7 +63,7 @@
         </div>
     </mat-step>
     <mat-step [completed]="false" [optional]="false" label="Quotes">
-      <div *ngIf="!solidConsignments">
+      <div>
         <div>
           <mat-list>
             <mat-list-item *ngFor="let consignment of consignments">
@@ -84,16 +84,17 @@
         </div>
         <div *ngIf="quoteCheckComplete">
           <button mat-button (click)="saveFulfillment()" >Save</button>
-          <button mat-button (click)="saveFulfillment(true)" >Save & Create Labels</button>
+          <button mat-button (click)="saveFulfillment(true)" >Save & Get Labels</button>
+          <button mat-button *ngIf="consignmentsIds" (click)="printLabels()" >Print</button>
         </div>
       </div>
-      <div *ngIf="solidConsignments">
+      <!-- <div *ngIf="solidConsignments">
           <mat-list *ngFor="let consignment of solidConsignments">
             <mat-list-item *ngFor="let label of consignment.labels">
               {{label.labelNumber}}
             </mat-list-item>
           </mat-list>
-      </div>
+      </div> -->
     </mat-step>
   </mat-vertical-stepper>
 </div>

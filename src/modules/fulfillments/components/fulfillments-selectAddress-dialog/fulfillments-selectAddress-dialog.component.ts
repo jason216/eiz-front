@@ -14,9 +14,6 @@ export class FulfillmentsSelectAddressDialogComponent {
   addresses;
   selected;
 
-  lat = -34.397;
-  lng = 150.644;
-
   constructor(
     public dialogRef: MatDialogRef<FulfillmentsSelectAddressDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: [any],

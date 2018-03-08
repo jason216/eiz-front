@@ -1,19 +1,22 @@
 <h2>Similar Addresses</h2>
 <h4>Select one from the following addresses</h4>
-<div style="float: left; width: 400px; margin-right: 10px;">
-    <mat-radio-group>
-      <mat-radio-button *ngFor="let address of addresses" [value]="address" (click)="onChange(address)">
-        {{address.StreetLine}} {{address.Suburb}} {{address.State}} {{address.Postcode}}
-      </mat-radio-button>
-    </mat-radio-group>
-</div>
-<div style="float: left;" *ngIf="selected">
-  Map:
-  <agm-map [latitude]="selected.Latitude" [longitude]="selected.Longitude" [zoom]="14" style="width: 400px; height: 300px;">
-      <agm-marker [latitude]="selected.Latitude" [longitude]="selected.Longitude"></agm-marker>
-  </agm-map>
+<div style="height: 390px;">
+  <div style="float: left; width: 400px; margin-right: 10px;">
+      <mat-radio-group>
+        <mat-radio-button *ngFor="let address of addresses" [value]="address" (click)="onChange(address)">
+          {{address.StreetLine}} {{address.Suburb}} {{address.State}} {{address.Postcode}}
+        </mat-radio-button>
+      </mat-radio-group>
+  </div>
+  <div style="float: left;" *ngIf="selected">
+    Map:
+    <agm-map [latitude]="selected.Latitude" [longitude]="selected.Longitude" [zoom]="14" style="width: 400px; height: 300px;">
+        <agm-marker [latitude]="selected.Latitude" [longitude]="selected.Longitude"></agm-marker>
+    </agm-map>
+  </div>
 </div>
 
-<div style="clear: both;">
-    <button mat-button [mat-dialog-close]="selected" cdkFocusInitial>Ok</button>
+<div>
+    <button *ngIf="selected" mat-button [mat-dialog-close]="selected" cdkFocusInitial>Set this address</button>
+    <button mat-button [mat-dialog-close]="false" cdkFocusInitial>Cancel</button>
 </div>

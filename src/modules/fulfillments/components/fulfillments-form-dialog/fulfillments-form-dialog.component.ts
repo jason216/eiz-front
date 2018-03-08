@@ -28,6 +28,7 @@ export class FulfillmentsFormDialogComponent {
   consignments: Array<any> = [
       new ConsignmentGroup([new Package(1, 0.5, 12, 12, 12)])
   ];
+  consignmentsIds;
 
   packages: Array<Package>;
 
@@ -70,10 +71,11 @@ export class FulfillmentsFormDialogComponent {
   }
 
   checkAddress(){
+    this.shipTo.similarAddress = true;
     this.apiService.get('Fulfillments', 'checkAddress', null, this.shipTo).subscribe(
       (res) => {
         if (res.message){
-          if (res.similarAddress){
+          if (res.similarAddress.length){
             const checkAddressDia = this.dialog.open(FulfillmentsSelectAddressDialogComponent, {
               width: '1000px',
               height: '580px',
@@ -81,15 +83,17 @@ export class FulfillmentsFormDialogComponent {
             });
 
             checkAddressDia.afterClosed().subscribe(address => {
-              this.shipTo.shipTo_address1 = address.StreetLine;
-              this.shipTo.shipTo_address2 = '';
-              this.shipTo.shipTo_address3 = '';
-              this.shipTo.shipTo_address4 = '';
-              this.shipTo.shipTo_suburb = address.Suburb;
-              this.shipTo.shipTo_postcode = address.Postcode;
-              this.shipTo.shipTo_state = address.State;
-              this.stepper.selected.completed = true;
-              this.stepper.next();
+              if (address){
+                this.shipTo.shipTo_address1 = address.StreetLine;
+                this.shipTo.shipTo_address2 = '';
+                this.shipTo.shipTo_address3 = '';
+                this.shipTo.shipTo_address4 = '';
+                this.shipTo.shipTo_suburb = address.Suburb;
+                this.shipTo.shipTo_postcode = address.Postcode;
+                this.shipTo.shipTo_state = address.State;
+                this.stepper.selected.completed = true;
+                this.stepper.next();
+              }
             });
           }
           this.snackBar.open(res.message, 'Got it', {
@@ -235,15 +239,9 @@ export class FulfillmentsFormDialogComponent {
         if (createLabels){
           this.apiService.post('fulfillments', 'solidConsignments', null, {'ids': consignmentsIds}).subscribe(
             res_labels => {
-              console.log(res_labels);
               if (res_labels['data']) {
                 this.solidConsignments = res_labels['data'];
-                console.log(this.solidConsignments);
-                this.apiService.get('fulfillments', 'printConsignments', null, {'ids[]': consignmentsIds}).subscribe(
-                  res => {
-                    window.open(res.data.url);
-                  }
-                );
+                this.consignmentsIds = consignmentsIds;
               }
             },
             err => {
@@ -256,6 +254,14 @@ export class FulfillmentsFormDialogComponent {
         }else{
           this.dialogRef.close();
         }
+      }
+    );
+  }
+
+  printLabels(){
+    this.apiService.get('fulfillments', 'printConsignments', null, {'ids[]': this.consignmentsIds}).subscribe(
+      res => {
+        window.open(res.data.url);
       }
     );
   }

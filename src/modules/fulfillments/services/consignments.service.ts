@@ -1,3 +1,4 @@
+import { ActiveContentService } from './../../../app/alpha/services/activeContent.service';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/fromPromise';
@@ -13,14 +14,16 @@ export class ConsignmentsService {
 
   constructor(
     private apiService: ApiService,
+    private activeContentService: ActiveContentService,
   ) {
 
   }
 
-  printConsignments(ids: [any]){
+  printConsignments(ids: any[]){
     this.apiService.get('Fulfillments', 'printConsignments', null, {'ids[]': ids}).subscribe(
       (res) => {
         window.open(res.data.url);
+        this.activeContentService.getConsignments();
       }
     );
   }
@@ -28,7 +31,7 @@ export class ConsignmentsService {
   solidConsignments(ids: [any]){
     this.apiService.post('Fulfillments', 'solidConsignments', null, {'ids': ids}).subscribe(
       (res) => {
-        console.log(res);
+        this.activeContentService.getConsignments();
       }
     );
   }

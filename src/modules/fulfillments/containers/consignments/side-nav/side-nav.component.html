@@ -3,24 +3,35 @@
     <mat-list>
         <h3 matSubheader>Consignments</h3>
 
-        <mat-list-item >
-            <button mat-button fxFlexFill [routerLink]="['/fulfillments/consignments']">All</button>
-          </mat-list-item>
+        <!-- <mat-list-item >
+            <button mat-button fxFlexFill [routerLink]="['/fulfillments/consignments']">All <span *ngIf="consignments.all?.length">
+              ({{consignments.all.length}})
+          </span></button>
+
+          </mat-list-item> -->
 
         <mat-list-item>
-          <button mat-button fxFlexFill [routerLink]="['/fulfillments/consignments/pending']">Pending</button>
+          <button mat-button fxFlexFill [routerLink]="['/fulfillments/consignments/pending']">Pending <span *ngIf="consignments.pending?.length">
+            ({{consignments.pending.length}})
+        </span></button>
         </mat-list-item>
 
         <mat-list-item>
-            <button mat-button fxFlexFill [routerLink]="['/fulfillments/consignments/error']">Error Consignments</button>
+            <button mat-button fxFlexFill [routerLink]="['/fulfillments/consignments/error']">Error Consignments <span *ngIf="consignments.error?.length">
+              ({{consignments.error.length}})
+          </span></button>
           </mat-list-item>
 
         <mat-list-item>
-            <button mat-button fxFlexFill [routerLink]="['/fulfillments/consignments/solid']">Awaiting Print</button>
+            <button mat-button fxFlexFill [routerLink]="['/fulfillments/consignments/solid']">Awaiting Print <span *ngIf="consignments.solid?.length">
+              ({{consignments.solid.length}})
+          </span></button>
           </mat-list-item>
 
           <mat-list-item>
-              <button mat-button fxFlexFill [routerLink]="['/fulfillments/consignments/printed']">Awaiting Despatch</button>
+              <button mat-button fxFlexFill [routerLink]="['/fulfillments/consignments/printed']">Awaiting Despatch <span *ngIf="consignments.printed?.length">
+                ({{consignments.printed.length}})
+            </span></button>
             </mat-list-item>
 
       </mat-list>

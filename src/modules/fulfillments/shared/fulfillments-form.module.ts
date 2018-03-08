@@ -28,7 +28,7 @@ import { AgmCoreModule } from '@agm/core';
   ],
   exports: [
     fromComponents.FulfillmentsFormComponent,
-    DndModule
+    DndModule,
   ],
   entryComponents: [
     FulfillmentsSelectAddressDialogComponent

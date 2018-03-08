@@ -1,25 +1,26 @@
 <!-- CONTENT HEADER -->
 <div class="header white-fg p-24">
-  <button mat-button class="mat-icon-button sidenav-toggle" fuseMatSidenavToggler="carded-left-sidenav" fxHide.gt-md>
-    <mat-icon>menu</mat-icon>
-  </button>
   <h2>All Consignments</h2>
 </div>
 <!-- / CONTENT HEADER -->
 
 <!-- CONTENT CARD -->
-<!-- <div class="content-card mat-white-bg"> -->
+<div class="content-card mat-white-bg">
 
 <!-- CONTENT TOOLBAR -->
-<!-- <div class="toolbar px-24 py-8">
+<div class="toolbar px-24 py-8">
                     <button mat-button class="mat-icon-button sidenav-toggle"
                             fuseMatSidenavToggler="carded-left-sidenav"
                             fxHide.gt-md>
                         <mat-icon>menu</mat-icon>
                     </button>
 
-                    <span>Content toolbar</span>
-                </div> -->
+                    <span *ngIf="selected?.length">
+                      {{selected.length}} Selected: <button mat-icon-button (click)="printSelected()">
+                          <mat-icon class="mat-18">print</mat-icon>
+                      </button>
+                    </span>
+                </div>
 <!-- / CONTENT TOOLBAR -->
 
 <!-- CONTENT -->
@@ -28,5 +29,5 @@
 </div>
 <!-- / CONTENT -->
 
-<!-- </div> -->
+</div>
 <!-- / CONTENT CARD -->
