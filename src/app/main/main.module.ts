@@ -13,8 +13,8 @@ import { FuseNavbarVerticalToggleDirective } from './navbar/vertical/navbar-vert
 import { FuseNavbarHorizontalComponent } from './navbar/horizontal/navbar-horizontal.component';
 import { FuseQuickPanelComponent } from './quick-panel/quick-panel.component';
 import { FuseThemeOptionsComponent } from '../core/components/theme-options/theme-options.component';
-import { FuseShortcutsModule } from '../core/components/shortcuts/shortcuts.module';
-import { FuseSearchBarModule } from '../core/components/search-bar/search-bar.module';
+// import { FuseShortcutsModule } from '../core/components/shortcuts/shortcuts.module';
+// import { FuseSearchBarModule } from '../core/components/search-bar/search-bar.module';
 import { BasicModule } from '../basic/basic.module';
 import { UserMenuComponent } from '../main/toolbar/user-menu/user-menu.component';
 
@@ -35,8 +35,8 @@ import { UserMenuComponent } from '../main/toolbar/user-menu/user-menu.component
         SharedModule,
         RouterModule,
         FuseNavigationModule,
-        FuseShortcutsModule,
-        FuseSearchBarModule,
+        // FuseShortcutsModule,
+        // FuseSearchBarModule,
         BasicModule
     ],
     exports     : [

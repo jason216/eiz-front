@@ -23,7 +23,7 @@ import { FulfillmentsBulkDialogComponent } from '../../../fulfillments/component
 
 @Component({
   // tslint:disable-next-line:component-selector
-  selector: 'page-order-list',
+  selector: 'page-order-list1',
   templateUrl: './order-list.component.html',
   styleUrls: ['./order-list.component.scss'],
   animations: fuseAnimations
@@ -39,6 +39,9 @@ export class OrderListComponent implements OnInit, OnDestroy {
   @ViewChild('cellActionTmpl') cellActionTmpl: TemplateRef<any>;
   @ViewChild('cellOrderlinesTmpl') cellOrderlinesTmpl: TemplateRef<any>;
 
+  awaitFulfill: number;
+  onHold: number;
+  unPaid: number;
   rows: any[] = [];
   selected: any = [];
   hasSelectedOrders = false;
@@ -120,6 +123,11 @@ export class OrderListComponent implements OnInit, OnDestroy {
             (orders) => {
               this.orders = orders;
               this.gridOptions.api.setRowData(orders[this.currentOrders]);
+              if (orders['awaitFulfill']) {console.log(orders);
+                this.awaitFulfill = orders['awaitFulfill'].length;
+                this.onHold = orders['hold'].length;
+                this.unPaid = orders['unpaid'].length;
+              }
             }
           );
           this.activeContentService.getOrders();
@@ -312,5 +320,9 @@ export class OrderListComponent implements OnInit, OnDestroy {
     this.selected = [];
     this.gridOptions.api.deselectAll();
     this.hasSelectedOrders = false;
+  }
+
+  optionSelected(tag) {
+    this.setCurrentOrders(tag);
   }
 }

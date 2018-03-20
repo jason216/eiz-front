@@ -23,6 +23,15 @@ import { AgGridModule } from 'ag-grid-angular';
 import { TableOrderlinesCellComponent, TableActionCellComponent, TableStatusCellComponent } from './components';
 import { FulfillmentsBulkDialogComponent } from '../fulfillments/components/fulfillments-bulk-dialog/fulfillments-bulk-dialog.component';
 
+// tslint:disable-next-line:import-spacing
+import { CommonModule } from '@angular/common';
+import { Routes, RouterModule } from '@angular/router';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpModule } from '@angular/http';
+// import { OrderUploadComponent } from './orderupload/orderupload.component';
+import { FileUtil } from './containers/order-new/orderupload.util';
+import { Constants } from './containers/order-new/orderupload.constants';
+
 @NgModule({
   imports: [
     SharedModule,
@@ -32,16 +41,26 @@ import { FulfillmentsBulkDialogComponent } from '../fulfillments/components/fulf
     AlphaModule,
     FulfillmentsFormModule,
     AgGridModule.withComponents([TableOrderlinesCellComponent, TableActionCellComponent, TableStatusCellComponent]),
+    CommonModule,
+    FormsModule,
+    RouterModule,
+    ReactiveFormsModule,
+    HttpModule
   ],
   declarations: [
     fromComponents.components,
     fromContainers.containers,
     FulfillmentsBulkDialogComponent
+    // OrderUploadComponent
   ],
   entryComponents: [
     fromComponents.OrderSearchDialogComponent,
     FulfillmentsFormDialogComponent,
     FulfillmentsBulkDialogComponent
+  ],
+  providers: [
+    FileUtil,
+    Constants
   ]
 })
 

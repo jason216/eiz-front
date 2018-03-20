@@ -1,3 +1,5 @@
+import { Plugin } from '../../alpha/models/plugin.model';
+
 export class Account{
 
   email: string;
@@ -5,7 +7,8 @@ export class Account{
   ABN: string;
   phone: string;
   status: string;
-  created: DateTimeFormat;
+  created_at: DateTimeFormat;
+  plugins: Plugin[];
 
   constructor(){
 
@@ -16,6 +19,7 @@ export class Account{
     this.companyName = param.companyName;
     this.ABN = param.ABN;
     this.status = param.status;
-    this.created = param.created_at;
+    this.created_at = param.created_at;
+    this.plugins = param.plugins;
   }
 }

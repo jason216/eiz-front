@@ -2,10 +2,12 @@ import { Routes, RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { LoginComponent } from './auth/login/login.component';
 import { RegisterComponent } from './auth/register/register.component';
+import { MailConfirmComponent } from './auth/register/mail-confirm.component';
 import { UserSettingComponent } from '../basic/user-setting/user-setting.component';
 import { PageNotFoundComponent } from './error/page-not-found/page-not-found.component';
 import { FuseMainComponent } from '../main/main.component';
 import { AuthGuard } from '../alpha/services/guard/auth.guard';
+import { UserResolver } from '../basic/user-setting/user.resolve.service';
 
 const routes: Routes = [
   {
@@ -17,6 +19,10 @@ const routes: Routes = [
     component: RegisterComponent
   },
   {
+    path: 'register/mailconfirm',
+    component: MailConfirmComponent
+  },
+  {
     path: '',
     redirectTo: 'orders/all',
     pathMatch: 'full'
@@ -24,7 +30,8 @@ const routes: Routes = [
   {
     path: 'settings',
     component: UserSettingComponent,
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard],
+    resolve: { user: UserResolver }
   },
   {
     path: 'plugins',
@@ -54,6 +61,9 @@ const routes: Routes = [
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
+  providers: [
+    UserResolver
+  ]
 })
 export class RoutesRoutingModule{}

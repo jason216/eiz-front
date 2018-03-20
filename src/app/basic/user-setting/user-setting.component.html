@@ -1,37 +1,127 @@
 <div id="profile" class="page-layout simple tabbed" fusePerfectScrollbar>
-  <!-- HEADER -->
-  <div class="header p-24" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-sm="row" fxLayoutAlign.gt-sm="space-between end">
-
-    <div class="user-info" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-sm="row" fxLayoutAlign.gt-sm="start center">
-      <img class="profile-image avatar huge" src="assets/images/avatars/katherine.jpg" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">
-      <div class="name" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">Katherine Wilson
-      </div>
+    <!-- HEADER -->
+    <div class="header p-24" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-sm="row" fxLayoutAlign.gt-sm="space-between end">
+        <div class="user-info" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-sm="row" fxLayoutAlign.gt-sm="start center">
+            <img class="profile-image avatar huge" src="assets/images/avatars/profile.jpg" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">
+            <div class="name" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">{{user.name}}
+            </div>
+        </div>
     </div>
-
-    <div class="actions" fxLayout="row" fxLayoutAlign="end center" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'200ms'}}">
-      <button mat-raised-button color="accent" aria-label="Follow">Follow</button>
-      <button mat-raised-button color="primary" aria-label="Send Message">Send Message</button>
+    <!-- / HEADER -->
+    <!-- CONTENT -->
+    <div class="content">
+        <mat-tab-group dynamicHeight="true">
+            <mat-tab label="Plugin subscriptions">
+                <div id="academy-plugins" class="page-layout simple" fusePerfectScrollbar>
+                    <div class="content p-24">
+                        <div fxLayout="column" fxLayoutAlign="center">
+                            <div class="plugins" fxLayout="row" fxLayoutAlign="center" fxLayoutWrap>
+                                <div class="plugin" *ngFor="let plugin of plugins" fxFlex="100" fxFlex.gt-xs="50" fxFlex.gt-sm="33">
+                                    <div class="plugin-content" fxLayout="column">
+                                        <div class="header" fxLayout="row" fxLayoutAlign="center center">
+                                            <div class="category" fxFlex>
+                                                {{plugin.title}}
+                                            </div>
+                                            <div class="length" fxLayout="row" fxLayoutAlign="center center">
+                                                <mat-icon class="length-icon s-20">attach_money</mat-icon>
+                                                <div class="min">{{plugin.fee}}</div>
+                                            </div>
+                                        </div>
+                                        <div class="content" fxLayout="column" fxLayoutAlign="center center" fxFlex>
+                                            <div class="h1">{{plugin.title}}</div>
+                                            <div class="updated">{{plugin.description}}</div>
+                                        </div>
+                                        <div class="footer" fxLayout="row" fxLayoutAlign="center center">
+                                            <button mat-button color="accent" *ngIf="!plugin.subscribed" [routerLink]="['subscribe', plugin.name, 'subscribe']">
+                                                Subscribe
+                                            </button>
+                                            <button mat-button color="accent" *ngIf="plugin.subscribed" [routerLink]="'/apps/academy/plugins/' + plugin.id + '/' + plugin.name" disabled>
+                                                Subscribed
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="no-plugins" *ngIf="plugins === 0">
+                                    No plugins found!
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </mat-tab>
+            <mat-tab label="Profiles">
+                <div id="about" class="p-24" fxLayout="row" fxLayoutWrap>
+                    <div class="about-content" fxLayout="column" fxFlex="100" fxFlex.gt-sm="50" fxFlex.gt-md="65">
+                        <div class="profile-box info-box general" fxLayout="column">
+                            <form name="editUserForm" [formGroup]="editUserForm" novalidate>
+                                <header class="mat-accent-bg">
+                                    <div class="title" fxFlex fxLayoutAlign="left center">General Information</div>
+                                    <div fxLayout="row" fxLayoutAlign="center center">
+                                        <button mat-icon-button (click)=showEdit($event.target)>
+                                            <mat-icon _ngcontent-c64="" class="s-24 mat-icon material-icons" role="img" 
+                                            aria-hidden="true" *ngIf="!doEdit">edit</mat-icon>
+                                            <mat-icon _ngcontent-c64="" class="s-24 mat-icon material-icons" role="img" 
+                                            aria-hidden="true" *ngIf="doEdit">cancel</mat-icon>
+                                        </button>
+                                    </div>
+                                </header>
+                                <div class="content">
+                                    <div class="info-line">
+                                        <div class="title">Name</div>
+                                        <div class="info" *ngIf="!doEdit">{{user.name}}</div>
+                                        <div class="info" *ngIf="doEdit">
+                                            <mat-form-field class="example-full-width">
+                                                <input matInput formControlName="name" [(ngModel)]="user.name">
+                                                <mat-error *ngIf="editUserFormErrors.name.required">
+                                                    Name is required
+                                                </mat-error>
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                    <div class="info-line">
+                                        <div class="title">Email</div>
+                                        <div class="info">{{user.email}}</div>
+                                    </div>
+                                    <div class="info-line">
+                                        <div class="title">Created Date</div>
+                                        <div class="info">{{user.created_at}}</div>
+                                    </div>
+                                    <div class="info-line" *ngIf="doEdit">
+                                        <button mat-raised-button color="accent" class="submit-button" aria-label="Submit" [disabled]="editUserForm.invalid" (click)=editSubmit($event.target)>Submit
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="about-sidebar" fxLayout="column" fxFlex="100" fxFlex.gt-sm="50" fxFlex.gt-md="35">
+                        <div class="profile-box info-box general" fxLayout="column">
+                            <header class="mat-accent-bg">
+                                <div class="title">Account Information</div>
+                            </header>
+                            <div class="content">
+                                <div class="info-line">
+                                    <div class="title">CompanyName</div>
+                                    <div class="info">{{user.account.companyName}}</div>
+                                </div>
+                                <div class="info-line">
+                                    <div class="title">ABN</div>
+                                    <div class="info">{{user.account.ABN}}</div>
+                                </div>
+                                <div class="info-line">
+                                    <div class="title">Phone</div>
+                                    <div class="info">{{user.account.phone}}</div>
+                                </div>
+                                <div class="info-line">
+                                    <div class="title">Created Date</div>
+                                    <div class="info">{{user.account.created_at}}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </mat-tab>
+        </mat-tab-group>
     </div>
-
-  </div>
-  <!-- / HEADER -->
-
-  <!-- CONTENT -->
-  <div class="content">
-
-    <mat-tab-group dynamicHeight="true">
-
-      <mat-tab label="Plugin subscriptions">
-          <plugin-list></plugin-list>>
-      </mat-tab>
-
-      <mat-tab label="Profiles">
-        <h1>testing3</h1>
-      </mat-tab>
-
-    </mat-tab-group>
-
-  </div>
-  <!-- / CONTENT -->
-
+    <!-- / CONTENT -->
 </div>

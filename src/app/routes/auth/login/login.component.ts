@@ -83,7 +83,7 @@ export class LoginComponent implements OnInit {
   }
 
   login(button){
-    button.textContent = 'loading...';
+    button.textContent = 'Loading...';
     button.disabled = true;
     this.authService.login(this.loginForm.get('username').value, this.loginForm.get('password').value).subscribe(
       res => {

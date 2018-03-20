@@ -1,37 +1,44 @@
-<div id="product" class="page-layout carded fullwidth" fusePerfectScrollbar>
+<div class="page-layout simple tabbed" fusePerfectScrollbar>
+    <div class="content">
+        <mat-tab-group dynamicHeight="true">
+            <mat-tab label="Create New Order">
+                <div id="new-order" class="page-layout simple" fusePerfectScrollbar>
+                    <div class="content p-24">
+                        <div fxLayout="column" fxLayoutAlign="center">
+                            <div id="product" class="page-layout carded fullwidth" fusePerfectScrollbar>
 
-  <!-- TOP BACKGROUND -->
-  <div class="top-bg mat-accent-bg"></div>
-  <!-- / TOP BACKGROUND -->
+                                <!-- TOP BACKGROUND -->
+                                <div class="top-bg mat-accent-bg"></div>
+                                <!-- / TOP BACKGROUND -->
 
-  <!-- CENTER -->
-  <div class="center">
+                                <!-- CENTER -->
+                                <div class="center">
 
-    <!-- HEADER -->
-    <div class="header white-fg" fxLayout="row" fxLayoutAlign="space-between center">
+                                    <!-- HEADER -->
+                                    <div class="header white-fg" fxLayout="row" fxLayoutAlign="space-between center">
 
-      <!-- APP TITLE -->
-      <div fxLayout="row" fxLayoutAlign="start center">
+                                        <!-- APP TITLE -->
+                                        <div fxLayout="row" fxLayoutAlign="start center">
 
-        <button class="mr-0 mr-sm-16" mat-icon-button [routerLink]="'/orders/all'">
-          <mat-icon>arrow_back</mat-icon>
-        </button>
+                                            <button class="mr-0 mr-sm-16" mat-icon-button [routerLink]="'/orders/all'">
+                                          <mat-icon>arrow_back</mat-icon>
+                                        </button>
 
-        <div class="product-image mr-8 mr-sm-16" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">
-          <img [src]="'assets/images/ecommerce/product-image-placeholder.png'">
-        </div>
+                                            <div class="product-image mr-8 mr-sm-16" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">
+                                                <img [src]="'assets/images/ecommerce/product-image-placeholder.png'">
+                                            </div>
 
-        <div fxLayout="column" fxLayoutAlign="start start" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
-          <div class="h2">
-            New Order
-          </div>
-          <div class="subtitle secondary-text">
-            <span>Order Detail</span>
-          </div>
-        </div>
-      </div>
-      <!-- / APP TITLE -->
-<!-- 
+                                            <div fxLayout="column" fxLayoutAlign="start start" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
+                                                <div class="h2">
+                                                    New Order
+                                                </div>
+                                                <div class="subtitle secondary-text">
+                                                    <span>Order Detail</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- / APP TITLE -->
+                                        <!-- 
       <button mat-raised-button class="save-product-button mat-white-bg mt-16 mt-sm-0" [disabled]="productForm.invalid" *ngIf="pageType ==='new'"
         (click)="addProduct()">
         <span>ADD</span>
@@ -41,19 +48,63 @@
         *ngIf="pageType ==='edit'" (click)="saveProduct()">
         <span>SAVE</span>
       </button> -->
+                                    </div>
+                                    <!-- / HEADER -->
+
+                                    <!-- CONTENT CARD -->
+                                    <div class="content-card mat-white-bg">
+                                        <!-- CONTENT -->
+                                        <form-new-order class="content w-100-p" fxLayout="column" fxFlex></form-new-order>
+                                        <!-- / CONTENT -->
+                                    </div>
+                                    <!-- / CONTENT CARD -->
+                                </div>
+                                <!-- / CENTER -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </mat-tab>
+            <mat-tab label="Import Order">
+                <div id="import-order" class="" fxLayout="row" fxLayoutWrap>
+                    <div class="content p-24">
+                        <div fxLayout="column" fxLayoutAlign="center">
+                            <div>
+                                <input type="file" #fileImportInput name="File Upload" id="txtFileUpload" class="btn btn-primary" (change)="fileChangeListener($event)" accept=".csv" value={{selectedImageFile}}/>
+                                <button mat-raised-button color="accent" class="submit-button" aria-label="Submit" (click)=uploadOrder()> Submit </button>
+                            </div>
+                            <br>
+                            <div>
+                                <div class="example-container mat-elevation-z8">
+                                    <!-- <form name="orderUploadForm" [formGroup]="orderUploadForm" novalidate> -->
+                                    <mat-table #table [dataSource]="dataSource">
+                                        <ng-container matColumnDef="orderCol">
+                                            <mat-header-cell *matHeaderCellDef> New Order Input fields </mat-header-cell>
+                                            <mat-cell *matCellDef="let row" #colName> {{row.label}} </mat-cell>
+                                        </ng-container>
+                                        <ng-container matColumnDef="customerOrderCol">
+                                            <mat-header-cell *matHeaderCellDef> Customer Order Column </mat-header-cell>
+                                            <mat-cell *matCellDef="let row">
+                                                <mat-select placeholder="Please select" (selectionChange)="optionSelected($event)" [id]="row.col">
+                                                    <!-- <mat-option value=" None ">None</mat-option> -->
+                                                    <mat-option *ngFor="let data of customerOrderCol " [value]="data.col"> {{data.col}} </mat-option>
+                                                </mat-select>
+                                                <!-- <mat-error *ngIf="orderUploadFormErrors.row.col.required">
+                                                    {{row.col}} is required
+                                                </mat-error> -->
+                                            </mat-cell>
+                                        </ng-container>
+                                        <mat-header-row *matHeaderRowDef="displayedColumns "></mat-header-row>
+                                        <mat-row *matRowDef="let dataSource; columns: displayedColumns; ">
+                                        </mat-row>
+                                    </mat-table>
+                                    <!-- </form> -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </mat-tab>
+        </mat-tab-group>
     </div>
-    <!-- / HEADER -->
-
-    <!-- CONTENT CARD -->
-    <div class="content-card mat-white-bg">
-
-      <!-- CONTENT -->
-      <form-new-order class="content w-100-p" fxLayout="column" fxFlex></form-new-order>
-      <!-- / CONTENT -->
-
-    </div>
-    <!-- / CONTENT CARD -->
-
-  </div>
-  <!-- / CENTER -->
 </div>

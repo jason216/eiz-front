@@ -22,6 +22,7 @@ import { ApiHeaderInterceptor } from './alpha/services/interceptor/api-header.in
 
 import { AuthService } from './alpha/services';
 import { ActiveContentService } from './alpha/services/activeContent.service';
+import { UserService } from './basic/user-setting/user.service';
 @NgModule({
   declarations: [AppComponent],
   imports: [
@@ -50,7 +51,7 @@ import { ActiveContentService } from './alpha/services/activeContent.service';
     FuseNavigationService,
     MenuService,
     AuthService,
-
+    UserService
   ],
   bootstrap: [AppComponent]
 })

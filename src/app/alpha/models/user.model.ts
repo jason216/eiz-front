@@ -6,7 +6,7 @@ export class User{
   name: string;
   role: string;
   active: boolean;
-  created: DateTimeFormat;
+  created_at: DateTimeFormat;
 
   account: Account;
 
@@ -17,7 +17,7 @@ export class User{
     this.name = params.name;
     this.role = params.role;
     this.active = params.active;
-    this.created = params.created_at;
+    this.created_at = params.created_at;
     const account = new Account();
     account.loadFromAuth(params.account);
     this.account = account;

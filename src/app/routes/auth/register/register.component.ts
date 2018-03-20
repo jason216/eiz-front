@@ -1,9 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { HttpClient, HttpInterceptor, HttpRequest, HttpHandler, HttpEvent } from '@angular/common/http';
+import { Router, ActivatedRoute } from '@angular/router';
 
 import { fuseAnimations } from '../../../core/animations';
 import { FuseConfigService } from '../../../core/services/config.service';
+import { AuthService } from '../../../alpha/services/auth.service';
+
+import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material';
 
 
 @Component({
@@ -21,7 +25,11 @@ export class RegisterComponent implements OnInit {
   constructor(
       private fuseConfig: FuseConfigService,
       private formBuilder: FormBuilder,
-      private http: HttpClient
+      private http: HttpClient,
+      private authService: AuthService,
+      private router: Router,
+      private route: ActivatedRoute,
+      private snackBar: MatSnackBar
   )
   {
       this.fuseConfig.setSettings({
@@ -33,20 +41,22 @@ export class RegisterComponent implements OnInit {
       });
 
       this.registerFormErrors = {
-          username       : {},
+          // username       : {},
           email          : {},
           password       : {},
-          passwordConfirm: {}
+          passwordConfirm: {},
+          terms          : {}
       };
   }
 
   ngOnInit()
   {
       this.registerForm = this.formBuilder.group({
-          username       : ['', Validators.required],
+          // username       : ['', Validators.required],
           email          : ['', [Validators.required, Validators.email]],
           password       : ['', Validators.required],
-          passwordConfirm: ['', [Validators.required, confirmPassword]]
+          passwordConfirm: ['', [Validators.required, confirmPassword]],
+          terms          : ['', Validators.required]
       });
 
       this.registerForm.valueChanges.subscribe(() => {
@@ -76,11 +86,23 @@ export class RegisterComponent implements OnInit {
       }
   }
 
-  register(){
-    this.http.post('http://app.eiz.com.au/register', this.registerForm.value, {}).subscribe(data => {
-        // Read the result field from the JSON response.
-        console.log(data);
-    });
+  register(button){
+    button.textContent = 'Loading...';
+    button.disabled = true;
+    this.http.post('http://app.eiz.com.au/api/auth/register', this.registerForm.value, {}).subscribe(
+        (resp: any) => {
+            this.router.navigate(['/register/mailconfirm', { email: resp.data.emailSentTo }]);
+        }, 
+        error => {
+            this.snackBar.open(error.error.message, 'Dismiss', {
+                duration: 15000,
+                horizontalPosition: 'right',
+                verticalPosition: 'top',
+              });
+            button.textContent = 'CREATE AN ACCOUNT';
+            button.disabled = false;
+        }
+    );
   }
 }
 
