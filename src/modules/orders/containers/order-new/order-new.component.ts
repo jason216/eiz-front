@@ -7,6 +7,7 @@ import { Constants } from './orderupload.constants';
 import {MatTableDataSource, MatStepper} from '@angular/material';
 import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material';
 import { fuseAnimations } from '../../../../app/core/animations';
+import { ApiService } from '../../../../app/alpha/services';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -31,6 +32,7 @@ export class OrderNewComponent implements OnInit, OnDestroy {
   // 'Postcode', 'Country'];
 
   PAYPAL_TEMPLATE = [
+    {col: 'Invoice Number', matchTo: 'salesRecordNumber', parent: null},
     {col: 'Name', matchTo: 'shipTo_name', parent: null},
     {col: 'From email address', matchTo: 'shipTo_email', parent: null},
     {col: 'Address line 1', matchTo: 'shipTo_address1', parent: null},
@@ -95,7 +97,8 @@ export class OrderNewComponent implements OnInit, OnDestroy {
   constructor(private _router: Router,
     private _fileUtil: FileUtil,
     private formBuilder: FormBuilder,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private apiService: ApiService
   ){
     this.verticalStepperStep1Errors = {
       template: {}
@@ -274,7 +277,7 @@ export class OrderNewComponent implements OnInit, OnDestroy {
         for (let j = 0; j < this.customerOrderCol.length; j++) {
           if (this.customerOrderCol[j].parent === 'orderlines') {
             orderlines[this.customerOrderCol[j].matchTo] = this.csvRecords[i][this.customerOrderCol[j].index];
-            jsonData[this.customerOrderCol[j].parent] = orderlines;
+            jsonData[this.customerOrderCol[j].parent] = []; // orderlines;
             if (this.customerOrderCol[j].matchTo === 'quantity') {
               temp_quantity = this.csvRecords[i][this.customerOrderCol[j].index];
             }
@@ -283,16 +286,16 @@ export class OrderNewComponent implements OnInit, OnDestroy {
               temp_amount = this.csvRecords[i][this.customerOrderCol[j].index];
             }
             payments[this.customerOrderCol[j].matchTo] = this.csvRecords[i][this.customerOrderCol[j].index];
-            jsonData[this.customerOrderCol[j].parent] = payments;
+            jsonData[this.customerOrderCol[j].parent] = []; // payments;
           } else if (!this.customerOrderCol[j].parent) {
             jsonData[this.customerOrderCol[j].matchTo] = this.csvRecords[i][this.customerOrderCol[j].index];
           }
         }
         orderlines['saleprice'] = temp_amount / temp_quantity;
-        jsonData['orderlines'] = orderlines;
+        jsonData['orderlines'][0] = orderlines;
+        jsonData['payments'][0] = payments;
         this.uploadRecords.push(jsonData);
       }
-      console.log(this.uploadRecords);
     } else if (this.template === 'none') {
       this.customerOrderCol = this.customerOrderCol.filter(item => item.col !== 'None'); 
       for (let i = 1; i < this.csvRecords.length; i++) {
@@ -306,6 +309,24 @@ export class OrderNewComponent implements OnInit, OnDestroy {
         this.uploadRecords.push(jsonData);
       }
     }
+    console.log(this.uploadRecords);
+    this.apiService.post('Orders', 'orders', null, this.uploadRecords).subscribe(
+      res => {
+        if (res['data']) {
+          this.snackBar.open('Import successfully', 'Dismiss', {
+            duration: 15000,
+            horizontalPosition: 'right',
+            verticalPosition: 'top',
+          });
+        }
+      },
+      err => {
+        console.log(`Error in import order: ${err}`);
+      }// ,
+      // () => {
+      //   console.log('solid consignment Completed');
+      // }
+    );
 
     
     // tslint:disable-next-line:prefer-const
