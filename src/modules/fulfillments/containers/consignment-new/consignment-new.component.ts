@@ -164,7 +164,7 @@ export class ConsignmentNewComponent implements OnInit, OnDestroy {
     let newBtnId = 'newBtn' + lastBtnId; console.log(newBtnId);
 
     // tslint:disable-next-line:prefer-const
-    let buttonDiv: HTMLDivElement = document.getElementById(newBtnId);
+    let buttonDiv: HTMLElement = document.getElementById(newBtnId);
     buttonDiv.style.display = 'block';
     // }
 
