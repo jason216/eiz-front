@@ -1,0 +1,16 @@
+<div id="user-active" fxLayout="column" fusePerfectScrollbar>
+    <div id="user-active-form-wrapper" fxLayout="column" fxLayoutAlign="center center">
+        <div id="user-active-form" *fuseIfOnDom [@animate]="{value:'*',params:{duration:'300ms',y:'100px'}}">
+            <div class="logo">
+                <mat-icon class="s-96">account_circle</mat-icon>
+            </div>
+            <div class="title">Activating your account, please waiting.</div>
+            <div class="subtitle center">
+                <div fxFlex fxLayout="column" fxLayoutAlign="space-between center">
+                    <mat-spinner class="" [color]="primary" [mode]="indeterminate" [value]="value" style="margin: 0 10px;">
+                    </mat-spinner>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

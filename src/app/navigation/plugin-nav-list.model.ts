@@ -35,6 +35,13 @@ export class PluginNavListModel implements FuseNavigationModelInterface{
         'url': '/orders/new',
       },
       {
+        'id': 'orders.archived',
+        'title': 'Archived Order',
+        'type': 'item',
+        'icon': 'email',
+        'url': '/orders/archived',
+      },
+      {
         'id': 'fulfillments',
         'title': 'Fulfillments',
         'type' : 'group',
@@ -72,6 +79,13 @@ export class PluginNavListModel implements FuseNavigationModelInterface{
           'bg'       : '#F44336',
           'fg'       : '#FFFFFF'
         }
+      },
+      {
+        'id': 'fulfillments.consignments.new',
+        'title': 'New Consignment',
+        'type': 'item',
+        'icon': 'email',
+        'url': '/fulfillments/consignment/new'
       },
     ];
   }

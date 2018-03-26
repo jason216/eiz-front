@@ -5,6 +5,7 @@ import { OrderService } from '../../../../app/alpha/services';
 
 
 @Component({
+  // tslint:disable-next-line:component-selector
   selector: 'form-new-order',
   templateUrl: './form-new-order.component.html',
 })

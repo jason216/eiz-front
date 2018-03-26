@@ -1,7 +1,8 @@
 <div>
-    <div *ngFor="let orderline of orderlines" style="white-space: normal; line-height: initial;">
+    <div *ngFor="let orderline of orderlines" style="white-space: normal; line-height: initial;  clear:both;">
 
         <img src='{{orderline.listing?.cover}}' style="float:left; height: 48px; margin-right: 10px;" /> {{orderline.itemtitle}} <br/>
         <span class="mat-body-2">Qty: {{orderline.quantity | json}} ${{orderline.saleprice | json}}</span>
     </div>
+    <!-- <div></div> -->
 </div>

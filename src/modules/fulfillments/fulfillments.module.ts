@@ -20,6 +20,8 @@ import { ConsignmentsModule } from './containers/consignments/consignmentsModule
 import { DndModule } from 'ng2-dnd';
 import { AgGridModule } from 'ag-grid-angular';
 import { TableActionCellComponent } from './containers/consignments/table-cell/table-action-cell/table-action-cell.component';
+import { FileUtil } from './containers/consignment-new/orderupload.util';
+import { Constants } from './containers/consignment-new/orderupload.constants';
 
 
 @NgModule({
@@ -35,7 +37,7 @@ import { TableActionCellComponent } from './containers/consignments/table-cell/t
   ],
   declarations: [
     fromComponents.components,
-    fromContainers.containers
+    fromContainers.containers,
   ],
   exports: [
     fromComponents.FulfillmentsFormComponent,
@@ -43,6 +45,10 @@ import { TableActionCellComponent } from './containers/consignments/table-cell/t
   ],
   entryComponents: [
     fromComponents.FulfillmentsDespatchDialogComponent
+  ],
+  providers: [
+    FileUtil,
+    Constants
   ]
 })
 

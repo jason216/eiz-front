@@ -1,0 +1,193 @@
+<div class="dialog-content-wrapper">
+    <mat-toolbar matDialogTitle class="mat-accent m-0">
+        <div fxFlex fxLayout="row" fxLayoutAlign="space-between center">
+            <span class="title dialog-title">Order Detail</span>
+            <button mat-button class="mat-icon-button" (click)="dialogRef.close()" aria-label="Close dialog">
+                <mat-icon>close</mat-icon>
+            </button>
+        </div>
+    </mat-toolbar>
+
+    <div id="order" mat-dialog-content class="page-layout carded fullwidth" fusePerfectScrollbar style="padding: 0; margin: 0;">
+        <div class="">
+            <div class="content-card mat-white-bg">
+                <!-- CONTENT -->
+                <div class="content">
+                    <mat-tab-group>
+                        <mat-tab label="Order Details">
+                            <div class="order-details tab-content p-24" fusePerfectScrollbar>
+                                <div class="section pb-48">
+                                    <div class="pb-16" fxLayout="row" fxLayoutAlign="start center">
+                                        <mat-icon class="m-0 mr-16">account_circle</mat-icon>
+                                        <div class="h2 secondary-text">Customer</div>
+                                    </div>
+                                    <div class="customer">
+                                        <table class="simple">
+                                            <thead>
+                                                <tr>
+                                                    <th>Name</th>
+                                                    <th>Email</th>
+                                                    <th>Phone</th>
+                                                    <th>Platform</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>
+                                                        <div fxLayout="row" fxLayoutAlign="start center">
+                                                            <span class="name text-truncate">{{order.customer.name}}</span>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <span class="email text-truncate">{{order.customer.email}}</span>
+                                                    </td>
+                                                    <td>
+                                                        <span class="phone text-truncate">{{order.customer.phone}}</span>
+                                                    </td>
+                                                    <td>
+                                                        <span class="company text-truncate">{{order.customer.platform}}</span>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="section pb-48">
+                                    <div class="pb-16" fxLayout="row" fxLayoutAlign="start center">
+                                        <mat-icon class="m-0 mr-16">attach_money</mat-icon>
+                                        <div class="h2 secondary-text">Payment</div>
+                                    </div>
+                                    <table class="simple">
+                                        <thead>
+                                            <tr>
+                                                <th>Payment Method</th>
+                                                <th>Amount</th>
+                                                <th>Date</th>
+                                                <th>Note</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let payment of order.payments">
+                                                <td>
+                                                    <span class="text-truncate">
+                                                        {{payment.paymentMethod}}
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <span class="text-truncate">
+                                                        {{payment.amount}}
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <span class="text-truncate">
+                                                        {{payment.created_at | date}}
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <span class="text-truncate">
+                                                        {{payment.note}}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </mat-tab>
+                        <mat-tab label="Product Details">
+                            <div class="products tab-content p-24" fusePerfectScrollbar>
+                                <table class="simple">
+                                    <thead>
+                                        <tr>
+                                            <th class="w-80"></th>
+                                            <th class="w-520">Title</th>
+                                            <th>Price</th>
+                                            <th>Quantity</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="product-row" *ngFor="let product of order.orderlines">
+                                            <td>
+                                                <img class="product-image" [src]="product.listing.image?.cover">
+                                            </td>
+                                            <td>
+                                                {{product.itemtitle}}
+                                            </td>
+                                            <td>
+                                                {{product.saleprice}}
+                                            </td>
+                                            <td>
+                                                {{product.quantity}}
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </mat-tab>
+                        <mat-tab label="Shipment Details" *ngIf="order.shipTo_name">
+                            <div class="order-details tab-content p-24" fusePerfectScrollbar>
+                                <div class="pb-16" fxLayout="row" fxLayoutAlign="start center">
+                                    <mat-icon class="m-0 mr-16">local_shipping</mat-icon>
+                                    <div class="h2 secondary-text">Shipping</div>
+                                </div>
+
+                                <table class="simple">
+                                    <thead>
+                                        <tr>
+                                            <th>Tracking Code</th>
+                                            <th>Carrier</th>
+                                            <th>Name</th>
+                                            <th>Address</th>
+                                            <th>Email</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="tracking-code">
+                                                {{order.salesRecordNumber}}
+                                            </td>
+                                            <td>
+                                                {{order.postageService}}
+                                            </td>
+                                            <td>
+                                                {{order.shipTo_name}}
+                                            </td>
+                                            <td>
+                                                {{order.shipTo_address1}}
+                                            </td>
+                                            <td>
+                                                {{order.shipTo_email}}
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </mat-tab>
+                    </mat-tab-group>
+                </div>
+            </div>
+        </div>
+        <!-- <div mat-dialog-actions class="m-0 p-16" fxLayout="row" fxLayoutAlign="space-between center">
+        <div>
+            <button mat-raised-button
+                    (click)="dialogRef.close(['send',composeForm])"
+                    class="save-button mat-accent"
+                    [disabled]="composeForm.invalid"
+                    aria-label="SAVE">
+                SEND
+            </button>
+
+            <button mat-icon-button matTooltip="Attach a file">
+                <mat-icon>attach_file</mat-icon>
+            </button>
+        </div>
+
+        <button mat-button
+                class="mat-icon-button"
+                (click)="dialogRef.close(['delete',composeForm])"
+                aria-label="Delete"
+                matTooltip="Delete">
+            <mat-icon>delete</mat-icon>
+        </button>
+    </div> -->
+    </div>

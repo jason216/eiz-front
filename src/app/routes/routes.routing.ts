@@ -8,8 +8,13 @@ import { PageNotFoundComponent } from './error/page-not-found/page-not-found.com
 import { FuseMainComponent } from '../main/main.component';
 import { AuthGuard } from '../alpha/services/guard/auth.guard';
 import { UserResolver } from '../basic/user-setting/user.resolve.service';
+import { ActiveComponent } from './auth/register/user-active.component';
 
 const routes: Routes = [
+  {
+    path: 'active',
+    component: ActiveComponent
+  },
   {
     path: 'login',
     component: LoginComponent

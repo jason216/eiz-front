@@ -41,29 +41,31 @@ export class ActiveContentService {
   }
 
   public getOrders(){
-      this.apiService.get('orders', 'orders', null, {size: 99999, 'ex_tags[]': 1}).subscribe(
+      this.apiService.get('orders', 'orders', null, {size: 99999, 'ex_status[]': 'finished'}).subscribe(
         res => {
           this.initialOrders();
           this.orders.all = res.data;
           this.orders.all.forEach(order => {
-            order.tags.forEach(tag => {
-              switch (tag.id){
-                case 4: {
-                  this.orders.hold.push(order);
-                  break;
-                }
-                case 3: {
-                  this.orders.awaitFulfill.push(order);
-                  break;
-                }
-                default: {
+              switch (order.status){
+                case 'unpaid': {
                   this.orders.unpaid.push(order);
                   break;
                 }
-
+                case 'paid': {
+                  this.orders.paid.push(order);
+                  break;
+                }
+                case 'processed': {
+                  this.orders.processed.push(order);
+                  break;
+                }
+                default: {
+                  this.orders.default.push(order);
+                  break;
+                }
               }
-            });
           });
+          
           this.onOrdersChange.next(this.orders);
           this.onChanges.next(true);
         }
@@ -101,9 +103,10 @@ export class ActiveContentService {
 
   initialOrders(){
     this.orders.all = [];
-    this.orders.hold = [];
-    this.orders.awaitFulfill = [];
+    this.orders.paid = [];
+    this.orders.processed = [];
     this.orders.unpaid = [];
+    this.orders.default = [];
   }
 
   initialConsigments(){

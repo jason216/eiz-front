@@ -3,9 +3,9 @@ import { ActiveContentService } from './../../../../app/alpha/services/activeCon
 
 import { DatatableComponent } from '@swimlane/ngx-datatable';
 import { TableColumn, ColumnMode } from '@swimlane/ngx-datatable';
-import {GridOptions} from 'ag-grid/main';
+import { GridOptions } from 'ag-grid/main';
 
-import { Component, ElementRef, TemplateRef, OnInit, OnDestroy, ViewChild} from '@angular/core';
+import { Component, ElementRef, TemplateRef, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { OrderService } from '../../../../app/alpha/services';
 
@@ -20,6 +20,8 @@ import { FulfillmentsFormDialogComponent } from '../../../fulfillments/component
 import { TableOrderlinesCellComponent, TableActionCellComponent, TableStatusCellComponent } from '../../components';
 import { Subscription } from 'rxjs/Subscription';
 import { FulfillmentsBulkDialogComponent } from '../../../fulfillments/components/fulfillments-bulk-dialog/fulfillments-bulk-dialog.component';
+import { OrderDetailDialogComponent } from './order-detail.component';
+import { OrderEditDialogComponent } from './order-edit.component';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -39,8 +41,8 @@ export class OrderListComponent implements OnInit, OnDestroy {
   @ViewChild('cellActionTmpl') cellActionTmpl: TemplateRef<any>;
   @ViewChild('cellOrderlinesTmpl') cellOrderlinesTmpl: TemplateRef<any>;
 
-  awaitFulfill: number;
-  onHold: number;
+  paid: number;
+  processed: number;
   unPaid: number;
   rows: any[] = [];
   selected: any = [];
@@ -56,6 +58,8 @@ export class OrderListComponent implements OnInit, OnDestroy {
   orders;
   currentOrders;
 
+  dialogRef: any;
+
   columnDefs = [
     {
       headerName: '',
@@ -70,7 +74,7 @@ export class OrderListComponent implements OnInit, OnDestroy {
       headerName: 'Orderlines',
       width: 150,
       cellRendererFramework: TableOrderlinesCellComponent,
-      cellStyle: {padding: 0}
+      cellStyle: { padding: 0 }
     },
     {
       field: 'status',
@@ -87,62 +91,64 @@ export class OrderListComponent implements OnInit, OnDestroy {
     public paginationService: PaginationService,
     public activeContentService: ActiveContentService,
   ) {
-    this.page.pageNumber = 0;
-    this.page.size = 12;
+    // this.page.pageNumber = 0;
+    // this.page.size = 12;
     this.gridOptions = <GridOptions>{
       // domLayout: 'autoHeight',
       enableRangeSelection: true,
       enableColResize: true,
-      pagination: true,
-      paginationAutoPageSize: true,
+      suppressHorizontalScroll: false,
+      // pagination: true,
+      // paginationAutoPageSize: true,
       suppressCellSelection: true,
       suppressRowClickSelection: true,
       rowSelection: 'multiple',
+      rowStyle: {cursor: 'pointer'},
       context: { componentParent: this },
 
-      getRowHeight: function(params) {
+      getRowHeight: function (params) {
         return 48 * (params.data.orderlines.length);
       },
       deltaRowDataMode: true,
-      getRowNodeId: function(data){
+      getRowNodeId: function (data) {
         return data.id;
       },
       onSelectionChanged: () => {
         this.selected = this.gridOptions.api.getSelectedRows();
-        if (this.selected.length){
+        if (this.selected.length) {
           this.hasSelectedOrders = true;
-        }else{
+        } else {
           this.hasSelectedOrders = false;
         }
       },
       onGridReady: () => {
-          this.gridOptions.api.doLayout();
-          this.gridOptions.api.sizeColumnsToFit();
-          this.currentOrders = 'awaitFulfill';
-          this.ordersUpdateSubscription = this.activeContentService.onOrdersChange.subscribe(
-            (orders) => {
-              this.orders = orders;
-              this.gridOptions.api.setRowData(orders[this.currentOrders]);
-              if (orders['awaitFulfill']) {console.log(orders);
-                this.awaitFulfill = orders['awaitFulfill'].length;
-                this.onHold = orders['hold'].length;
-                this.unPaid = orders['unpaid'].length;
-              }
+        this.gridOptions.api.doLayout();
+        this.gridOptions.api.sizeColumnsToFit();
+        this.currentOrders = 'paid';
+        this.ordersUpdateSubscription = this.activeContentService.onOrdersChange.subscribe(
+          (orders) => {
+            this.orders = orders;
+            this.gridOptions.api.setRowData(orders[this.currentOrders]);
+            if (orders['paid']) {
+              this.paid = orders['paid'].length;
+              this.processed = orders['processed'].length;
+              this.unPaid = orders['unpaid'].length;
             }
-          );
-          this.activeContentService.getOrders();
-          // this.gridOptions.api.setRowData(activeContentService.orders);
-          // this.orderService
-          // .getOrders({size: 99999})
-          // .takeWhile(() => this.startSubscribe)
-          // .subscribe(
-          //   res => {
-          //     this.gridOptions.api.setRowData(res.data);
-          //   },
-          //   err => {
-          //     console.log(`Error in order-get-orders: ${err}`);
-          //   }
-          // );
+          }
+        );
+        this.activeContentService.getOrders();
+        // this.gridOptions.api.setRowData(activeContentService.orders);
+        // this.orderService
+        // .getOrders({size: 99999})
+        // .takeWhile(() => this.startSubscribe)
+        // .subscribe(
+        //   res => {
+        //     this.gridOptions.api.setRowData(res.data);
+        //   },
+        //   err => {
+        //     console.log(`Error in order-get-orders: ${err}`);
+        //   }
+        // );
       }
     };
   }
@@ -155,7 +161,36 @@ export class OrderListComponent implements OnInit, OnDestroy {
     this.ordersUpdateSubscription.unsubscribe();
   }
 
-  setCurrentOrders(tag){
+  viewOrderDetail(order) {
+    this.dialogRef = this.dialog.open(OrderDetailDialogComponent, {
+      panelClass: 'order-detail-dialog',
+      data: order
+    });
+    // this.dialogRef.afterClosed()
+    //   .subscribe(response => {
+    //     if (!response) {
+    //       return;
+    //     }
+    //     const actionType: string = response[0];
+    //     const formData: FormGroup = response[1];
+    //     switch (actionType) {
+    //       /**
+    //        * Send
+    //        */
+    //       case 'send':
+    //         console.log('new Mail', formData.getRawValue());
+    //         break;
+    //       /**
+    //        * Delete
+    //        */
+    //       case 'delete':
+    //         console.log('delete Mail');
+    //         break;
+    //     }
+    //   });
+  }
+
+  setCurrentOrders(tag) {
     this.currentOrders = tag;
     this.gridOptions.api.setRowData(this.orders[this.currentOrders]);
   }
@@ -185,7 +220,7 @@ export class OrderListComponent implements OnInit, OnDestroy {
     });
   }
 
-  bulkProcess(){
+  bulkProcess() {
     const orders = this.gridOptions.api.getSelectedRows();
     const dialogRef = this.dialog.open(FulfillmentsBulkDialogComponent, {
       width: '1000px',
@@ -232,15 +267,15 @@ export class OrderListComponent implements OnInit, OnDestroy {
       .subscribe(
         res => {
           this.searchFormControl = new FormControl('');
-          const pagedData = this.paginationService.decodeResponse(res);
+          // const pagedData = this.paginationService.decodeResponse(res);
           this.rows = [];
-          this.rows = pagedData.data;
-          this.rows = pagedData.data;
+          this.rows = res;
+          this.rows = res;
           // console.log("after reset page", pagedData.page);
 
-          this.page = pagedData.page;
+          // this.page = pagedData.page;
           // IMPORTANT NOTE: server-side page index start at 1, ngx-datatable page index start at 0
-          this.page.pageNumber = this.page.pageNumber - 1;
+          // this.page.pageNumber = this.page.pageNumber - 1;
           // console.log('data', this.rows);
           this.table.recalculate();
         },
@@ -254,7 +289,7 @@ export class OrderListComponent implements OnInit, OnDestroy {
 
   setPage(pageInfo) {
     this.tableDataOnLoading = true;
-    const params = {page: pageInfo.offset + 1};
+    const params = { page: pageInfo.offset + 1 };
 
     this.filters.forEach(([key, value]) => {
       params[key] = value;
@@ -324,5 +359,12 @@ export class OrderListComponent implements OnInit, OnDestroy {
 
   optionSelected(tag) {
     this.setCurrentOrders(tag);
+  }
+
+  editOrder(selectedOrder) {
+    this.dialogRef = this.dialog.open(OrderEditDialogComponent, {
+      panelClass: 'order-edit-dialog',
+      data: selectedOrder
+    });
   }
 }

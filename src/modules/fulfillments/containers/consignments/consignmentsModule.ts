@@ -14,6 +14,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { ConsignmentsSideNavComponent } from './side-nav/side-nav.component';
 import { AgGridModule } from 'ag-grid-angular';
 import { ConsignmentsPendingComponent } from './consignments-pending/consignments-pending.component';
+import { ConsignmentNewComponent } from '../consignment-new/consignment-new.component';
 
 const routes: Routes = [
   {
@@ -66,6 +67,7 @@ const routes: Routes = [
     ConsignmentsSideNavComponent,
     ConsignmentsComponent_fastway,
     TableActionCellComponent,
+    ConsignmentNewComponent
   ],
   exports: [
     RouterModule,

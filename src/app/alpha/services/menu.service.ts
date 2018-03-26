@@ -23,11 +23,11 @@ export class MenuService {
     this.menu = [
       {
         id: 'orders',
-        children: [{ id: 'orders.new' }, { id: 'orders.all' }]
+        children: [{ id: 'orders.new' }, { id: 'orders.all' }, { id: 'orders.archived' }]
       },
       {
         id: 'fulfillments',
-        children: [{ id: 'fulfillments.consignments' }, { id: 'fulfillments.new' }, { id: 'fulfillments.despatch' }]
+        children: [{ id: 'fulfillments.consignments.new' }, { id: 'fulfillments.consignments' }, { id: 'fulfillments.new' }, { id: 'fulfillments.despatch' }]
       }
     ];
     this.onOrdersChangeSubscription = this.activeContentService.onChanges.subscribe(

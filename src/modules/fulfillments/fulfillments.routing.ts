@@ -4,6 +4,7 @@ import { ModuleWithProviders } from '@angular/core';
 
 // containers
 import * as fromFulfillmentsContainers from './containers';
+import { ConsignmentNewComponent } from './containers/consignment-new/consignment-new.component';
 
 
 const routes: Routes = [
@@ -22,6 +23,10 @@ const routes: Routes = [
   {
     path: 'consignments',
     loadChildren: './containers/consignments/consignmentsModule#ConsignmentsModule'
+  },
+  {
+    path: 'consignment/new',
+    component: ConsignmentNewComponent
   }
 ];
 

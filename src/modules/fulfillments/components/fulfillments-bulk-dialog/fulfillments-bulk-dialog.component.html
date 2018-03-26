@@ -1,21 +1,7 @@
-<div *ngIf="totalReceived !== totalOrders">
-  <p><mat-spinner [diameter] = "20" style="float: left;"></mat-spinner>Order processing inprogress</p>
+<div>
+    <mat-spinner class="" [color]="primary" [mode]="indeterminate" [value]="value" style="margin: 0 10px;">
+    </mat-spinner>
 
-  <p>{{totalReceived}}/{{totalOrders}}</p>
-
-  <p>
-    <mat-progress-bar mode="determinate" [value]="totalReceived/totalOrders*100"></mat-progress-bar>
-  </p>
-</div>
-
-<div *ngIf="totalReceived === totalOrders">
-  <p>
-    {{totalSuccess}} Created Success
-    <br/>
-    {{totalFailed}} Created Failed
-  </p>
-  <p>
-      <button mat-button (click)="solidConsignments(false)">Create Labels</button>
-      <button mat-button (click)="solidConsignments(true)">Create Labels & Print</button>
-  </p>
+    <span *ngIf="processCompleted">Bulk processe completely.</span>
+    <span *ngIf="processError">Error occured during bulk processe.</span>
 </div>

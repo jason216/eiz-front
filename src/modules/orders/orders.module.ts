@@ -31,6 +31,8 @@ import { HttpModule } from '@angular/http';
 // import { OrderUploadComponent } from './orderupload/orderupload.component';
 import { FileUtil } from './containers/order-new/orderupload.util';
 import { Constants } from './containers/order-new/orderupload.constants';
+import { OrderDetailDialogComponent } from './containers/order-list/order-detail.component';
+import { OrderEditDialogComponent } from './containers/order-list/order-edit.component';
 
 @NgModule({
   imports: [
@@ -50,13 +52,17 @@ import { Constants } from './containers/order-new/orderupload.constants';
   declarations: [
     fromComponents.components,
     fromContainers.containers,
-    FulfillmentsBulkDialogComponent
+    FulfillmentsBulkDialogComponent,
+    OrderDetailDialogComponent,
+    OrderEditDialogComponent
     // OrderUploadComponent
   ],
   entryComponents: [
     fromComponents.OrderSearchDialogComponent,
     FulfillmentsFormDialogComponent,
-    FulfillmentsBulkDialogComponent
+    FulfillmentsBulkDialogComponent,
+    OrderDetailDialogComponent,
+    OrderEditDialogComponent
   ],
   providers: [
     FileUtil,

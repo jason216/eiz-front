@@ -10,6 +10,7 @@ import { ICellRendererParams, IAfterGuiAttachedParams } from 'ag-grid';
 export class TableActionCellComponent implements ICellRendererAngularComp{
   public order: any;
   public params: any;
+  unpaidorder = false;
 
   refresh(params: any): boolean {
     return false;
@@ -17,6 +18,10 @@ export class TableActionCellComponent implements ICellRendererAngularComp{
   agInit(params: any): void {
     this.order = params.data;
     this.params = params;
+
+    if (this.order.status === 'unpaid') {
+      this.unpaidorder = true;
+    }
   }
   afterGuiAttached?(params?: IAfterGuiAttachedParams): void {
     this.params = params;
@@ -24,5 +29,13 @@ export class TableActionCellComponent implements ICellRendererAngularComp{
 
   openFulfillments() {
     this.params.context.componentParent.openFulfillments([this.order]);
+  }
+
+  editOrder() {
+    this.params.context.componentParent.editOrder([this.order]);
+  }
+
+  viewOrderDetail() {
+    this.params.context.componentParent.viewOrderDetail([this.order]);
   }
 }

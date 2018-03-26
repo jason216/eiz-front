@@ -13,6 +13,7 @@ import { MailConfirmComponent } from './auth/register/mail-confirm.component';
 import { PageNotFoundComponent } from './error/page-not-found/page-not-found.component';
 import { FuseShortcutsModule } from '../core/components/shortcuts/shortcuts.module';
 import { FuseSearchBarModule } from '../core/components/search-bar/search-bar.module';
+import { ActiveComponent } from './auth/register/user-active.component';
 
 @NgModule({
   imports: [
@@ -24,6 +25,7 @@ import { FuseSearchBarModule } from '../core/components/search-bar/search-bar.mo
   ],
   declarations: [
     LoginComponent,
+    ActiveComponent,
     RegisterComponent,
     MailConfirmComponent,
     PageNotFoundComponent
