@@ -41,8 +41,12 @@ export class FileUtil {
 
             let data: any;
 
-            if (i >= 1){// console.log(csvRecordsArray[i]);
-                data = csvRecordsArray[i].replace(/,\s/g, '; ').replace(/\"/g, '');
+            if (i >= 1){
+                data = csvRecordsArray[i].replace(/,\s/g, '; ').replace(/"[^"]+"/g, function(v) { 
+                    return v.replace(/,/g, ';');
+                });
+                
+              data = data.replace(/\"/g, '');
 
                 data = data.split(tokenDelimeter);
             } else {
@@ -58,13 +62,13 @@ export class FileUtil {
                     continue;
                 }
             }
-
+            
             const col = [];
             for (let j = 0; j < data.length; j++) {
                 col.push(data[j]);
             }
             dataArr.push(col);
-        }   
+        }    
         return dataArr;
     }
 

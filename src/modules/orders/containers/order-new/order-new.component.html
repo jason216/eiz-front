@@ -37,13 +37,9 @@
                 </div>
             </mat-tab>
             <mat-tab label="Import Order">
-                <p class="pb-32">
-                    Angular Material's stepper provides a wizard-like workflow by dividing content into logical steps.
-                    <code>mat-vertical-stepper</code> can be used to create a vertical stepper.
-                </p>
                 <div class="vertical-stepper-wrapper">
-                    <mat-vertical-stepper class="mat-elevation-z4" [linear]="true">
-                        <mat-step [stepControl]="verticalStepperStep1">
+                    <mat-vertical-stepper class="mat-elevation-z4" [linear]="true" #stepper>
+                        <mat-step [completed]="selectTemplate" [optional]="false">
                             <form [formGroup]="verticalStepperStep1">
                                 <ng-template matStepLabel>Select Import template</ng-template>
                                 <div>
@@ -58,13 +54,13 @@
                                     </mat-form-field>
                                 </div>
                                 <div class="pt-24" fxLayout="row" fxLayoutAlign="center center">
-                                    <button mat-raised-button matStepperNext type="button" color="accent">
+                                    <button mat-raised-button type="button" color="accent" (click)=next()>
                                     Next
                                     </button>
                                 </div>
                             </form>
                         </mat-step>
-                        <mat-step [stepControl]="verticalStepperStep2">
+                        <mat-step [completed]="selectFile" [optional]="false">
                             <form [formGroup]="verticalStepperStep2">
                                 <ng-template matStepLabel>Select your file.</ng-template>
                                 <div>
@@ -74,7 +70,7 @@
                                     <button class="mr-8" mat-raised-button matStepperPrevious type="button" color="accent">
                                                 Previous
                                             </button>
-                                    <button mat-raised-button matStepperNext type="button" color="accent" (click)=uploadOrder()>
+                                    <button mat-raised-button type="button" color="accent" (click)=uploadOrder()>
                                                 Submit
                                             </button>
                                 </div>

@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FileUtil } from './orderupload.util';
 import { Constants } from './orderupload.constants';
 
-import {MatTableDataSource} from '@angular/material';
+import {MatTableDataSource, MatStepper} from '@angular/material';
 import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material';
 import { fuseAnimations } from '../../../../app/core/animations';
 
@@ -18,6 +18,38 @@ import { fuseAnimations } from '../../../../app/core/animations';
 
 export class OrderNewComponent implements OnInit, OnDestroy {
   private startSubscribe = true;
+
+  // --------------
+  verticalStepperStep1: FormGroup;
+  verticalStepperStep2: FormGroup;
+  verticalStepperStep1Errors: any;
+  verticalStepperStep2Errors: any;
+  template: string;
+
+  // PAYPAL_TEMPLATE = ['Name', 'From email address', 'Transaction ID', 'Item Title', 'Item ID', 'Quantity', 
+  // 'Address line 1', 'Address Line 2/District/Neighbourhood', 'Suburb', 'State/Territory/Province/Region/County/Prefecture/Republic', 
+  // 'Postcode', 'Country'];
+
+  PAYPAL_TEMPLATE = [
+    {col: 'Name', matchTo: 'shipTo_name', parent: null},
+    {col: 'From email address', matchTo: 'shipTo_email', parent: null},
+    {col: 'Address line 1', matchTo: 'shipTo_address1', parent: null},
+    {col: 'Address Line 2/District/Neighbourhood', matchTo: 'shipTo_address2', parent: null},
+    {col: 'Suburb', matchTo: 'shipTo_suburb', parent: null},
+    {col: 'State/Territory/Province/Region/County/Prefecture/Republic', matchTo: 'shipTo_state', parent: null},
+    {col: 'Postcode', matchTo: 'shipTo_postcode', parent: null},
+    {col: 'Country', matchTo: 'shipTo_country', parent: null},
+    {col: 'Transaction ID', matchTo: 'transactionId', parent: 'orderlines'},
+    {col: 'Item Title', matchTo: 'itemtitle', parent: 'orderlines'},
+    {col: 'Item ID', matchTo: 'itemnumber', parent: 'orderlines'},
+    {col: 'Quantity', matchTo: 'quantity', parent: 'orderlines'},
+    {col: 'Gross', matchTo: 'amount', parent: 'payments'}
+  ];
+
+  selectTemplate = false;
+  selectFile = false;
+  @ViewChild('stepper', {read: MatStepper}) stepper: MatStepper;
+  // --------------
 
   ORDERCOLUMN_DATA = [
     {col: 'salesRecordNumber', label: 'Sales record number', selected: true, matchTo: null},
@@ -53,9 +85,6 @@ export class OrderNewComponent implements OnInit, OnDestroy {
   uploadRecords = [];
   selectedColData = [];
 
-  // orderUploadForm: FormGroup;
-  // orderUploadFormErrors: any;
-
   @ViewChild('fileImportInput')
   fileImportInput: any;
 
@@ -68,9 +97,22 @@ export class OrderNewComponent implements OnInit, OnDestroy {
     private formBuilder: FormBuilder,
     private snackBar: MatSnackBar
   ){
+    this.verticalStepperStep1Errors = {
+      template: {}
+    };
 
+    this.verticalStepperStep2Errors = {
+        importOrder: {}
+    };
   }
   ngOnInit() {
+    this.verticalStepperStep1 = this.formBuilder.group({
+      template: ['', Validators.required]
+    });
+
+    this.verticalStepperStep2 = this.formBuilder.group({
+      importOrder: ['', Validators.required]
+    });
   }
 
   ngOnDestroy() {
@@ -108,22 +150,34 @@ export class OrderNewComponent implements OnInit, OnDestroy {
       let headerLength = -1;
       if (Constants.isHeaderPresentFlag){
         headersRow = this._fileUtil.getHeaderArray(csvRecordsArray, Constants.tokenDelimeter);
-        
-        for ( let i = 0; i < headersRow.length; i++ )
-        {
-          // if (i === 0) {
-          //   this.customerOrderCol.push({col: 'None', selected: false, matchTo: null});
-          // }
-          this.customerOrderCol.push(this.createCustomerOrderCol(headersRow[i]));
+
+        if (this.template === 'paypal') { // paypal template is used
+          for ( let i = 0; i < headersRow.length; i++ ) {
+            for (let j = 0; j < this.PAYPAL_TEMPLATE.length; j++) {
+              if (headersRow[i] === this.PAYPAL_TEMPLATE[j].col) {
+                if (this.PAYPAL_TEMPLATE[j].parent) {
+                  this.customerOrderCol.push(this.createCustomerOrderCol(headersRow[i], this.PAYPAL_TEMPLATE[j].matchTo, this.PAYPAL_TEMPLATE[j].parent, i));
+                } else {
+                  this.customerOrderCol.push(this.createCustomerOrderCol(headersRow[i], this.PAYPAL_TEMPLATE[j].matchTo, null, i));
+                }
+              }
+            }
+          }
+          headerLength = headersRow.length; 
+        } else { // template is not used
+          
+          for ( let i = 0; i < headersRow.length; i++ )
+          {
+            this.customerOrderCol.push(this.createCustomerOrderCol(headersRow[i], null, null, null));
+          }
+          
+          this.dataSource = new MatTableDataSource(this.ORDERCOLUMN_DATA);
+          headerLength = headersRow.length; 
         }
-        
-        this.dataSource = new MatTableDataSource(this.ORDERCOLUMN_DATA);
-        headerLength = headersRow.length; 
       }
 
       this.csvRecords = this._fileUtil.getDataRecordsArrayFromCSVFile(csvRecordsArray, 
           headerLength, Constants.validateHeaderAndRecordLengthFlag, Constants.tokenDelimeter);
-
       // console.log(this.csvRecords);
       
       // if (this.csvRecords == null){
@@ -200,49 +254,98 @@ export class OrderNewComponent implements OnInit, OnDestroy {
     }
   }
 
-  uploadOrder() {
-    // tslint:disable-next-line:prefer-const
-    let elem: Element = document.getElementById('postage');
-
+  uploadOrder() {  
     this.uploadRecords = [];
-    this.customerOrderCol = this.customerOrderCol.filter(item => item.col !== 'None'); 
-    for (let i = 1; i < this.csvRecords.length; i++) {
-      // tslint:disable-next-line:prefer-const
-      let jsonData = {};
-      for (let j = 1; j < this.csvRecords[i].length; j++) {
-        if (this.customerOrderCol[j].selected) {
-          jsonData[this.customerOrderCol[j].matchTo] = this.csvRecords[i][j];
+    
+    if (this.template === 'paypal') { // paypal template is used
+      for (let i = 1; i < this.csvRecords.length; i++) {
+        // tslint:disable-next-line:prefer-const
+        let jsonData = {};
+        // tslint:disable-next-line:prefer-const
+        let orderlines = {};
+        // tslint:disable-next-line:prefer-const
+        let payments = {};
+
+        // tslint:disable-next-line:prefer-const
+        let temp_quantity = 1;
+        // tslint:disable-next-line:prefer-const
+        let temp_amount = 1;
+        payments['paymentMethod'] = 'Paypal';
+        for (let j = 0; j < this.customerOrderCol.length; j++) {
+          if (this.customerOrderCol[j].parent === 'orderlines') {
+            orderlines[this.customerOrderCol[j].matchTo] = this.csvRecords[i][this.customerOrderCol[j].index];
+            jsonData[this.customerOrderCol[j].parent] = orderlines;
+            if (this.customerOrderCol[j].matchTo === 'quantity') {
+              temp_quantity = this.csvRecords[i][this.customerOrderCol[j].index];
+            }
+          } else if (this.customerOrderCol[j].parent === 'payments') {
+            if (this.customerOrderCol[j].matchTo === 'amount') {
+              temp_amount = this.csvRecords[i][this.customerOrderCol[j].index];
+            }
+            payments[this.customerOrderCol[j].matchTo] = this.csvRecords[i][this.customerOrderCol[j].index];
+            jsonData[this.customerOrderCol[j].parent] = payments;
+          } else if (!this.customerOrderCol[j].parent) {
+            jsonData[this.customerOrderCol[j].matchTo] = this.csvRecords[i][this.customerOrderCol[j].index];
+          }
         }
+        orderlines['saleprice'] = temp_amount / temp_quantity;
+        jsonData['orderlines'] = orderlines;
+        this.uploadRecords.push(jsonData);
       }
-      this.uploadRecords.push(jsonData);
+      console.log(this.uploadRecords);
+    } else if (this.template === 'none') {
+      this.customerOrderCol = this.customerOrderCol.filter(item => item.col !== 'None'); 
+      for (let i = 1; i < this.csvRecords.length; i++) {
+        // tslint:disable-next-line:prefer-const
+        let jsonData = {};
+        for (let j = 1; j < this.csvRecords[i].length; j++) {
+          if (this.customerOrderCol[j].selected) {
+            jsonData[this.customerOrderCol[j].matchTo] = this.csvRecords[i][j];
+          }
+        }
+        this.uploadRecords.push(jsonData);
+      }
     }
+
     
     // tslint:disable-next-line:prefer-const
-    let requiredCol = [];
-    for (let i = 0; i < this.uploadRecords.length; i++) {
-      for (let j = 1; j < this.ORDERCOLUMN_DATA.length; j++) {
-        if (this.ORDERCOLUMN_DATA[j].selected && !this.uploadRecords[0][this.ORDERCOLUMN_DATA[j].col]) {
-          requiredCol.push(this.ORDERCOLUMN_DATA[j].col);
-          continue;
-        }
-      }
-      break;
-    }
+    // let requiredCol = [];
+    // for (let i = 0; i < this.uploadRecords.length; i++) {
+    //   for (let j = 1; j < this.ORDERCOLUMN_DATA.length; j++) {
+    //     if (this.ORDERCOLUMN_DATA[j].selected && !this.uploadRecords[0][this.ORDERCOLUMN_DATA[j].col]) {
+    //       requiredCol.push(this.ORDERCOLUMN_DATA[j].col);
+    //       continue;
+    //     }
+    //   }
+    //   break;
+    // }
   }
 
-  createCustomerOrderCol(colVal: string): CustomerOrderCol {
+  createCustomerOrderCol(colVal: string, matchTo: string, parent: string, index: number): CustomerOrderCol {
     return {
         col      : colVal,
         selected : false,
-        matchTo  : null
+        matchTo  : matchTo,
+        parent   : parent,
+        index    : index
     };
+  }
+
+  next() {
+    if (!this.verticalStepperStep1.invalid) {
+      this.selectTemplate = true;
+      this.stepper.selected.completed = true;
+      this.stepper.next();
+    }
   }
 }
 
 export interface CustomerOrderCol {
-  col: string;
+  col:      string;
   selected: boolean;
-  matchTo: string;
+  matchTo:  string;
+  parent:   string;
+  index:    number;
 }
 
 export interface OrderCol {
@@ -252,4 +355,5 @@ export interface OrderCol {
   selected: boolean;
   matchTo: string;
 }
+
 
