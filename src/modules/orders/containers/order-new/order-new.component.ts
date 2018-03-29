@@ -8,6 +8,7 @@ import {MatTableDataSource, MatStepper} from '@angular/material';
 import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material';
 import { fuseAnimations } from '../../../../app/core/animations';
 import { ApiService } from '../../../../app/alpha/services';
+import { ActiveContentService } from '../../../../app/alpha/services/activeContent.service';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -101,7 +102,8 @@ export class OrderNewComponent implements OnInit, OnDestroy {
     private _fileUtil: FileUtil,
     private formBuilder: FormBuilder,
     private snackBar: MatSnackBar,
-    private apiService: ApiService
+    private apiService: ApiService,
+    public activeContentService: ActiveContentService,
   ){
     this.verticalStepperStep1Errors = {
       template: {}
@@ -388,6 +390,7 @@ export class OrderNewComponent implements OnInit, OnDestroy {
             verticalPosition: 'top',
           });
 
+          this.activeContentService.getOrders();
           event.target.textContent = 'Submit';
           event.target.parentElement.disabled = false;
           this.stepper.selectedIndex = 0;
