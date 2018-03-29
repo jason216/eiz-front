@@ -21,6 +21,8 @@ export class ConsignmentsComponent implements OnInit, OnDestroy {
 
   searchFormControl = new FormControl('');
 
+  consignemntStatusFilter;
+
   Pending = 0;
   Solid = 0;
   Printed = 0;
@@ -39,23 +41,42 @@ export class ConsignmentsComponent implements OnInit, OnDestroy {
       checkboxSelection: true,
       headerCheckboxSelection: true
     },
-    { field: 'clientIndex_id', headerName: 'ID', width: 5 },
+    { 
+      field: 'labels.labelNumber', 
+      headerName: 'Tracking Number', 
+      width: 20, 
+      cellRenderer: function(param) {
+        if (param.data.errors) {
+          return '<span style="color: red;">' + param.data.errors + '</span>';
+        } else {
+          // tslint:disable-next-line:prefer-const
+          let trackingNum: string;
+          trackingNum = '<span>';
+
+          const labels = param.data.labels;
+          for (let i = 0; i < labels.length; i++) {
+            trackingNum = trackingNum + labels[0].labelNumber;
+            trackingNum = trackingNum + ', ';
+          }
+          trackingNum = trackingNum + '</span><br>111<br>';
+          return trackingNum;
+        }
+      }
+    },
     { 
       field: 'shipTo_name', 
       headerName: 'Customer', 
-      width: 15
+      width: 20
     },
     {
       field: 'shipping_method.serviceProvider',
       headerName: 'Carrier',
-      width: 15,
-      cellStyle: {padding: 0}
+      width: 20
     },
     {
       field: 'shipping_method.name',
       headerName: 'Method',
-      width: 20,
-      cellStyle: {padding: 0}
+      width: 10
     },
     {
       field: 'created_at',
@@ -91,13 +112,14 @@ export class ConsignmentsComponent implements OnInit, OnDestroy {
           this.currentConsignments = 'pending';
           this.consignmentsSubscription = this.activeContentService.onConsignmentsChange.subscribe(
             (consignments) => {
-              this.consignments = consignments;
+              this.consignments = consignments;console.log(consignments);
               this.gridOptions.api.setRowData(consignments[this.currentConsignments]);
               if (consignments['pending']) {
                 this.Pending = consignments['pending'].length;
                 this.Solid = consignments['solid'].length;
                 this.Printed = consignments['printed'].length;
                 this.Issue = consignments['issue'].length;
+                this.consignemntStatusFilter = 'pending';
               }
             }
           );
@@ -123,4 +145,7 @@ export class ConsignmentsComponent implements OnInit, OnDestroy {
   optionSelected(tag) {
     this.setCurrentOrders(tag);
   }
+
 }
+
+

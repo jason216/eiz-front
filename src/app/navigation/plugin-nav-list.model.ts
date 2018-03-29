@@ -71,14 +71,23 @@ export class PluginNavListModel implements FuseNavigationModelInterface{
       {
         'id': 'fulfillments.consignments',
         'title': 'Consignments',
-        'type': 'item',
+        'type': 'collapse',
         'icon': 'email',
         'url': '/fulfillments/consignments',
-        'badge'    : {
-          'title'    : data.consignments.all.length,
-          'bg'       : '#F44336',
-          'fg'       : '#FFFFFF'
-        }
+        // 'badge'    : {
+        //   'title'    : data.consignments.all.length,
+        //   'bg'       : '#F44336',
+        //   'fg'       : '#FFFFFF'
+        // }
+        'children': [
+          {
+            'id': 'fulfillments.consignments.fastway',
+            'title': 'Fastway',
+            'type': 'item',
+            'icon': 'email',
+            'url': '/fulfillments/consignments/fastway'
+          },
+        ]
       },
       {
         'id': 'fulfillments.consignments.new',

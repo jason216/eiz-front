@@ -48,41 +48,36 @@
     <!-- SELECTED BAR -->
     <div class="selectedBar mat-accent-600-bg" *ngIf="hasSelectedOrders" [@slideInTop]>
         <div fxFlex fxLayout="row" fxLayoutAlign="start center" class="p-24">
-
             <div class="close-button-wrapper" fxFlex="0 1 auto" fxFlex.gt-sm="220px" (click)="deselectAll()">
                 <button class="p-8" mat-button fxLayout="row" fxLayoutAlign="start center">
-          <mat-icon class="mr-8">arrow_back</mat-icon>
-          <span class="text-uppercase">Back</span>
-        </button>
+                    <mat-icon class="mr-8">arrow_back</mat-icon>
+                    <span class="text-uppercase">Back</span>
+                </button>
             </div>
-
             <div fxFlex fxLayout="row" fxLayoutAlign="end center" fxLayoutAlign.gt-sm="space-between center">
-
                 <div>
                     <span class="selected-contacts-count">
-            <span>{{selected.length}}</span>
+                        <span>{{selected.length}}</span>
                     <span>selected</span>
                     </span>
-
                     <button mat-icon-button [matMenuTriggerFor]="selectMenu">
-            <mat-icon>arrow_drop_down</mat-icon>
-          </button>
+                        <mat-icon>arrow_drop_down</mat-icon>
+                    </button>
                     <mat-menu #selectMenu="matMenu">
                         <button mat-menu-item>Select all</button>
                         <button mat-menu-item>Deselect all</button>
                     </mat-menu>
-
-                    <button mat-raised-button class="mb-4" color="primary" (click)="bulkProcess()">Bulk Process</button>
+                    <div [ngSwitch]="selectedStatus" style="display: inline;">
+                        <button *ngSwitchCase="'paid'" mat-raised-button class="mb-4" color="primary" (click)="bulkProcess()">Bulk Process</button>
+                        <button *ngSwitchCase="'processed'" mat-raised-button class="mb-4" color="primary" (click)="bulkProcess()">Archive</button>
+                    </div>
                 </div>
-
                 <div class="multi-select-actions">
                     <button mat-icon-button aria-label="delete selected">
-            <mat-icon>delete</mat-icon>
-          </button>
+                        <mat-icon>delete</mat-icon>
+                    </button>
                 </div>
-
             </div>
-
         </div>
     </div>
     <!-- / SELECTED BAR -->
@@ -150,7 +145,7 @@
                     <mat-datepicker #dp4 disabled="false"></mat-datepicker>
                 </mat-form-field> value="awaitFulfill"-->
                 <mat-form-field>
-                    <mat-select placeholder="Filter Order" (selectionChange)="optionSelected($event.value)" #orderStatusFilter style="width: 230px;">
+                    <mat-select placeholder="Filter Order" (selectionChange)="optionSelected($event.value)" [(ngModel)]="orderStatusFilter" style="width: 230px;">
                         <mat-option value="unpaid">
                             Unpaid<span class="nav-link-badge"> ({{unPaid}}) </span>
                         </mat-option>

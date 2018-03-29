@@ -61,7 +61,7 @@
         <div layout-gt-xs="row" layout-xs="column" layout-align="stretch center" class="layout-xs-column layout-gt-xs-row layout-align-stretch-center">
             <div layout="row" layout-align="start center" class="layout-align-start-center layout-row">
                 <mat-form-field>
-                    <mat-select placeholder="Filter Consignment" (selectionChange)="optionSelected($event.value)" #consignemntStatusFilter style="width: 230px;">
+                    <mat-select placeholder="Filter Consignment" (selectionChange)="optionSelected($event.value)" [(ngModel)]="consignemntStatusFilter" style="width: 230px;">
                         <mat-option value="pending">
                             Pending<span class="nav-link-badge"> ({{Pending}}) </span>
                         </mat-option>

@@ -4,6 +4,7 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatStepper, MatSnackBar } fro
 import { ApiService } from '../../../../app/alpha/services';
 import { DomSanitizer } from '@angular/platform-browser';
 import { FulfillmentsSelectAddressDialogComponent } from '../fulfillments-selectAddress-dialog/fulfillments-selectAddress-dialog.component';
+import { ActiveContentService } from '../../../../app/alpha/services/activeContent.service';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -34,6 +35,7 @@ export class FulfillmentsFormDialogComponent {
 
 
   constructor(
+    private activeContentService: ActiveContentService,
     public dialogRef: MatDialogRef<FulfillmentsFormDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: [any],
     private apiService: ApiService,
@@ -246,6 +248,7 @@ export class FulfillmentsFormDialogComponent {
                 this.consignmentsIds = consignmentsIds;
 
                 this.printLabels();
+                this.activeContentService.getConsignments();
                 this.dialogRef.close();
               }
             },

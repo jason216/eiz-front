@@ -47,6 +47,8 @@ export class OrderListComponent implements OnInit, OnDestroy {
   issue = 0;
   onhold = 0;
 
+  selectedStatus = 'paid';
+
   rows: any[] = [];
   selected: any = [];
   hasSelectedOrders = false;
@@ -60,6 +62,7 @@ export class OrderListComponent implements OnInit, OnDestroy {
   ordersUpdateSubscription: Subscription;
   orders;
   currentOrders;
+  orderStatusFilter;
 
   dialogRef: any;
 
@@ -138,6 +141,7 @@ export class OrderListComponent implements OnInit, OnDestroy {
               this.unPaid = orders['unpaid'].length;
               this.issue = orders['issue'].length;
               this.onhold = orders['onhold'].length;
+              this.orderStatusFilter = 'paid';
             }
           }
         );
@@ -159,7 +163,7 @@ export class OrderListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-
+    
   }
   ngOnDestroy() {
     this.startSubscribe = false;
@@ -363,6 +367,7 @@ export class OrderListComponent implements OnInit, OnDestroy {
   }
 
   optionSelected(tag) {
+    this.selectedStatus = tag;
     this.setCurrentOrders(tag);
   }
 
