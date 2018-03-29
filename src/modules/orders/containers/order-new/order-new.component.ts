@@ -319,13 +319,13 @@ export class OrderNewComponent implements OnInit, OnDestroy {
   }
 
   uploadOrder(event) {  
-    event.target.textContent = 'Submit...';
-    event.target.parentElement.disabled = true;
-
     if (this.importOrder.nativeElement.value === '') {
       this.needCSVFile = true;
       return;
     }
+
+    event.target.textContent = 'Submit...';
+    event.target.parentElement.disabled = true;
 
     this.uploadRecords = [];
     
