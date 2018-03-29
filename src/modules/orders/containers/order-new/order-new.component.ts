@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FileUtil } from './orderupload.util';
@@ -14,7 +14,7 @@ import { ApiService } from '../../../../app/alpha/services';
   selector: 'page-order-new',
   templateUrl: './order-new.component.html',
   styleUrls: ['./order-new.component.scss'],
-  animations: fuseAnimations
+  // animations: fuseAnimations
 })
 
 export class OrderNewComponent implements OnInit, OnDestroy {
@@ -25,7 +25,7 @@ export class OrderNewComponent implements OnInit, OnDestroy {
   verticalStepperStep2: FormGroup;
   verticalStepperStep1Errors: any;
   verticalStepperStep2Errors: any;
-  template: string;
+  template = 'paypal';
 
   // PAYPAL_TEMPLATE = ['Name', 'From email address', 'Transaction ID', 'Item Title', 'Item ID', 'Quantity', 
   // 'Address line 1', 'Address Line 2/District/Neighbourhood', 'Suburb', 'State/Territory/Province/Region/County/Prefecture/Republic', 
@@ -50,7 +50,9 @@ export class OrderNewComponent implements OnInit, OnDestroy {
 
   selectTemplate = false;
   selectFile = false;
-  @ViewChild('stepper', {read: MatStepper}) stepper: MatStepper;
+  @ViewChild('stepper') stepper: MatStepper;
+  @ViewChild('importOrder') importOrder: ElementRef;
+  @ViewChild('uploadBtn') uploadBtn: ElementRef;
   // --------------
 
   ORDERCOLUMN_DATA = [
@@ -81,6 +83,7 @@ export class OrderNewComponent implements OnInit, OnDestroy {
   ];
 
   orderColDuplicateError = false;
+  needCSVFile = false;
 
   displayedColumns = ['orderCol', 'customerOrderCol'];
   dataSource: MatTableDataSource<OrderCol>;
@@ -116,14 +119,54 @@ export class OrderNewComponent implements OnInit, OnDestroy {
     this.verticalStepperStep2 = this.formBuilder.group({
       importOrder: ['', Validators.required]
     });
+
+    this.verticalStepperStep1.valueChanges.subscribe(() => {
+      this.onVerticalStepperStepValuesChanged();
+    });
+
+    this.verticalStepperStep2.valueChanges.subscribe(() => {
+      this.onVerticalStepperStepValuesChanged();
+    });
   }
 
   ngOnDestroy() {
     this.startSubscribe = false;
   }
 
+  onVerticalStepperStepValuesChanged()
+  {
+      for ( const field in this.verticalStepperStep1Errors )
+      {
+          if ( !this.verticalStepperStep1Errors.hasOwnProperty(field) )
+          {
+              continue;
+          }
+
+          // Clear previous errors
+          this.verticalStepperStep1Errors[field] = {};
+
+          // Get the control
+          const control = this.verticalStepperStep1.get(field);
+
+          if ( control && control.dirty && !control.valid )
+          {
+              this.verticalStepperStep1Errors[field] = control.errors;
+          }
+      }
+  }
+
   // METHOD CALLED WHEN CSV FILE IS IMPORTED
   fileChangeListener($event): void {
+    this.needCSVFile = false;
+    if (this.template === '' || this.template === undefined) {
+      this.fileReset();
+      this.snackBar.open('Please select a template', 'Dismiss', {
+        duration: 15000,
+        horizontalPosition: 'right',
+        verticalPosition: 'top',
+      });
+      return;
+    }
 
     const text = [];
     const target = $event.target || $event.srcElement;
@@ -257,7 +300,33 @@ export class OrderNewComponent implements OnInit, OnDestroy {
     }
   }
 
-  uploadOrder() {  
+  createCustomerOrderCol(colVal: string, matchTo: string, parent: string, index: number): CustomerOrderCol {
+    return {
+        col      : colVal,
+        selected : false,
+        matchTo  : matchTo,
+        parent   : parent,
+        index    : index
+    };
+  }
+
+  next() {
+    if (!this.verticalStepperStep1.invalid) {
+      this.selectTemplate = true;
+      this.stepper.selected.completed = true;
+      this.stepper.next();
+    }
+  }
+
+  uploadOrder(event) {  
+    event.target.textContent = 'Submit...';
+    event.target.parentElement.disabled = true;
+
+    if (this.importOrder.nativeElement.value === '') {
+      this.needCSVFile = true;
+      return;
+    }
+
     this.uploadRecords = [];
     
     if (this.template === 'paypal') { // paypal template is used
@@ -309,19 +378,28 @@ export class OrderNewComponent implements OnInit, OnDestroy {
         this.uploadRecords.push(jsonData);
       }
     }
-    console.log(this.uploadRecords);
+
     this.apiService.post('Orders', 'orders', null, this.uploadRecords).subscribe(
       res => {
-        if (res['data']) {
+          this.fileReset();
           this.snackBar.open('Import successfully', 'Dismiss', {
             duration: 15000,
             horizontalPosition: 'right',
             verticalPosition: 'top',
           });
-        }
+
+          event.target.textContent = 'Submit';
+          event.target.parentElement.disabled = false;
+          this.stepper.selectedIndex = 0;
       },
       err => {
-        console.log(`Error in import order: ${err}`);
+        this.snackBar.open('Error in import order:' + err, 'Dismiss', {
+          duration: 15000,
+          horizontalPosition: 'right',
+          verticalPosition: 'top',
+        });
+        event.target.textContent = 'Submit';
+        event.target.parentElement.disabled = false;
       }// ,
       // () => {
       //   console.log('solid consignment Completed');
@@ -340,24 +418,6 @@ export class OrderNewComponent implements OnInit, OnDestroy {
     //   }
     //   break;
     // }
-  }
-
-  createCustomerOrderCol(colVal: string, matchTo: string, parent: string, index: number): CustomerOrderCol {
-    return {
-        col      : colVal,
-        selected : false,
-        matchTo  : matchTo,
-        parent   : parent,
-        index    : index
-    };
-  }
-
-  next() {
-    if (!this.verticalStepperStep1.invalid) {
-      this.selectTemplate = true;
-      this.stepper.selected.completed = true;
-      this.stepper.next();
-    }
   }
 }
 

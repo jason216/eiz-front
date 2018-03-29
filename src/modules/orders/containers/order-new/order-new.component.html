@@ -1,6 +1,94 @@
 <div class="page-layout simple tabbed" fusePerfectScrollbar>
     <div class="content">
-        <mat-tab-group dynamicHeight="true">
+        <mat-tab-group>
+            <mat-tab label="Import Order">
+                <!-- <div class="vertical-stepper-wrapper"> -->
+                <mat-vertical-stepper [linear]="true" #stepper>
+                    <mat-step [completed]="selectTemplate" [optional]="false">
+                        <form [formGroup]="verticalStepperStep1">
+                            <ng-template matStepLabel>Select Import template</ng-template>
+                            <div>
+                                <mat-form-field fxFlex="50">
+                                    <mat-select formControlName="template" required [(ngModel)]="template">
+                                        <!-- placeholder="Please select an import template" -->
+                                        <!-- <mat-option value="none"> None </mat-option> -->
+                                        <mat-option value="paypal"> Paypal </mat-option>
+                                    </mat-select>
+                                    <mat-error *ngIf="verticalStepperStep1.invalid">
+                                        Template is required!
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="pt-24" fxLayout="row" fxLayoutAlign="center center">
+                                <button mat-raised-button type="button" color="accent" (click)=next()>
+                                            Next
+                                            </button>
+                            </div>
+                        </form>
+                    </mat-step>
+                    <mat-step [completed]="selectFile" [optional]="false">
+                        <form [formGroup]="verticalStepperStep2">
+                            <ng-template matStepLabel>Select your file.</ng-template>
+                            <div>
+                                <input required type="file" #importOrder formControlName="importOrder" #fileImportInput name="File Upload" id="txtFileUpload" class="btn btn-primary" (change)="fileChangeListener($event)" accept=".csv" value={{selectedImageFile}}/>
+                                <mat-error *ngIf="needCSVFile">
+                                    A CSV file is required!
+                                </mat-error>
+                            </div>
+                            <div class="pt-24" fxLayout="row" fxLayoutAlign="center center">
+                                <button class="mr-8" mat-raised-button matStepperPrevious type="button" color="accent">
+                                    Previous
+                                </button>
+                                <button mat-raised-button color="accent" (click)=uploadOrder($event)>
+                                    Submit
+                                </button>
+                            </div>
+                        </form>
+                    </mat-step>
+                </mat-vertical-stepper>
+                <!-- </div> -->
+                <!-- <div id="import-order" class="mat-white-bg p-24 mr-24 mb-24" fxLayout="column" fxLayoutAlign="start" fxFlex="1 0 auto">
+                            <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+                                <div fxFlex="25">
+                                    <input type="file" #fileImportInput name="File Upload" id="txtFileUpload" class="btn btn-primary" (change)="fileChangeListener($event)" accept=".csv" value={{selectedImageFile}}/>
+                                </div>
+                                <div fxFlex="25">
+                                    <mat-select placeholder="Please select a import template">
+                                        <mat-option value="paypal"> Paypal </mat-option>
+                                    </mat-select>
+                                </div>
+                                <div fxFlex="25">
+                                    <button mat-raised-button color="accent" class="submit-button" aria-label="Submit" (click)=uploadOrder()> Submit </button>
+                                </div>
+                            </div>
+                            <div class="content p-24">
+                                <div fxLayout="column" fxLayoutAlign="center">
+                                    <br>
+                                    <div>
+                                        <div class="example-container mat-elevation-z8">
+                                            <mat-table #table [dataSource]="dataSource" *ngIf="">
+                                                <ng-container matColumnDef="orderCol">
+                                                    <mat-header-cell *matHeaderCellDef> New Order Input fields </mat-header-cell>
+                                                    <mat-cell *matCellDef="let row" #colName> {{row.label}} </mat-cell>
+                                                </ng-container>
+                                                <ng-container matColumnDef="customerOrderCol">
+                                                    <mat-header-cell *matHeaderCellDef> Customer Order Column </mat-header-cell>
+                                                    <mat-cell *matCellDef="let row">
+                                                        <mat-select placeholder="Please select" (selectionChange)="optionSelected($event)" [id]="row.col">
+                                                            <mat-option *ngFor="let data of customerOrderCol " [value]="data.col"> {{data.col}} </mat-option>
+                                                        </mat-select>
+                                                    </mat-cell>
+                                                </ng-container>
+                                                <mat-header-row *matHeaderRowDef="displayedColumns "></mat-header-row>
+                                                <mat-row *matRowDef="let dataSource; columns: displayedColumns; ">
+                                                </mat-row>
+                                            </mat-table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> -->
+            </mat-tab>
             <mat-tab label="Create New Order">
                 <div id="new-order" class="page-layout simple" fusePerfectScrollbar>
                     <div class="content p-24">
@@ -13,11 +101,12 @@
                                             <button class="mr-0 mr-sm-16" mat-icon-button [routerLink]="'/orders/all'">
                                           <mat-icon>arrow_back</mat-icon>
                                         </button>
-                                            <div class="product-image mr-8 mr-sm-16" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">
+                                            <div class="product-image mr-8 mr-sm-16" *fuseIfOnDom>
+                                                <!-- [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}" -->
                                                 <img [src]="'assets/images/ecommerce/product-image-placeholder.png'">
                                             </div>
-
-                                            <div fxLayout="column" fxLayoutAlign="start start" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
+                                            <div fxLayout="column" fxLayoutAlign="start start" *fuseIfOnDom>
+                                                <!-- [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}" -->
                                                 <div class="h2">
                                                     New Order
                                                 </div>
@@ -35,90 +124,6 @@
                         </div>
                     </div>
                 </div>
-            </mat-tab>
-            <mat-tab label="Import Order">
-                <!-- <div class="vertical-stepper-wrapper"> -->
-                <mat-vertical-stepper [linear]="true" #stepper>
-                    <mat-step [completed]="selectTemplate" [optional]="false">
-                        <form [formGroup]="verticalStepperStep1">
-                            <ng-template matStepLabel>Select Import template</ng-template>
-                            <div>
-                                <mat-form-field fxFlex="50">
-                                    <mat-select [(ngModel)]="template" placeholder="Please select an import template" formControlName="template" required>
-                                        <mat-option value="none"> None </mat-option>
-                                        <mat-option value="paypal"> Paypal </mat-option>
-                                    </mat-select>
-                                    <mat-error *ngIf="verticalStepperStep1Errors.template.required">
-                                        Template is required!
-                                    </mat-error>
-                                </mat-form-field>
-                            </div>
-                            <div class="pt-24" fxLayout="row" fxLayoutAlign="center center">
-                                <button mat-raised-button type="button" color="accent" (click)=next()>
-                                    Next
-                                    </button>
-                            </div>
-                        </form>
-                    </mat-step>
-                    <mat-step [completed]="selectFile" [optional]="false">
-                        <form [formGroup]="verticalStepperStep2">
-                            <ng-template matStepLabel>Select your file.</ng-template>
-                            <div>
-                                <input type="file" formControlName="importOrder" #fileImportInput name="File Upload" id="txtFileUpload" class="btn btn-primary" (change)="fileChangeListener($event)" accept=".csv" value={{selectedImageFile}}/>
-                            </div>
-                            <div class="pt-24" fxLayout="row" fxLayoutAlign="center center">
-                                <button class="mr-8" mat-raised-button matStepperPrevious type="button" color="accent">
-                                                Previous
-                                            </button>
-                                <button mat-raised-button type="button" color="accent" (click)=uploadOrder()>
-                                                Submit
-                                            </button>
-                            </div>
-                        </form>
-                    </mat-step>
-                </mat-vertical-stepper>
-                <!-- </div> -->
-                <!-- <div id="import-order" class="mat-white-bg p-24 mr-24 mb-24" fxLayout="column" fxLayoutAlign="start" fxFlex="1 0 auto">
-                    <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
-                        <div fxFlex="25">
-                            <input type="file" #fileImportInput name="File Upload" id="txtFileUpload" class="btn btn-primary" (change)="fileChangeListener($event)" accept=".csv" value={{selectedImageFile}}/>
-                        </div>
-                        <div fxFlex="25">
-                            <mat-select placeholder="Please select a import template">
-                                <mat-option value="paypal"> Paypal </mat-option>
-                            </mat-select>
-                        </div>
-                        <div fxFlex="25">
-                            <button mat-raised-button color="accent" class="submit-button" aria-label="Submit" (click)=uploadOrder()> Submit </button>
-                        </div>
-                    </div>
-                    <div class="content p-24">
-                        <div fxLayout="column" fxLayoutAlign="center">
-                            <br>
-                            <div>
-                                <div class="example-container mat-elevation-z8">
-                                    <mat-table #table [dataSource]="dataSource" *ngIf="">
-                                        <ng-container matColumnDef="orderCol">
-                                            <mat-header-cell *matHeaderCellDef> New Order Input fields </mat-header-cell>
-                                            <mat-cell *matCellDef="let row" #colName> {{row.label}} </mat-cell>
-                                        </ng-container>
-                                        <ng-container matColumnDef="customerOrderCol">
-                                            <mat-header-cell *matHeaderCellDef> Customer Order Column </mat-header-cell>
-                                            <mat-cell *matCellDef="let row">
-                                                <mat-select placeholder="Please select" (selectionChange)="optionSelected($event)" [id]="row.col">
-                                                    <mat-option *ngFor="let data of customerOrderCol " [value]="data.col"> {{data.col}} </mat-option>
-                                                </mat-select>
-                                            </mat-cell>
-                                        </ng-container>
-                                        <mat-header-row *matHeaderRowDef="displayedColumns "></mat-header-row>
-                                        <mat-row *matRowDef="let dataSource; columns: displayedColumns; ">
-                                        </mat-row>
-                                    </mat-table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div> -->
             </mat-tab>
         </mat-tab-group>
     </div>
