@@ -59,6 +59,14 @@ export class ActiveContentService {
                   this.orders.processed.push(order);
                   break;
                 }
+                case 'issue': {
+                  this.orders.issue.push(order);
+                  break;
+                }
+                case 'onhold': {
+                  this.orders.onhold.push(order);
+                  break;
+                }
                 default: {
                   this.orders.default.push(order);
                   break;
@@ -106,6 +114,8 @@ export class ActiveContentService {
     this.orders.paid = [];
     this.orders.processed = [];
     this.orders.unpaid = [];
+    this.orders.issue = [];
+    this.orders.onhold = [];
     this.orders.default = [];
   }
 

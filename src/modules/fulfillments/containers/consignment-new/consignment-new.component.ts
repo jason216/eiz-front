@@ -47,6 +47,8 @@ export class ConsignmentNewComponent implements OnInit, OnDestroy {
   consignmentForm: FormGroup;
   consignmentFormErrors: any;
 
+  defaultVal: 1;
+
   // orderColDuplicateError = false;
 
   // displayedColumns = ['orderCol', 'customerOrderCol'];
@@ -192,33 +194,6 @@ export class ConsignmentNewComponent implements OnInit, OnDestroy {
     } else {
       return 'none';
     }
-  }
-
-  onKeyup(event: any) {
-    // tslint:disable-next-line:prefer-const
-    let txt = event.target.value; console.log(txt);
-    // let indexstr;
-    // if (txt.indexOf('.') === -1) {
-    //   indexstr = txt.length;
-    // } else {
-    //   indexstr = txt.indexOf('.');
-    // }
-    // if ((txt.length - indexstr + 1) >= 2) {
-    //   // tslint:disable-next-line:prefer-const
-    //   let len = txt.indexOf('.') + 1 + 2;
-    //   event.target.value = txt.substr(0, len);
-    // }
-
-    // 先把非数字的都替换掉，除了数字和.
-    txt = txt.replace(/[^\d.]/g, '');
-    // 必须保证第一个为数字而不是.
-    txt = txt.replace(/^\./g, '');
-    // 保证只有出现一个.而没有多个.
-    txt = txt.replace(/\.{2,}/g, '');
-    // 保证.只出现一次，而不能出现两次以上
-    txt = txt.replace('.', '$#$').replace(/\./g, '').replace('$#$', '.');
-
-    event.target.value = txt;
   }
 
   checkOrderline() {

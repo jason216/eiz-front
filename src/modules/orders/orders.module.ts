@@ -54,7 +54,7 @@ import { OrderEditDialogComponent } from './containers/order-list/order-edit.com
     fromContainers.containers,
     FulfillmentsBulkDialogComponent,
     OrderDetailDialogComponent,
-    OrderEditDialogComponent
+    OrderEditDialogComponent,
     // OrderUploadComponent
   ],
   entryComponents: [

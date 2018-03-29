@@ -92,7 +92,7 @@ export class ConsignmentsPendingComponent implements OnInit, OnDestroy {
           this.gridOptions.api.sizeColumnsToFit();
           // this.currentOrders = 'awaitFulfill';
           this.consignmentsSubscription = this.activeContentService.onConsignmentsChange.subscribe(
-            (consignments) => {
+            (consignments) => {console.log(consignments);
               this.consignments = consignments;
               this.gridOptions.api.setRowData(this.activeContentService.consignments.pending);
             }

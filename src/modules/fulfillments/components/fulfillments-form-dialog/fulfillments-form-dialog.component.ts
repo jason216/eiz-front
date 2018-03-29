@@ -123,8 +123,10 @@ export class FulfillmentsFormDialogComponent {
           consignment.quoteSelected = res.data[0];
           consignment.quotes = res.data;
           consignment.quotes.forEach(quote => {
-            if (consignment.quoteSelected.amount > quote.amount){
-              consignment.quoteSelected = quote;
+            if (quote.amount !== null && quote.amount !== '') {
+              if (consignment.quoteSelected.amount > quote.amount){
+                consignment.quoteSelected = quote;
+              }
             }
             // console.log(consignment.quoteSelected);
           });
@@ -146,7 +148,7 @@ export class FulfillmentsFormDialogComponent {
   checkQuoteComplete(){
     let status = true;
     this.consignments.forEach(consignment => {
-      status = status && consignment.hasOwnProperty('quoteSelected');
+      status = status && consignment.quotes.length > 0 && consignment.hasOwnProperty('quoteSelected');
     });
     return status;
   }
@@ -242,6 +244,9 @@ export class FulfillmentsFormDialogComponent {
               if (res_labels['data']) {
                 this.solidConsignments = res_labels['data'];
                 this.consignmentsIds = consignmentsIds;
+
+                this.printLabels();
+                this.dialogRef.close();
               }
             },
             err => {

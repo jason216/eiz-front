@@ -1,38 +1,102 @@
-<div class="page-layout carded left-sidenav single-scroll" fusePerfectScrollbar>
-
-  <!-- TOP BACKGROUND -->
-  <div class="top-bg mat-accent-bg"></div>
-  <!-- / TOP BACKGROUND -->
-
-  <mat-sidenav-container>
-        <!-- SIDENAV -->
-        <mat-sidenav class="sidenav" align="start" opened="true" mode="side"
-                     fuseMatSidenavHelper="carded-left-sidenav" mat-is-locked-open="gt-md">
-
-            <!-- SIDENAV HEADER -->
-            <div class="header p-24" ngClass="mat-accent-bg" ngClass.gt-md="white-fg">
-                <h2>Consignments</h2>
+<div id="consignment" class="page-layout simple left-sidenav inner-sidenav">
+    <!-- HEADER -->
+    <div class="header mat-accent-bg p-16 p-sm-24" fxLayout="column" fxLayoutAlign="start start" fxLayout.gt-xs="row" fxLayoutAlign.gt-xs="space-between center">
+        <!-- APP TITLE -->
+        <div fxLayout="row" fxLayoutAlign="start center">
+            <button mat-button class="mat-icon-button sidenav-toggle mr-12" fuseMatSidenavToggler="contacts-main-sidenav" fxHide.gt-md>
+        <mat-icon>menu</mat-icon>
+      </button>
+            <div class="logo" fxLayout="row" fxLayoutAlign="start center">
+                <mat-icon class="logo-icon mr-16" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">account_box</mat-icon>
+                <span class="logo-text h1" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">Consignments from Fastway</span>
             </div>
-            <!-- / SIDENAV HEADER -->
-
-            <!-- SIDENAV CONTENT -->
-            <div class="content p-24" fusePerfectScrollbar>
-
-                <consignments-side-nav></consignments-side-nav>
-
+        </div>
+        <!-- / APP TITLE -->
+        <!-- SEARCH -->
+        <!-- <div class="search-input-wrapper mt-16 ml-8 m-sm-0" fxLayout="row" fxLayoutAlign="start center">
+            <label for="search" class="mr-8">
+                <mat-icon (click)="handleBasicSearch()">search</mat-icon>
+            </label>
+            <mat-form-field mat-no-float class="m-0" floatPlaceholder="never">
+                <input id="search" matInput placeholder="Search" [formControl]="searchFormControl">
+            </mat-form-field>
+        </div> -->
+        <!-- / SEARCH -->
+    </div>
+    <!-- / HEADER -->
+    <!-- SELECTED BAR -->
+    <!-- <div class="selectedBar mat-accent-600-bg" *ngIf="hasSelectedOrders" [@slideInTop]>
+        <div fxFlex fxLayout="row" fxLayoutAlign="start center" class="p-24">
+            <div class="close-button-wrapper" fxFlex="0 1 auto" fxFlex.gt-sm="220px" (click)="deselectAll()">
+                <button class="p-8" mat-button fxLayout="row" fxLayoutAlign="start center">
+                    <mat-icon class="mr-8">arrow_back</mat-icon>
+                    <span class="text-uppercase">Back</span>
+                </button>
             </div>
-            <!-- / SIDENAV CONTENT -->
-
-        </mat-sidenav>
-
-    <!-- CENTER -->
-    <div class="center">
-
-        <router-outlet></router-outlet>
-
+            <div fxFlex fxLayout="row" fxLayoutAlign="end center" fxLayoutAlign.gt-sm="space-between center">
+                <div>
+                    <span class="selected-contacts-count">
+                        <span>{{selected.length}}</span>
+                    <span>selected</span>
+                    </span>
+                    <button mat-icon-button [matMenuTriggerFor]="selectMenu">
+                        <mat-icon>arrow_drop_down</mat-icon>
+                    </button>
+                    <mat-menu #selectMenu="matMenu">
+                        <button mat-menu-item>Select all</button>
+                        <button mat-menu-item>Deselect all</button>
+                    </mat-menu>
+                    <button mat-raised-button class="mb-4" color="primary" (click)="bulkProcess()">Bulk Process</button>
+                </div>
+                <div class="multi-select-actions">
+                    <button mat-icon-button aria-label="delete selected">
+            <mat-icon>delete</mat-icon>
+          </button>
+                </div>
+            </div>
+        </div>
+    </div> -->
+    <!-- / SELECTED BAR -->
+    <div class="center p-24" fusePerfectScrollbar>
+        <div layout-gt-xs="row" layout-xs="column" layout-align="stretch center" class="layout-xs-column layout-gt-xs-row layout-align-stretch-center">
+            <div layout="row" layout-align="start center" class="layout-align-start-center layout-row">
+                <mat-form-field>
+                    <mat-select placeholder="Filter Consignment" (selectionChange)="optionSelected($event.value)" #consignemntStatusFilter style="width: 230px;">
+                        <mat-option value="pending">
+                            Pending<span class="nav-link-badge"> ({{Pending}}) </span>
+                        </mat-option>
+                        <mat-option value="solid">
+                            Solid
+                            <span class="nav-link-badge"> ({{Solid}}) </span>
+                        </mat-option>
+                        <mat-option value="printed">
+                            Printed
+                            <span class="nav-link-badge"> ({{Printed}}) </span>
+                        </mat-option>
+                        <mat-option value="issue">
+                            Issue
+                            <span class="nav-link-badge"> ({{Issue}}) </span>
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <!-- <mat-form-field>
+                    <mat-select placeholder="Service Provider" (selectionChange)="optionSelected($event.value)" style="width: 230px;">
+                        <mat-option value="aupost">
+                            AUstralia Post
+                        </mat-option>
+                        <mat-option value="fastway">
+                            Fastway Courier
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field> -->
+            </div>
+        </div>
+        <!-- CONTENT -->
+        <div class="content mat-white-bg mat-elevation-z4" fxLayout="row" fusePerfectScrollbar>
+            <ag-grid-angular #agGrid style="width: 100%; min-height: 550px;" class="ag-theme-material" [gridOptions]="gridOptions" [columnDefs]="columnDefs"></ag-grid-angular>
+        </div>
+        <!-- / CONTENT -->
     </div>
     <!-- / CENTER -->
-
-  </mat-sidenav-container>
-
+    <!-- </mat-sidenav-container> -->
 </div>

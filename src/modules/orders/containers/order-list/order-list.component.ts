@@ -41,9 +41,12 @@ export class OrderListComponent implements OnInit, OnDestroy {
   @ViewChild('cellActionTmpl') cellActionTmpl: TemplateRef<any>;
   @ViewChild('cellOrderlinesTmpl') cellOrderlinesTmpl: TemplateRef<any>;
 
-  paid: number;
-  processed: number;
-  unPaid: number;
+  paid = 0;
+  processed = 0;
+  unPaid = 0;
+  issue = 0;
+  onhold = 0;
+
   rows: any[] = [];
   selected: any = [];
   hasSelectedOrders = false;
@@ -97,7 +100,7 @@ export class OrderListComponent implements OnInit, OnDestroy {
       // domLayout: 'autoHeight',
       enableRangeSelection: true,
       enableColResize: true,
-      suppressHorizontalScroll: false,
+      suppressHorizontalScroll: true,
       // pagination: true,
       // paginationAutoPageSize: true,
       suppressCellSelection: true,
@@ -133,6 +136,8 @@ export class OrderListComponent implements OnInit, OnDestroy {
               this.paid = orders['paid'].length;
               this.processed = orders['processed'].length;
               this.unPaid = orders['unpaid'].length;
+              this.issue = orders['issue'].length;
+              this.onhold = orders['onhold'].length;
             }
           }
         );

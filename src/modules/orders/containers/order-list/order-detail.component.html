@@ -124,43 +124,44 @@
                                 </table>
                             </div>
                         </mat-tab>
-                        <mat-tab label="Shipment Details" *ngIf="order.shipTo_name">
+                        <mat-tab label="Shipment Details">
                             <div class="order-details tab-content p-24" fusePerfectScrollbar>
-                                <div class="pb-16" fxLayout="row" fxLayoutAlign="start center">
-                                    <mat-icon class="m-0 mr-16">local_shipping</mat-icon>
-                                    <div class="h2 secondary-text">Shipping</div>
-                                </div>
+                                <div *ngIf="order.fulfillments.length>0">
+                                    <div class="pb-16" fxLayout="row" fxLayoutAlign="start center">
+                                        <mat-icon class="m-0 mr-16">local_shipping</mat-icon>
+                                        <div class="h2 secondary-text">Shipping</div>
+                                    </div>
 
-                                <table class="simple">
-                                    <thead>
-                                        <tr>
-                                            <th>Tracking Code</th>
-                                            <th>Carrier</th>
-                                            <th>Name</th>
-                                            <th>Address</th>
-                                            <th>Email</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td class="tracking-code">
-                                                {{order.salesRecordNumber}}
-                                            </td>
-                                            <td>
-                                                {{order.postageService}}
-                                            </td>
-                                            <td>
-                                                {{order.shipTo_name}}
-                                            </td>
-                                            <td>
-                                                {{order.shipTo_address1}}
-                                            </td>
-                                            <td>
-                                                {{order.shipTo_email}}
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                    <table class="simple" *ngFor="let fulfillment of order.fulfillments">
+                                        <thead>
+                                            <tr>
+                                                <th>Tracking Code</th>
+                                                <th>Carrier</th>
+                                                <th>Service</th>
+                                                <th>Label</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let consignment of fulfillment.consignments">
+                                                <td class="tracking-code">
+                                                    {{fulfillment.shipTo_ref}}
+                                                </td>
+                                                <td>
+                                                    {{consignment.shipping_method?.serviceProvider}}
+                                                </td>
+                                                <td>
+                                                    {{consignment.shipping_method.name}}
+                                                </td>
+                                                <td>
+                                                    <button *ngIf="consignment.labels?.length>0" mat-raised-button color="accent" class="submit-button" (click)="printLabels(consignment)">Print</button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div *ngIf="order.fulfillments.length<=0">
+
+                                </div>
                             </div>
                         </mat-tab>
                     </mat-tab-group>

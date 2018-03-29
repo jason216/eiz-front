@@ -151,15 +151,23 @@
                 </mat-form-field> value="awaitFulfill"-->
                 <mat-form-field>
                     <mat-select placeholder="Filter Order" (selectionChange)="optionSelected($event.value)" #orderStatusFilter style="width: 230px;">
+                        <mat-option value="unpaid">
+                            Unpaid<span class="nav-link-badge"> ({{unPaid}}) </span>
+                        </mat-option>
                         <mat-option value="paid">
                             Paid
-                            <span class="nav-link-badge"> ({{paid}})</span>
+                            <span class="nav-link-badge"> ({{paid}}) </span>
                         </mat-option>
-                        <mat-option value="unpaid">
-                            Unpaid<span class="nav-link-badge"> ({{unPaid}})</span>
+                        <mat-option value="issue">
+                            Issue
+                            <span class="nav-link-badge"> ({{issue}}) </span>
+                        </mat-option>
+                        <mat-option value="onhold">
+                            Onhold
+                            <span class="nav-link-badge"> ({{onhold}}) </span>
                         </mat-option>
                         <mat-option value="processed">
-                            Processed<span class="nav-link-badge"> ({{processed}})</span>
+                            Processed<span class="nav-link-badge"> ({{processed}}) </span>
                         </mat-option>
                     </mat-select>
                 </mat-form-field>

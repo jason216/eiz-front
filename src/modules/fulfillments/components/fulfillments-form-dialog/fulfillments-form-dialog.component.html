@@ -1,100 +1,100 @@
 <h1 mat-dialog-title>Create Fulfillment</h1>
 
 <div mat-dialog-content>
-  <!-- <div fxLayout="row wrap" fxLayoutAlign="start left">
+    <!-- <div fxLayout="row wrap" fxLayoutAlign="start left">
     <fulfillments-form [order]="data" (onCompleted)= "closeDialog($event)" ></fulfillments-form>
   </div> -->
-  <mat-vertical-stepper [linear]="true" #stepper>
-    <mat-step [completed]="addressCheckComplete" [optional]="false" label="Shipping Address">
-      <div>
-        <mat-form-field><input matInput placeholder="Receiver Name" [(ngModel)]="shipTo.shipTo_name"></mat-form-field>
-        <mat-form-field><input matInput placeholder="Company Name" [(ngModel)]="shipTo.shipTo_companyName"></mat-form-field>
-        <mat-form-field><input matInput placeholder="Phone Number" [(ngModel)]="shipTo.shipTo_phone"></mat-form-field>
-        <mat-form-field><input matInput placeholder="Email" [(ngModel)]="shipTo.shipTo_email"></mat-form-field>
-        <mat-form-field><input matInput placeholder="Address 1" [(ngModel)]="shipTo.shipTo_address1"></mat-form-field>
-        <mat-form-field><input matInput placeholder="Address 2" [(ngModel)]="shipTo.shipTo_address2"></mat-form-field>
-        <mat-form-field><input matInput placeholder="Address 3" [(ngModel)]="shipTo.shipTo_address3"></mat-form-field>
-        <mat-form-field><input matInput placeholder="Address 4" [(ngModel)]="shipTo.shipTo_address4"></mat-form-field>
-        <mat-form-field><input matInput placeholder="Suburb" [(ngModel)]="shipTo.shipTo_suburb"></mat-form-field>
-        <mat-form-field><input matInput placeholder="State" [(ngModel)]="shipTo.shipTo_state"></mat-form-field>
-        <mat-form-field><input matInput placeholder="Postcode" [(ngModel)]="shipTo.shipTo_postcode"></mat-form-field>
-        <mat-form-field><input matInput placeholder="Country" [(ngModel)]="shipTo.shipTo_country"></mat-form-field>
-      </div>
-      <div>
-        <button mat-button (click)="checkAddress()">Continue</button>
-      </div>
-    </mat-step>
-    <mat-step [completed]="packageCheckComplete" [optional]="false" label="Packages">
-        <div><button mat-button (click)="newConsignment()">New Group</button></div>
-        <div>
-            <div dnd-sortable-container [sortableData]="consignments" [dropZones]="['consignment-dropZone']">
-                <mat-card class="col-sm3"
-                        *ngFor="let consignment of consignments; let i = index"
-                        dnd-sortable-container [sortableData]="consignment.packages" [dropZones]="['package-dropZone']"
-                        style="margin-bottom: 5px;"
-                        >
+    <mat-vertical-stepper [linear]="true" #stepper>
+        <mat-step [completed]="addressCheckComplete" [optional]="false" label="Shipping Address">
+            <div>
+                <mat-form-field><input matInput placeholder="Receiver Name" [(ngModel)]="shipTo.shipTo_name"></mat-form-field>
+                <mat-form-field><input matInput placeholder="Company Name" [(ngModel)]="shipTo.shipTo_companyName"></mat-form-field>
+                <mat-form-field><input matInput placeholder="Phone Number" [(ngModel)]="shipTo.shipTo_phone"></mat-form-field>
+                <mat-form-field><input matInput placeholder="Email" [(ngModel)]="shipTo.shipTo_email"></mat-form-field>
+                <mat-form-field><input matInput placeholder="Address 1" [(ngModel)]="shipTo.shipTo_address1"></mat-form-field>
+                <mat-form-field><input matInput placeholder="Address 2" [(ngModel)]="shipTo.shipTo_address2"></mat-form-field>
+                <mat-form-field><input matInput placeholder="Address 3" [(ngModel)]="shipTo.shipTo_address3"></mat-form-field>
+                <mat-form-field><input matInput placeholder="Address 4" [(ngModel)]="shipTo.shipTo_address4"></mat-form-field>
+                <mat-form-field><input matInput placeholder="Suburb" [(ngModel)]="shipTo.shipTo_suburb"></mat-form-field>
+                <mat-form-field><input matInput placeholder="State" [(ngModel)]="shipTo.shipTo_state"></mat-form-field>
+                <mat-form-field><input matInput placeholder="Postcode" [(ngModel)]="shipTo.shipTo_postcode"></mat-form-field>
+                <mat-form-field><input matInput placeholder="Country" [(ngModel)]="shipTo.shipTo_country"></mat-form-field>
+            </div>
+            <div>
+                <button mat-button (click)="checkAddress()">Continue</button>
+            </div>
+        </mat-step>
+        <mat-step [completed]="packageCheckComplete" [optional]="false" label="Packages">
+            <div><button mat-button (click)="newConsignment()">New Group</button></div>
+            <div>
+                <div dnd-sortable-container [sortableData]="consignments" [dropZones]="['consignment-dropZone']">
+                    <mat-card class="col-sm3" *ngFor="let consignment of consignments; let i = index" dnd-sortable-container [sortableData]="consignment.packages" [dropZones]="['package-dropZone']" style="margin-bottom: 5px;">
                         <div class="panel-heading">
                             Consignment <button mat-button (click)="newPackage(consignment)">New Package</button>
                         </div>
                         <div class="panel-body">
                             <mat-list>
-                                <mat-list-item *ngFor="let package of consignment.packages; let x = index"
-                                    dnd-sortable [sortableIndex]="x" [dragEnabled]="true"
-                                    [dragData]="package">
+                                <mat-list-item *ngFor="let package of consignment.packages; let x = index" dnd-sortable [sortableIndex]="x" [dragEnabled]="true" [dragData]="package">
                                     <mat-icon class="handle mr-16" dnd-sortable-handle fxFlex="0 1 auto" fxHide.xs>
                                         drag_handle
                                     </mat-icon>
-                                    <mat-form-field style="width: 40px;"><input matInput placeholder="Qty" [(ngModel)]="package.qty" size="1"></mat-form-field>
-                                    <mat-form-field style="width: 60px;"><input matInput placeholder="Weight" [(ngModel)]="package.weight"></mat-form-field>
-                                    <mat-form-field style="width: 60px;"><input matInput placeholder="L" [(ngModel)]="package.length"></mat-form-field>
-                                    <mat-form-field style="width: 60px;"><input matInput placeholder="W" [(ngModel)]="package.width"></mat-form-field>
-                                    <mat-form-field style="width: 60px;"><input matInput placeholder="H" [(ngModel)]="package.height"></mat-form-field>
+                                    <mat-form-field style="width: 40px;"><input type="number" InputNumberDirective matInput placeholder="Qty" [(ngModel)]="package.qty" size="1"></mat-form-field>
+                                    <mat-form-field style="width: 60px;"><input type="number" InputNumberDirective matInput placeholder="Weight" [(ngModel)]="package.weight"></mat-form-field>
+                                    <mat-form-field style="width: 60px;"><input type="number" InputNumberDirective matInput placeholder="L" [(ngModel)]="package.length"></mat-form-field>
+                                    <mat-form-field style="width: 60px;"><input type="number" InputNumberDirective matInput placeholder="W" [(ngModel)]="package.width"></mat-form-field>
+                                    <mat-form-field style="width: 60px;"><input type="number" InputNumberDirective matInput placeholder="H" [(ngModel)]="package.height"></mat-form-field>
                                     <mat-icon fxFlex="0 1 auto" (click)="removePackage(consignment, package)" fxHide.xs>
-                                      delete
+                                        delete
                                     </mat-icon>
                                 </mat-list-item>
                             </mat-list>
                         </div>
-                  </mat-card>
-            </div>
-        </div>
-        <div>
-          <button mat-button (click)="checkPackage()">Continue</button>
-        </div>
-    </mat-step>
-    <mat-step [completed]="false" [optional]="false" label="Quotes">
-      <div>
-        <div>
-          <mat-list>
-            <mat-list-item *ngFor="let consignment of consignments">
-              <div style="float: left;"><mat-icon style="font-size: 40px;">layers</mat-icon></div>
-              <div style="float: left; margin-left: 20px;">
-                <div matLine *ngFor="let package of consignment.packages">
-                  {{package.qty}} x {{package.weight}}kg {{package.length}}cm x {{package.width}}cm x {{package.height}}cm
+                    </mat-card>
                 </div>
-                <div matLine *ngIf="!consignment.quotes"><mat-spinner [diameter]="18">Quoting...</mat-spinner></div>
-                <mat-select placeholder="Favorite food" matLine *ngIf="consignment.quotes" [(ngModel)]="consignment.quoteSelected">
-                  <mat-option *ngFor="let quote of consignment.quotes" [value]="quote">
-                      <div style="float: left;">[{{quote.shippingMethod.serviceProvider}}] {{quote.shippingMethod.name}}</div> <div style="float: right;">${{quote.amount}}</div>
-                  </mat-option>
-                </mat-select>
-              </div>
-            </mat-list-item>
-          </mat-list>
-        </div>
-        <div *ngIf="quoteCheckComplete">
-          <button mat-button (click)="saveFulfillment()" >Save</button>
-          <button mat-button (click)="saveFulfillment(true)" >Save & Get Labels</button>
-          <button mat-button *ngIf="consignmentsIds" (click)="printLabels()" >Print</button>
-        </div>
-      </div>
-      <!-- <div *ngIf="solidConsignments">
+            </div>
+            <div>
+                <button mat-button (click)="checkPackage()">Continue</button>
+            </div>
+        </mat-step>
+        <mat-step [completed]="false" [optional]="false" label="Quotes">
+            <div>
+                <div>
+                    <mat-list>
+                        <mat-list-item *ngFor="let consignment of consignments">
+                            <div style="float: left;">
+                                <mat-icon style="font-size: 40px;">layers</mat-icon>
+                            </div>
+                            <div style="float: left; margin-left: 20px;">
+                                <div matLine *ngFor="let package of consignment.packages">
+                                    {{package.qty}} x {{package.weight}}kg {{package.length}}cm x {{package.width}}cm x {{package.height}}cm
+                                </div>
+                                <div matLine *ngIf="!consignment.quotes">
+                                    <mat-spinner [diameter]="18">Quoting...</mat-spinner>
+                                </div>
+                                <mat-select placeholder="No shipping method available for this package" matLine *ngIf="consignment.quotes" [(ngModel)]="consignment.quoteSelected">
+                                    <mat-option *ngFor="let quote of consignment.quotes" [value]="quote">
+                                        <div style="float: left;">[{{quote.shippingMethod.serviceProvider}}] {{quote.shippingMethod.name}}</div>
+                                        <div style="float: right;">${{quote.amount}}</div>
+                                    </mat-option>
+                                </mat-select>
+                            </div>
+                        </mat-list-item>
+                    </mat-list>
+                </div>
+                <div *ngIf="quoteCheckComplete">
+                    <!-- <button mat-button (click)="saveFulfillment()">Save</button>
+                    <button mat-button (click)="saveFulfillment(true)">Save & Get Labels</button>
+                    <button mat-button *ngIf="consignmentsIds" (click)="printLabels()">Print</button> -->
+                    <button mat-button (click)="saveFulfillment(true)">Create Shipment</button>
+                </div>
+            </div>
+            <!-- <div *ngIf="solidConsignments">
           <mat-list *ngFor="let consignment of solidConsignments">
             <mat-list-item *ngFor="let label of consignment.labels">
               {{label.labelNumber}}
             </mat-list-item>
           </mat-list>
       </div> -->
-    </mat-step>
-  </mat-vertical-stepper>
+        </mat-step>
+    </mat-vertical-stepper>
 </div>

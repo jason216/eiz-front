@@ -15,6 +15,7 @@ import { ConsignmentsSideNavComponent } from './side-nav/side-nav.component';
 import { AgGridModule } from 'ag-grid-angular';
 import { ConsignmentsPendingComponent } from './consignments-pending/consignments-pending.component';
 import { ConsignmentNewComponent } from '../consignment-new/consignment-new.component';
+import { ConsignmentsService } from '../../services/consignments.service';
 
 const routes: Routes = [
   {
@@ -74,6 +75,9 @@ const routes: Routes = [
   ],
   entryComponents: [
 
+  ],
+  providers: [
+    ConsignmentsService
   ]
 })
 
