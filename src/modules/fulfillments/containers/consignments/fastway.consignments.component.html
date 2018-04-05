@@ -13,30 +13,30 @@
         </div>
         <!-- / APP TITLE -->
         <!-- SEARCH -->
-        <!-- <div class="search-input-wrapper mt-16 ml-8 m-sm-0" fxLayout="row" fxLayoutAlign="start center">
+        <div class="search-input-wrapper mt-16 ml-8 m-sm-0" fxLayout="row" fxLayoutAlign="start center">
             <label for="search" class="mr-8">
                 <mat-icon (click)="handleBasicSearch()">search</mat-icon>
             </label>
             <mat-form-field mat-no-float class="m-0" floatPlaceholder="never">
                 <input id="search" matInput placeholder="Search" [formControl]="searchFormControl">
             </mat-form-field>
-        </div> -->
+        </div>
         <!-- / SEARCH -->
     </div>
     <!-- / HEADER -->
     <!-- SELECTED BAR -->
-    <!-- <div class="selectedBar mat-accent-600-bg" *ngIf="hasSelectedOrders" [@slideInTop]>
+    <div class="selectedBar mat-accent-600-bg" *ngIf="hasSelectedConsignments" [@slideInTop]>
         <div fxFlex fxLayout="row" fxLayoutAlign="start center" class="p-24">
             <div class="close-button-wrapper" fxFlex="0 1 auto" fxFlex.gt-sm="220px" (click)="deselectAll()">
                 <button class="p-8" mat-button fxLayout="row" fxLayoutAlign="start center">
-                    <mat-icon class="mr-8">arrow_back</mat-icon>
-                    <span class="text-uppercase">Back</span>
-                </button>
+                            <mat-icon class="mr-8">arrow_back</mat-icon>
+                            <span class="text-uppercase">Back</span>
+                        </button>
             </div>
             <div fxFlex fxLayout="row" fxLayoutAlign="end center" fxLayoutAlign.gt-sm="space-between center">
                 <div>
                     <span class="selected-contacts-count">
-                        <span>{{selected.length}}</span>
+                    <span>{{selected.length}}</span>
                     <span>selected</span>
                     </span>
                     <button mat-icon-button [matMenuTriggerFor]="selectMenu">
@@ -46,25 +46,32 @@
                         <button mat-menu-item>Select all</button>
                         <button mat-menu-item>Deselect all</button>
                     </mat-menu>
-                    <button mat-raised-button class="mb-4" color="primary" (click)="bulkProcess()">Bulk Process</button>
+                    <div [ngSwitch]="selectedStatus" style="display: inline;">
+                        <button *ngSwitchCase="'pending'" mat-raised-button class="mb-4" color="primary" (click)="bulkSolidConsignment($event.target)">Bulk Solid</button>
+                        <button *ngSwitchCase="'solid'" mat-raised-button class="mb-4" color="primary" (click)="bulkPrintConsignment($event.target)">Bulk Print</button>
+                        <button *ngSwitchCase="'printed'" mat-raised-button class="mb-4" color="primary" (click)="bulkSubmitConsignment($event.target)">Bulk Submit</button>
+                    </div>
+                    <div style="display: inline;">
+                        <button mat-raised-button class="mb-4" color="primary" (click)="bulkProcess()">Delete</button>
+                    </div>
                 </div>
-                <div class="multi-select-actions">
+                <!-- <div class="multi-select-actions">
                     <button mat-icon-button aria-label="delete selected">
-            <mat-icon>delete</mat-icon>
-          </button>
-                </div>
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </div> -->
             </div>
         </div>
-    </div> -->
+    </div>
     <!-- / SELECTED BAR -->
     <div class="center p-24" fusePerfectScrollbar>
         <div layout-gt-xs="row" layout-xs="column" layout-align="stretch center" class="layout-xs-column layout-gt-xs-row layout-align-stretch-center">
             <div layout="row" layout-align="start center" class="layout-align-start-center layout-row">
                 <mat-form-field>
                     <mat-select placeholder="Filter Consignment" (selectionChange)="optionSelected($event.value)" [(ngModel)]="consignemntStatusFilter" style="width: 230px;">
-                        <mat-option value="pending">
+                        <!-- <mat-option value="pending">
                             Pending<span class="nav-link-badge"> ({{Pending}}) </span>
-                        </mat-option>
+                        </mat-option> -->
                         <mat-option value="solid">
                             Solid
                             <span class="nav-link-badge"> ({{Solid}}) </span>

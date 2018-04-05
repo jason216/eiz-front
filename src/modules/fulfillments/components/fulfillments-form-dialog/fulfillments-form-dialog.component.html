@@ -26,7 +26,7 @@
         </mat-step>
         <mat-step [completed]="packageCheckComplete" [optional]="false" label="Packages">
             <div><button mat-button (click)="newConsignment()">New Group</button></div>
-            <div>
+            <div style="width: 50%; display: inline-block;">
                 <div dnd-sortable-container [sortableData]="consignments" [dropZones]="['consignment-dropZone']">
                     <mat-card class="col-sm3" *ngFor="let consignment of consignments; let i = index" dnd-sortable-container [sortableData]="consignment.packages" [dropZones]="['package-dropZone']" style="margin-bottom: 5px;">
                         <div class="panel-heading">
@@ -50,6 +50,17 @@
                             </mat-list>
                         </div>
                     </mat-card>
+                </div>
+            </div>
+            <div style="width: 45%; display: inline-block; vertical-align: top;">
+                <div class="panel-body">
+                    <mat-list>
+                        <h3 mat-subheader>Orderline detail</h3>
+                        <mat-list-item *ngFor="let orderline of orders[0]?.orderlines; let x = index">
+                            <h4 mat-line>Title: {{orderline.itemtitle}}</h4>
+                            <p mat-line>Quantity: {{orderline.quantity}}</p>
+                        </mat-list-item>
+                    </mat-list>
                 </div>
             </div>
             <div>
@@ -85,7 +96,7 @@
                     <!-- <button mat-button (click)="saveFulfillment()">Save</button>
                     <button mat-button (click)="saveFulfillment(true)">Save & Get Labels</button>
                     <button mat-button *ngIf="consignmentsIds" (click)="printLabels()">Print</button> -->
-                    <button mat-button (click)="saveFulfillment(true)">Create Shipment</button>
+                    <button mat-button mat-raised-button color="accent" (click)="saveFulfillment($event.target, true)">Create Shipment</button>
                 </div>
             </div>
             <!-- <div *ngIf="solidConsignments">

@@ -23,11 +23,10 @@ import { ApiHeaderInterceptor } from './alpha/services/interceptor/api-header.in
 import { AuthService } from './alpha/services';
 import { ActiveContentService } from './alpha/services/activeContent.service';
 import { UserService } from './basic/user-setting/user.service';
-import { InputNumberDirective } from './alpha/services/input-number.directive';
+
 @NgModule({
   declarations: [
-    AppComponent,
-    InputNumberDirective
+    AppComponent
   ],
   imports: [
     BrowserModule,

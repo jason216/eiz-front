@@ -40,7 +40,7 @@ export class ConsignmentNewComponent implements OnInit, OnDestroy {
   @ViewChild('cellEditTextTmpl') cellEditTextTmpl: TemplateRef<any>;
   columnsRef = [];
   rows: any[] = [];
-  orderline = '{ "qty": 0, "weight": 0, "leight": 0, "width": 0, "height": 0}';
+  orderline = '{ "qty": 0, "weight": 0, "length": 0, "width": 0, "height": 0}';
   orderlineAdded = false;
   totalRowNum = 1;
 
@@ -101,14 +101,14 @@ export class ConsignmentNewComponent implements OnInit, OnDestroy {
     });
 
     this.consignmentForm.valueChanges.subscribe(() => {
-      this.oncCnsignmentFormValuesChanged();
+      this.oncConsignmentFormValuesChanged();
     });
 
     this.rows.push(JSON.parse(this.orderline));
     this.columnsRef = [
       { prop: 'qty', name: 'Quantity', width: 120, cellTemplate: this.cellEditTextTmpl },
       { prop: 'weight', name: 'Weight', width: 120, cellTemplate: this.cellEditTextTmpl },
-      { prop: 'leight', name: 'Leight', width: 120, cellTemplate: this.cellEditTextTmpl },
+      { prop: 'length', name: 'Length', width: 120, cellTemplate: this.cellEditTextTmpl },
       { prop: 'width', name: 'Width', width: 120, cellTemplate: this.cellEditTextTmpl },
       { prop: 'height', name: 'Height', width: 120, cellTemplate: this.cellEditTextTmpl },
       { name: 'Actions', width: 300, cellTemplate: this.cellActionTmpl }
@@ -118,7 +118,7 @@ export class ConsignmentNewComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
   }
 
-  oncCnsignmentFormValuesChanged() {
+  oncConsignmentFormValuesChanged() {
     for (const field in this.consignmentFormErrors) {
       if (!this.consignmentFormErrors.hasOwnProperty(field)) {
         continue;
@@ -133,7 +133,7 @@ export class ConsignmentNewComponent implements OnInit, OnDestroy {
       if (control && control.dirty && !control.valid) {
         this.consignmentFormErrors[field] = control.errors;
       }
-    }
+    }console.log(this.consignmentFormErrors);
   }
 
   addOrderLine(event, row, rowIndex) {
@@ -204,7 +204,27 @@ export class ConsignmentNewComponent implements OnInit, OnDestroy {
     }
   }
 
-  submit() {
+  submit() {console.log(this.consignmentFormErrors);
+    const regex = new RegExp(/^(\d*\.)?\d+$/); // /^[1-9]+(\.[0-9]*){0,1}$/g // /^([1-9]\d*|0)(\.\d*[1-9])?$/
+    const numberInputs = document.getElementsByClassName('number') as HTMLCollectionOf<HTMLInputElement>;
+    // tslint:disable-next-line:prefer-const
+    let numberInputError = false;
+
+    for (let i = 0; i < numberInputs.length; i++) {
+      if (!String(numberInputs[i].value).match(regex)) {
+        numberInputError = true;
+        numberInputs[i].parentElement.parentElement.parentElement.parentElement.setAttribute('class', 'ng-invalid mat-input-invalid mat-form-field-invalid');
+      }
+    }
+
+    if (numberInputError) {
+      this.snackBar.open('Please input valid decimal number', 'Dismiss', {
+        duration: 15000,
+        horizontalPosition: 'right',
+        verticalPosition: 'top',
+      });
+      return;
+    }
     // if (this.consignmentForm.invalid) {
     //   return;
     // } else if (this.checkOrderline) {

@@ -41,7 +41,7 @@ export class FileUtil {
 
             let data: any;
 
-            if (i >= 1){// console.log(csvRecordsArray[i]);
+            if (i >= 1){
                 data = csvRecordsArray[i].replace(/,\s/g, '; ').replace(/\"/g, '');
 
                 data = data.split(tokenDelimeter);

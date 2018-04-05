@@ -150,7 +150,7 @@ export class FulfillmentsFormDialogComponent {
   checkQuoteComplete(){
     let status = true;
     this.consignments.forEach(consignment => {
-      status = status && consignment.quotes.length > 0 && consignment.hasOwnProperty('quoteSelected');
+      status = status && consignment.quotes && consignment.quotes.length > 0 && consignment.hasOwnProperty('quoteSelected');
     });
     return status;
   }
@@ -188,7 +188,9 @@ export class FulfillmentsFormDialogComponent {
     // this.iframe.nativeElement.contentWindow.print();
   }
 
-  saveFulfillment(createLabels){
+  saveFulfillment(event, createLabels){
+    event.parentElement.disabled = true;
+    event.parentElement.textContent = 'Submiting';
     const orderIds = [];
     this.orders.forEach(order => {
       orderIds.push(order.id);

@@ -87,6 +87,13 @@ export class PluginNavListModel implements FuseNavigationModelInterface{
             'icon': 'email',
             'url': '/fulfillments/consignments/fastway'
           },
+          {
+            'id': 'fulfillments.consignments.eparcel',
+            'title': 'eParcel',
+            'type': 'item',
+            'icon': 'email',
+            'url': '/fulfillments/consignments/eparcel'
+          },
         ]
       },
       {

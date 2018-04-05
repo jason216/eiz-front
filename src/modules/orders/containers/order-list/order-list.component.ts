@@ -102,8 +102,8 @@ export class OrderListComponent implements OnInit, OnDestroy {
     this.gridOptions = <GridOptions>{
       // domLayout: 'autoHeight',
       enableRangeSelection: true,
-      enableColResize: true,
-      suppressHorizontalScroll: true,
+      enableColResize: false,
+      suppressHorizontalScroll: false,
       // pagination: true,
       // paginationAutoPageSize: true,
       suppressCellSelection: true,
@@ -141,7 +141,10 @@ export class OrderListComponent implements OnInit, OnDestroy {
               this.unPaid = orders['unpaid'].length;
               this.issue = orders['issue'].length;
               this.onhold = orders['onhold'].length;
-              this.orderStatusFilter = 'paid';
+
+              if (!this.orderStatusFilter) {
+                this.orderStatusFilter = 'paid';
+              }
             }
           }
         );
@@ -163,7 +166,6 @@ export class OrderListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    
   }
   ngOnDestroy() {
     this.startSubscribe = false;

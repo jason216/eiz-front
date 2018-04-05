@@ -3,101 +3,120 @@
         <mat-tab-group dynamicHeight="true">
             <mat-tab label="Create New Consignment">
                 <div id="new-consignment" class="page-layout simple" fusePerfectScrollbar>
-                    <div class="content p-24">
-                        <div fxLayout="column" fxLayoutAlign="center">
-                            <div id="product" class="page-layout carded fullwidth" fusePerfectScrollbar>
-                                <div class="top-bg mat-accent-bg"></div>
-                                <div class="center">
-                                    <div class="header white-fg" fxLayout="row" fxLayoutAlign="space-between center">
-                                        <!-- <div fxLayout="row" fxLayoutAlign="start center">
-                                            <button class="mr-0 mr-sm-16" mat-icon-button [routerLink]="'/consignments/all'">
-                                          <mat-icon>arrow_back</mat-icon>
-                                        </button>
-                                            <div class="product-image mr-8 mr-sm-16" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">
-                                                <img [src]="'assets/images/ecommerce/product-image-placeholder.png'">
+                    <div id="new-consignment" class="page-layout simple" fusePerfectScrollbar>
+                        <!-- HEADER -->
+                        <div class="header mat-accent-bg p-16 p-sm-24" fxLayout="column" fxLayoutAlign="start start" fxLayout.gt-xs="row" fxLayoutAlign.gt-xs="space-between center">
+                            <div fxLayout="row" fxLayoutAlign="start center">
+                                <button mat-button class="mat-icon-button sidenav-toggle mr-12" fuseMatSidenavToggler="contacts-main-sidenav" fxHide.gt-md>
+                                    <mat-icon>menu</mat-icon>
+                                </button>
+                                <div class="logo" fxLayout="row" fxLayoutAlign="start center">
+                                    <mat-icon class="logo-icon mr-16" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">account_box</mat-icon>
+                                    <span class="logo-text h1" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">Create consignment</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="center p-24" fusePerfectScrollbar>
+                            <div layout-gt-xs="row" layout-xs="column" layout-align="stretch center" class="layout-xs-column layout-gt-xs-row layout-align-stretch-center">
+                                <div layout="row" layout-align="start center" class="layout-align-start-center layout-row">
+                                    <form name="consignmentForm" [formGroup]="consignmentForm" novalidate>
+                                        <div class="mat-white-bg p-24 mr-24 mb-24" fxLayout="column" fxLayoutAlign="start" fxFlex="1 0 auto">
+                                            <!-- <div class="h2 mb-24">Reactive Form Example</div> -->
+                                            <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+                                                <mat-form-field fxFlex="33">
+                                                    <input matInput placeholder="Consignee" formControlName="consignee" required [(ngModel)]="consignment['shipTo_name']">
+                                                    <mat-error *ngIf="consignmentFormErrors.consignee.required">
+                                                        Consignee is required
+                                                    </mat-error>
+                                                </mat-form-field>
+                                                <mat-form-field fxFlex="34">
+                                                    <input matInput placeholder="Email" formControlName="email" required [(ngModel)]="consignment['shipTo_email']">
+                                                    <mat-error *ngIf="consignmentFormErrors.email.required">
+                                                        Email is required
+                                                    </mat-error>
+                                                </mat-form-field>
+                                                <mat-form-field fxFlex="33">
+                                                    <input matInput placeholder="Phone" formControlName="phone" required [(ngModel)]="consignment['shipTo_phone']">
+                                                    <mat-error *ngIf="consignmentFormErrors.phone.required">
+                                                        Phone is required
+                                                    </mat-error>
+                                                </mat-form-field>
                                             </div>
-                                            <div fxLayout="column" fxLayoutAlign="start start" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
-                                                <div class="h2">
-                                                    New consignment
-                                                </div>
+                                            <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+                                                <mat-form-field fxFlex="50">
+                                                    <input matInput placeholder="Company Name" formControlName="companyName" [(ngModel)]="consignment['shipTo_companyName']">
+                                                </mat-form-field>
+                                                <mat-form-field fxFlex="50">
+                                                    <input matInput placeholder="Instruction" formControlName="instruction" required [(ngModel)]="consignment['shipTo_instruction1']">
+                                                    <mat-error *ngIf="consignmentFormErrors.instruction.required">
+                                                        Instruction is required
+                                                    </mat-error>
+                                                </mat-form-field>
                                             </div>
-                                        </div> -->
-                                    </div>
-                                    <div class="content-card mat-white-bg">
-                                        <form name="consignmentForm" [formGroup]="consignmentForm" novalidate>
-                                            <div class="mat-white-bg p-24 mr-24 mb-24" fxLayout="column" fxLayoutAlign="start" fxFlex="1 0 auto">
-                                                <!-- <div class="h2 mb-24">Reactive Form Example</div> -->
-                                                <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
-                                                    <mat-form-field fxFlex="33">
-                                                        <input matInput placeholder="Consignee" formControlName="consignee" required [(ngModel)]="consignment['shipTo_name']">
-                                                    </mat-form-field>
-
-                                                    <mat-form-field fxFlex="34">
-                                                        <input matInput placeholder="Email" formControlName="email" required [(ngModel)]="consignment['shipTo_email']">
-                                                    </mat-form-field>
-
-                                                    <mat-form-field fxFlex="33">
-                                                        <input matInput placeholder="Phone" formControlName="phone" required [(ngModel)]="consignment['shipTo_phone']">
-                                                    </mat-form-field>
-                                                </div>
-                                                <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
-                                                    <mat-form-field fxFlex="50">
-                                                        <input matInput placeholder="Company Name" formControlName="companyName" [(ngModel)]="consignment['shipTo_companyName']">
-                                                    </mat-form-field>
-                                                    <mat-form-field fxFlex="50">
-                                                        <input matInput placeholder="Instruction" formControlName="instruction" required [(ngModel)]="consignment['shipTo_instruction1']">
-                                                    </mat-form-field>
-                                                </div>
-                                                <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
-                                                    <mat-form-field fxFlex="100">
-                                                        <input matInput placeholder="Address 1" formControlName="address1" required [(ngModel)]="consignment['shipTo_address1']">
-                                                    </mat-form-field>
-                                                </div>
-                                                <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
-                                                    <mat-form-field fxFlex="100">
-                                                        <input matInput placeholder="Address 2" formControlName="address2" [(ngModel)]="consignment['shipTo_address2']">
-                                                    </mat-form-field>
-                                                </div>
-                                                <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto" fxLayoutWrap>
-                                                    <mat-form-field fxFlex="25">
-                                                        <input matInput placeholder="Suburb" formControlName="suburb" required [(ngModel)]="consignment['shipTo_suburb']">
-                                                    </mat-form-field>
-                                                    <mat-form-field fxFlex="25">
-                                                        <input matInput placeholder="State" formControlName="state" required [(ngModel)]="consignment['shipTo_state']">
-                                                    </mat-form-field>
-                                                    <mat-form-field fxFlex="25">
-                                                        <input matInput placeholder="Postcode" formControlName="postcode" required [(ngModel)]="consignment['shipTo_postcode']">
-                                                    </mat-form-field>
-                                                    <mat-form-field fxFlex="25">
-                                                        <input matInput placeholder="Country" formControlName="country" required [(ngModel)]="consignment['shipTo_country']">
-                                                    </mat-form-field>
-                                                </div>
-                                                <div fxLayout="row" fxLayoutAlign="start center">
-                                                    <ngx-datatable fxFlex="100" #myTable class='material fullscreen expandable' [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50" [rowHeight]="auto" [rows]=rows [columns]=columnsRef [limit]="20">
-                                                        <ng-template #cellEditTextTmpl let-rowIndex="rowIndex" let-column="column" let-value="value" let-row="row" ngx-datatable-cell-template>
-                                                            <mat-form-field class="example-full-width">
-                                                                <input type="number" InputNumberDirective matInput [value]="defaultVal" (change)="updateValue($event, column.prop, rowIndex)" (blur)="updateValue($event, column.prop, rowIndex)" (keyup)="updateValue($event, column.prop, rowIndex)">
-                                                            </mat-form-field>
-                                                        </ng-template>
-                                                        <ng-template #cellActionTmpl let-row="row" let-value="value" let-rowIndex="rowIndex" ngx-datatable-cell-template>
-                                                            <mat-button-toggle-group #group="matButtonToggleGroup">
-                                                                <mat-button-toggle value="left" (click)="addOrderLine($event, row,rowIndex)" [id]="rowIndex">
-                                                                    New
-                                                                </mat-button-toggle>
-                                                                <mat-button-toggle value="right" (click)="deleteOrderLine($event, row,rowIndex)" *ngIf="totalRowNum !== 1">
-                                                                    Delete
-                                                                </mat-button-toggle>
-                                                            </mat-button-toggle-group>
-                                                        </ng-template>
-                                                    </ngx-datatable>
-                                                </div>
-                                                <div fxLayout="row" fxLayoutAlign="start center" class="p-24">
-                                                    <!-- <button *ngIf="!orderlineAdded" class="w-20-p" fxFlex="25" mat-raised-button color="primary" (click)="addOrderLine()">Add Orderline</button> -->
-                                                    <button class="w-20-p" fxFlex="25" mat-raised-button color="primary" (click)="submit()">Submit</button>
-                                                </div>
+                                            <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+                                                <mat-form-field fxFlex="100">
+                                                    <input matInput placeholder="Address 1" formControlName="address1" required [(ngModel)]="consignment['shipTo_address1']">
+                                                    <mat-error *ngIf="consignmentFormErrors.address1.required">
+                                                        Address 1 is required
+                                                    </mat-error>
+                                                </mat-form-field>
                                             </div>
-                                        </form>
-                                    </div>
+                                            <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+                                                <mat-form-field fxFlex="100">
+                                                    <input matInput placeholder="Address 2" formControlName="address2" [(ngModel)]="consignment['shipTo_address2']">
+                                                </mat-form-field>
+                                            </div>
+                                            <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto" fxLayoutWrap>
+                                                <mat-form-field fxFlex="25">
+                                                    <input matInput placeholder="Suburb" formControlName="suburb" required [(ngModel)]="consignment['shipTo_suburb']">
+                                                    <mat-error *ngIf="consignmentFormErrors.suburb.required">
+                                                        Suburb is required
+                                                    </mat-error>
+                                                </mat-form-field>
+                                                <mat-form-field fxFlex="25">
+                                                    <input matInput placeholder="State" formControlName="state" required [(ngModel)]="consignment['shipTo_state']">
+                                                    <mat-error *ngIf="consignmentFormErrors.state.required">
+                                                        State is required
+                                                    </mat-error>
+                                                </mat-form-field>
+                                                <mat-form-field fxFlex="25">
+                                                    <input matInput placeholder="Postcode" formControlName="postcode" required [(ngModel)]="consignment['shipTo_postcode']">
+                                                    <mat-error *ngIf="consignmentFormErrors.postcode.required">
+                                                        Postcode is required
+                                                    </mat-error>
+                                                </mat-form-field>
+                                                <mat-form-field fxFlex="25">
+                                                    <input matInput placeholder="Country" formControlName="country" required [(ngModel)]="consignment['shipTo_country']">
+                                                    <mat-error *ngIf="consignmentFormErrors.country.required">
+                                                        Country is required
+                                                    </mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                            <div fxLayout="row" fxLayoutAlign="start center">
+                                                <ngx-datatable fxFlex="100" #myTable class='material fullscreen expandable' [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50" [rowHeight]="auto" [rows]=rows [columns]=columnsRef [limit]="20">
+                                                    <ng-template #cellEditTextTmpl let-rowIndex="rowIndex" let-column="column" let-value="value" let-row="row" ngx-datatable-cell-template>
+                                                        <mat-form-field class="example-full-width">
+                                                            <input type="text" matInput class="number" (change)="updateValue($event, column.prop, rowIndex)">
+                                                        </mat-form-field>
+                                                    </ng-template>
+                                                    <ng-template #cellActionTmpl let-row="row" let-value="value" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                                                        <mat-button-toggle-group #group="matButtonToggleGroup">
+                                                            <mat-button-toggle value="left" (click)="addOrderLine($event, row,rowIndex)" [id]="rowIndex">
+                                                                New
+                                                            </mat-button-toggle>
+                                                            <mat-button-toggle value="right" (click)="deleteOrderLine($event, row,rowIndex)" *ngIf="totalRowNum !== 1">
+                                                                Delete
+                                                            </mat-button-toggle>
+                                                        </mat-button-toggle-group>
+                                                    </ng-template>
+                                                </ngx-datatable>
+                                            </div>
+                                            <div fxLayout="row" fxLayoutAlign="start center" class="p-24">
+                                                <!-- <button *ngIf="!orderlineAdded" class="w-20-p" fxFlex="25" mat-raised-button color="primary" (click)="addOrderLine()">Add Orderline</button> -->
+                                                <button class="w-20-p" fxFlex="25" mat-raised-button color="primary" (click)="submit()">Submit</button>
+                                            </div>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
                         </div>

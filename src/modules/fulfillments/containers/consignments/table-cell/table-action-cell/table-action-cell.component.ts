@@ -36,4 +36,8 @@ export class TableActionCellComponent implements ICellRendererAngularComp{
   solidConsignment(){
     this.consignmentsService.solidConsignments([this.consignment.id]);
   }
+
+  fixIssue () {
+    this.params.context.componentParent.fixIssue([this.consignment]);
+  }
 }

@@ -86,14 +86,32 @@ export class ActiveContentService {
         this.initialConsigments();
         this.consignments.all = res.data;
         this.consignments.all.forEach(consignment => {
-          if (!consignment.processed){
-            this.consignments.pending.push(consignment);
-          }else if (consignment.errors){
-            this.consignments.issue.push(consignment);
-          }else if (!consignment.printed){
-            this.consignments.solid.push(consignment);
-          }else{
-            this.consignments.printed.push(consignment);
+          if (consignment.shipping_method.plugin.name === 'Fastway') {
+            this.consignments.fastway.all.push(consignment);
+            if (consignment.closed) {
+              this.consignments.fastway.closed.push(consignment);
+            }else if (consignment.errors){
+              this.consignments.fastway.issue.push(consignment);
+            }else if (!consignment.processed){
+              this.consignments.fastway.pending.push(consignment);
+            }else if (!consignment.printed){
+              this.consignments.fastway.solid.push(consignment);
+            }else{
+              this.consignments.fastway.printed.push(consignment);
+            }
+          } else if (consignment.shipping_method.plugin.name === 'eParcel') {
+            this.consignments.eparcel.all.push(consignment);
+            if (consignment.closed) {
+              this.consignments.eparcel.closed.push(consignment);
+            }else if (consignment.errors){
+              this.consignments.eparcel.issue.push(consignment);
+            }else if (!consignment.processed){
+              this.consignments.eparcel.pending.push(consignment);
+            }else if (!consignment.printed){
+              this.consignments.eparcel.solid.push(consignment);
+            }else{
+              this.consignments.eparcel.printed.push(consignment);
+            }
           }
         });
         this.onConsignmentsChange.next(this.consignments);
@@ -121,10 +139,20 @@ export class ActiveContentService {
 
   initialConsigments(){
     this.consignments.all = [];
-    this.consignments.pending = [];
-    this.consignments.issue = [];
-    this.consignments.solid = [];
-    this.consignments.printed = [];
+    this.consignments.fastway = [];
+    this.consignments.eparcel = [];
+    this.consignments.fastway.all = [];
+    this.consignments.fastway.pending = [];
+    this.consignments.fastway.issue = [];
+    this.consignments.fastway.solid = [];
+    this.consignments.fastway.printed = [];
+    this.consignments.fastway.closed = [];
+    this.consignments.eparcel.all = [];
+    this.consignments.eparcel.pending = [];
+    this.consignments.eparcel.issue = [];
+    this.consignments.eparcel.solid = [];
+    this.consignments.eparcel.printed = [];
+    this.consignments.eparcel.closed = [];
   }
 
 }

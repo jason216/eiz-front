@@ -2,7 +2,7 @@ import { ConsignmentsPrintedComponent } from './consignments-printed/consignment
 import { ConsignmentsSolidComponent } from './consignments-solid/consignments-solid.component';
 import { ConsignmentsErrorComponent } from './consignments-error/consignments-error.component';
 import { TableActionCellComponent } from './table-cell/table-action-cell/table-action-cell.component';
-import { ConsignmentsComponent } from './consignments.component';
+// import { ConsignmentsComponent } from './consignments.component';
 import { NgModule, ModuleWithProviders } from '@angular/core';
 
 import { SharedModule } from '../../../../app/core/modules/shared.module';
@@ -16,12 +16,16 @@ import { AgGridModule } from 'ag-grid-angular';
 import { ConsignmentsPendingComponent } from './consignments-pending/consignments-pending.component';
 import { ConsignmentNewComponent } from '../consignment-new/consignment-new.component';
 import { ConsignmentsService } from '../../services/consignments.service';
+import { NumberOnlyDirective } from '../../../../app/alpha/services/number-only.directive';
+import { ConsignmentEditDialogComponent } from './consignment-edit/consignment-edit.component';
+import { FastwayConsignmentsComponent } from './fastway.consignments.component';
+import { EparcelConsignmentsComponent } from './eparcel/eparcel.consignments.component';
 
 const routes: Routes = [
-  {
-    path: '',
-    component: ConsignmentsComponent,
-    children: [
+  // {
+    // path: '',
+    // component: ConsignmentsAllComponent,
+    // children: [
       {
         path: '',
         component: ConsignmentsAllComponent,
@@ -44,10 +48,14 @@ const routes: Routes = [
       },
       {
         path: 'fastway',
-        component: ConsignmentsComponent_fastway,
+        component: FastwayConsignmentsComponent,
       },
-    ]
-  },
+      {
+        path: 'eparcel',
+        component: EparcelConsignmentsComponent,
+      },
+    // ]
+  // },
 ];
 
 @NgModule({
@@ -64,17 +72,21 @@ const routes: Routes = [
     ConsignmentsErrorComponent,
     ConsignmentsSolidComponent,
     ConsignmentsPrintedComponent,
-    ConsignmentsComponent,
+    // ConsignmentsComponent,
     ConsignmentsSideNavComponent,
     ConsignmentsComponent_fastway,
     TableActionCellComponent,
-    ConsignmentNewComponent
+    ConsignmentNewComponent,
+    ConsignmentEditDialogComponent,
+    FastwayConsignmentsComponent,
+    EparcelConsignmentsComponent,
+    NumberOnlyDirective
   ],
   exports: [
     RouterModule,
   ],
   entryComponents: [
-
+    ConsignmentEditDialogComponent,
   ],
   providers: [
     ConsignmentsService
