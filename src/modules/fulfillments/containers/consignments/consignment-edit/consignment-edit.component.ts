@@ -1,7 +1,8 @@
 import { Component, Inject, OnInit, ViewEncapsulation } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialogRef, MatSnackBar } from '@angular/material';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ApiService } from '../../../../../app/alpha/services';
+import { ActiveContentService } from '../../../../../app/alpha/services/activeContent.service';
 
 @Component({
     // tslint:disable-next-line:component-selector
@@ -13,19 +14,21 @@ import { ApiService } from '../../../../../app/alpha/services';
 export class ConsignmentEditDialogComponent implements OnInit
 {
     showExtraToFields = false;
-    orderEditForm: FormGroup;
-    orderEditFormErrors: any;
-    order: any;
+    consignmentEditForm: FormGroup;
+    consignmentEditFormErrors: any;
+    consignment: any;
 
     constructor(
         public dialogRef: MatDialogRef<ConsignmentEditDialogComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any,
         private formBuilder: FormBuilder,
-        private apiService: ApiService
+        private apiService: ApiService,
+        private activeContentService: ActiveContentService,
+        private snackBar: MatSnackBar
     ){
-        this.order = data[0];
+        this.consignment = data[0];
 
-        this.orderEditFormErrors = {
+        this.consignmentEditFormErrors = {
             shipTo_name: {},
             shipTo_email: {},
             shipTo_phone: {},
@@ -39,7 +42,7 @@ export class ConsignmentEditDialogComponent implements OnInit
     }
 
     ngOnInit() {
-        this.orderEditForm = this.formBuilder.group({
+        this.consignmentEditForm = this.formBuilder.group({
             shipTo_name   : ['', [Validators.required]],
             shipTo_email: ['', Validators.required],
             shipTo_phone: ['', Validators.required],
@@ -51,40 +54,51 @@ export class ConsignmentEditDialogComponent implements OnInit
             shipTo_country: ['', Validators.required]
           });
       
-          this.orderEditForm.valueChanges.subscribe(() => {
+          this.consignmentEditForm.valueChanges.subscribe(() => {
             this.onOrderEditFormValuesChanged();
           });
     }
 
     onOrderEditFormValuesChanged(){
-      for ( const field in this.orderEditFormErrors )
+      for ( const field in this.consignmentEditFormErrors )
       {
-          if ( !this.orderEditFormErrors.hasOwnProperty(field) )
+          if ( !this.consignmentEditFormErrors.hasOwnProperty(field) )
           {
               continue;
           }
 
           // Clear previous errors
-          this.orderEditFormErrors[field] = {};
+          this.consignmentEditFormErrors[field] = {};
 
           // Get the control
-          const control = this.orderEditForm.get(field);
+          const control = this.consignmentEditForm.get(field);
 
           if ( control && control.dirty && !control.valid )
           {
-              this.orderEditFormErrors[field] = control.errors;
+              this.consignmentEditFormErrors[field] = control.errors;
           }
       }
     }
 
     submit(button) {
-        button.textContent = 'Waiting...';
-        button.disabled = true;
-        this.apiService.post('', '', null, '').subscribe(
-            res => {
-            
-            },
-            error => {}
-        );
+        if (!this.consignmentEditForm.invalid) {console.log(this.consignmentEditForm.value);
+            button.textContent = 'Submiting...';
+            button.disabled = true;
+            this.apiService.put('Fulfillments', 'consignment', this.consignment.id, this.consignmentEditForm.value).subscribe(
+                res => {
+                    this.activeContentService.getConsignments();
+                    this.dialogRef.close();
+                },
+                error => {
+                    this.snackBar.open(error.error.message, 'Dismiss', {
+                        duration: 15000,
+                        horizontalPosition: 'right',
+                        verticalPosition: 'top',
+                      });
+                    button.textContent = 'Submit';
+                    button.disabled = false;
+                }
+            );
+        }
     }
 }

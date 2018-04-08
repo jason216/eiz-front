@@ -3,6 +3,7 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
 
 @Component({
+  // tslint:disable-next-line:component-selector
   selector: 'order-search-dialog',
   templateUrl: './order-search-dialog.component.html',
 })

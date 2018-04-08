@@ -12,49 +12,49 @@
             <div class="content">
                 <mat-tab-group>
                     <mat-tab label="Shipment">
-                        <div class="order-edit tab-content p-24" fusePerfectScrollbar>
-                            <form name="loginForm" [formGroup]="orderEditForm" novalidate>
+                        <div class="consignment-edit tab-content p-24" fusePerfectScrollbar>
+                            <form name="loginForm" [formGroup]="consignmentEditForm" novalidate>
                                 <div class="" fxLayout="column" fxLayoutAlign="start" fxFlex="1 0 auto">
 
                                     <!-- <div class="h2 mb-24">Edit Consignment</div> -->
                                     <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
                                         <mat-form-field fxFlex="33">
-                                            <input matInput placeholder="Recipient Name" required [(ngModel)]="order['shipTo_name']" formControlName="shipTo_name">
+                                            <input matInput placeholder="Recipient Name" required [(ngModel)]="consignment['shipTo_name']" formControlName="shipTo_name">
                                         </mat-form-field>
 
                                         <mat-form-field fxFlex="34">
-                                            <input matInput placeholder="Email" required [(ngModel)]="order['shipTo_email']" formControlName="shipTo_email">
+                                            <input matInput placeholder="Email" required [(ngModel)]="consignment['shipTo_email']" formControlName="shipTo_email">
                                         </mat-form-field>
 
                                         <mat-form-field fxFlex="33">
-                                            <input matInput placeholder="Phone" required [(ngModel)]="order['shipTo_phone']" formControlName="shipTo_phone">
+                                            <input matInput placeholder="Phone" required [(ngModel)]="consignment['shipTo_phone']" formControlName="shipTo_phone">
                                         </mat-form-field>
                                     </div>
                                     <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
                                         <mat-form-field fxFlex="100">
-                                            <input matInput placeholder="Address 1" required [(ngModel)]="order['shipTo_address1']" formControlName="shipTo_address1">
+                                            <input matInput placeholder="Address 1" required [(ngModel)]="consignment['shipTo_address1']" formControlName="shipTo_address1">
                                         </mat-form-field>
                                     </div>
                                     <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
                                         <mat-form-field fxFlex="100">
-                                            <input matInput placeholder="Address 2" [(ngModel)]="order['shipTo_address2']" formControlName="shipTo_address2">
+                                            <input matInput placeholder="Address 2" [(ngModel)]="consignment['shipTo_address2']" formControlName="shipTo_address2">
                                         </mat-form-field>
                                     </div>
                                     <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto" fxLayoutWrap>
                                         <mat-form-field fxFlex="25">
-                                            <input matInput placeholder="Suburb" required [(ngModel)]="order['shipTo_suburb']" formControlName="shipTo_suburb">
+                                            <input matInput placeholder="Suburb" required [(ngModel)]="consignment['shipTo_suburb']" formControlName="shipTo_suburb">
                                         </mat-form-field>
                                         <mat-form-field fxFlex="25">
-                                            <input matInput placeholder="Postcode" required [(ngModel)]="order['shipTo_postcode']" formControlName="shipTo_postcode">
+                                            <input matInput placeholder="Postcode" required [(ngModel)]="consignment['shipTo_postcode']" formControlName="shipTo_postcode">
                                         </mat-form-field>
                                         <mat-form-field fxFlex="25">
-                                            <input matInput placeholder="State" required [(ngModel)]="order['shipTo_state']" formControlName="shipTo_state">
+                                            <input matInput placeholder="State" required [(ngModel)]="consignment['shipTo_state']" formControlName="shipTo_state">
                                         </mat-form-field>
                                         <mat-form-field fxFlex="25">
-                                            <input matInput placeholder="Country" required [(ngModel)]="order['shipTo_country']" formControlName="shipTo_country">
+                                            <input matInput placeholder="Country" required [(ngModel)]="consignment['shipTo_country']" formControlName="shipTo_country">
                                         </mat-form-field>
                                     </div>
-                                    <button class="w-20-p" fxFlex="100" mat-raised-button color="primary" (click)="submit($event.target)">Submit</button>
+                                    <button class="w-20-p" fxFlex="100" mat-raised-button color="primary" [disabled]="consignmentEditForm.invalid" (click)="submit($event.target)">Submit</button>
                                 </div>
                             </form>
                         </div>

@@ -66,7 +66,7 @@ export class FastwayConsignmentsComponent implements OnInit, OnDestroy {
             trackingNum = trackingNum + labels[0].labelNumber;
             trackingNum = trackingNum + ', ';
           }
-          trackingNum = trackingNum + '</span><br>111<br>';
+          trackingNum = trackingNum + '</span>';
           return trackingNum;
         }
       }
@@ -270,6 +270,11 @@ export class FastwayConsignmentsComponent implements OnInit, OnDestroy {
       panelClass: 'consignment-edit-dialog',
       data: issueConsignment
     });
+
+    this.dialogRef.afterClosed()
+      .subscribe(response => {
+        console.log(response);
+      });
   }
 }
 

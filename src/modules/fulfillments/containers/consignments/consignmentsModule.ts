@@ -20,6 +20,7 @@ import { NumberOnlyDirective } from '../../../../app/alpha/services/number-only.
 import { ConsignmentEditDialogComponent } from './consignment-edit/consignment-edit.component';
 import { FastwayConsignmentsComponent } from './fastway.consignments.component';
 import { EparcelConsignmentsComponent } from './eparcel/eparcel.consignments.component';
+import { EparcelTableActionCellComponent } from './eparcel/table-action-cell/table-action-cell.component';
 
 const routes: Routes = [
   // {
@@ -79,6 +80,7 @@ const routes: Routes = [
     ConsignmentNewComponent,
     ConsignmentEditDialogComponent,
     FastwayConsignmentsComponent,
+    EparcelTableActionCellComponent,
     EparcelConsignmentsComponent,
     NumberOnlyDirective
   ],
@@ -87,6 +89,7 @@ const routes: Routes = [
   ],
   entryComponents: [
     ConsignmentEditDialogComponent,
+    EparcelTableActionCellComponent,
   ],
   providers: [
     ConsignmentsService

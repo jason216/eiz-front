@@ -102,7 +102,7 @@ export class OrderListComponent implements OnInit, OnDestroy {
     this.gridOptions = <GridOptions>{
       // domLayout: 'autoHeight',
       enableRangeSelection: true,
-      enableColResize: false,
+      enableColResize: true,
       suppressHorizontalScroll: false,
       // pagination: true,
       // paginationAutoPageSize: true,
