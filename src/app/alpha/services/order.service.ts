@@ -29,4 +29,12 @@ export class OrderService {
     );
   }
 
+  public archiveOrders(ids): Observable<any> {
+    // tslint:disable-next-line:prefer-const
+    let params = {
+      'status': 'archived',
+      'ids': ids
+    };
+    return this.apiService.put('Orders', 'orderStatus', null, params);
+  }
 }

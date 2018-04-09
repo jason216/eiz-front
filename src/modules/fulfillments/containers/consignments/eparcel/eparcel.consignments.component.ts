@@ -236,7 +236,7 @@ export class EparcelConsignmentsComponent implements OnInit, OnDestroy {
       ids.push(this.selected[i].id);
     }
 
-    // this.consignmentsService.solidConsignments();
+    this.consignmentsService.solidConsignments(ids);
   }
 
   bulkPrintConsignment(event){

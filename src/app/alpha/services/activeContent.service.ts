@@ -47,6 +47,10 @@ export class ActiveContentService {
           this.orders.all = res.data;
           this.orders.all.forEach(order => {
               switch (order.status){
+                case 'archived': {
+                  this.orders.archived.push(order);
+                  break;
+                }
                 case 'unpaid': {
                   this.orders.unpaid.push(order);
                   break;
@@ -134,6 +138,7 @@ export class ActiveContentService {
     this.orders.unpaid = [];
     this.orders.issue = [];
     this.orders.onhold = [];
+    this.orders.archived = [];
     this.orders.default = [];
   }
 

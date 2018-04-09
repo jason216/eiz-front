@@ -69,7 +69,9 @@
                     </mat-menu>
                     <div [ngSwitch]="selectedStatus" style="display: inline;">
                         <button *ngSwitchCase="'paid'" mat-raised-button class="mb-4" color="primary" (click)="bulkProcess()">Bulk Process</button>
-                        <button *ngSwitchCase="'processed'" mat-raised-button class="mb-4" color="primary" (click)="bulkProcess()">Archive</button>
+                    </div>
+                    <div [ngSwitch]="selectedStatus" style="display: inline;">
+                        <button mat-raised-button class="mb-4" color="primary" (click)="bulkArchive()">Archive</button>
                     </div>
                 </div>
                 <div class="multi-select-actions">

@@ -6,7 +6,7 @@ import { TableColumn, ColumnMode } from '@swimlane/ngx-datatable';
 import { GridOptions } from 'ag-grid/main';
 
 import { Component, ElementRef, TemplateRef, OnInit, OnDestroy, ViewChild } from '@angular/core';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
 import { OrderService } from '../../../../app/alpha/services';
 
 import { OrderSearchDialogComponent } from '../../components/order-search-dialog/order-search-dialog.component';
@@ -96,6 +96,7 @@ export class OrderListComponent implements OnInit, OnDestroy {
     public orderService: OrderService,
     public paginationService: PaginationService,
     public activeContentService: ActiveContentService,
+    private snackBar: MatSnackBar
   ) {
     // this.page.pageNumber = 0;
     // this.page.size = 12;
@@ -379,4 +380,38 @@ export class OrderListComponent implements OnInit, OnDestroy {
       data: selectedOrder
     });
   }
+
+  bulkArchive() {
+    const orders = this.gridOptions.api.getSelectedRows();
+    // tslint:disable-next-line:prefer-const
+    let orderid: number[] = [];
+    for (let i = 0; i < orders.length; i++) {
+      orderid.push(orders[i]['id']);
+    }
+    // tslint:disable-next-line:prefer-const
+    // let orderIdArray = this.createOrderArray(orderid);
+    
+    this.orderService.archiveOrders(orderid).subscribe(
+      res => {
+        this.activeContentService.getOrders();
+      },
+      error => {
+        this.snackBar.open(error, 'Dismiss', {
+          duration: 5000,
+          horizontalPosition: 'right',
+          verticalPosition: 'top',
+        });
+      }
+    );
+  }
+
+  createOrderArray(oids: number[]): OrderArray {
+    return {
+        ids      : oids
+    };
+  }
+}
+
+export interface OrderArray {
+  ids: number[];
 }

@@ -1,167 +1,31 @@
-<!-- <div class="eiz-card mat-white-bg my-12 p-12 p-sm-4" fxFlex="100" fxLayout="row wrap" fxLayoutGap="8px">
-        <div class="functions-area p-12 p-sm-4">
-          <button mat-raised-button class="mb-4" color="primary">Print</button>
-          <button mat-raised-button class="mb-4" color="primary">Complete</button>
-          <button mat-raised-button class="mb-4" color="primary">Process</button>
-          <button mat-raised-button class="mb-4" color="primary">Export to Courier</button>
-          <button mat-raised-button class="mb-4" color="primary">Export CSV</button>
-          <button mat-raised-button class="mb-4" color="primary">Analysis</button>
-          <button mat-raised-button class="mb-4" color="primary">Mark as Un-Manifested</button>
-          <button mat-raised-button class="mb-4" color="primary">Mark as Manifested</button>
-          <button mat-raised-button class="mb-4" color="primary">Mark as Shipped</button>
-        </div>
-      </div> -->
-
 <div id="orders-archived" class="page-layout simple left-sidenav inner-sidenav">
-
     <!-- HEADER -->
     <div class="header mat-accent-bg p-16 p-sm-24" fxLayout="column" fxLayoutAlign="start start" fxLayout.gt-xs="row" fxLayoutAlign.gt-xs="space-between center">
-
         <!-- APP TITLE -->
         <div fxLayout="row" fxLayoutAlign="start center">
-
             <button mat-button class="mat-icon-button sidenav-toggle mr-12" fuseMatSidenavToggler="contacts-main-sidenav" fxHide.gt-md>
                 <mat-icon>menu</mat-icon>
               </button>
-
             <div class="logo" fxLayout="row" fxLayoutAlign="start center">
                 <mat-icon class="logo-icon mr-16" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">account_box</mat-icon>
                 <span class="logo-text h1" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">Archived Orders</span>
             </div>
-
         </div>
         <!-- / APP TITLE -->
         <!-- SEARCH -->
-        <div class="search-input-wrapper mt-16 ml-8 m-sm-0" fxLayout="row" fxLayoutAlign="start center">
+        <!-- <div class="search-input-wrapper mt-16 ml-8 m-sm-0" fxLayout="row" fxLayoutAlign="start center">
             <label for="search" class="mr-8">
                 <mat-icon (click)="handleBasicSearch()">search</mat-icon>
               </label>
             <mat-form-field mat-no-float class="m-0" floatPlaceholder="never">
                 <input id="search" matInput placeholder="Search" [formControl]="searchFormControl">
             </mat-form-field>
-        </div>
+        </div> -->
         <!-- / SEARCH -->
-
     </div>
     <!-- / HEADER -->
-
-    <!-- SELECTED BAR -->
-    <!-- <div class="selectedBar mat-accent-600-bg" *ngIf="hasSelectedOrders" [@slideInTop]>
-        <div fxFlex fxLayout="row" fxLayoutAlign="start center" class="p-24">
-            <div class="close-button-wrapper" fxFlex="0 1 auto" fxFlex.gt-sm="220px" (click)="deselectAll()">
-                <button class="p-8" mat-button fxLayout="row" fxLayoutAlign="start center">
-                  <mat-icon class="mr-8">arrow_back</mat-icon>
-                  <span class="text-uppercase">Back</span>
-                </button>
-            </div>
-            <div fxFlex fxLayout="row" fxLayoutAlign="end center" fxLayoutAlign.gt-sm="space-between center">
-                <div>
-                    <span class="selected-contacts-count">
-                    <span>{{selected.length}}</span>
-                    <span>selected</span>
-                    </span>
-
-                    <button mat-icon-button [matMenuTriggerFor]="selectMenu">
-                    <mat-icon>arrow_drop_down</mat-icon>
-                  </button>
-                    <mat-menu #selectMenu="matMenu">
-                        <button mat-menu-item>Select all</button>
-                        <button mat-menu-item>Deselect all</button>
-                    </mat-menu>
-
-                    <button mat-raised-button class="mb-4" color="primary" (click)="bulkProcess()">Bulk Process</button>
-                </div>
-
-                <div class="multi-select-actions">
-                    <button mat-icon-button aria-label="delete selected">
-                    <mat-icon>delete</mat-icon>
-                  </button>
-                </div>
-
-            </div>
-
-        </div>
-    </div> -->
-    <!-- / SELECTED BAR -->
-
-    <!-- <mat-sidenav-container> -->
-
-    <!-- SIDENAV -->
-    <!-- <mat-sidenav class="sidenav" align="start" opened="true" mode="side" fuseMatSidenavHelper="contacts-main-sidenav" mat-is-locked-open="gt-sm">
-              <div class="sidenav-component" *fuseIfOnDom [@animate]="{value:'*'}">
-                <div class="sidenav-content">
-                  <div class="card mat-white-bg">
-                    <div class="header p-24" fxLayout="row" fxLayoutAlign="start center">
-                      <img src="assets/images/avatars/alice.jpg" class="avatar mr-16"/>
-                      <span class="h5">Orders</span>
-                    </div>
-                    <div class="content py-16" fusePerfectScrollbar>
-                      <div class="nav">
-                        <div class="nav-item" aria-label="inbox" (click)="setCurrentOrders('awaitFulfill')">
-                          <a class="nav-link" matRipple>
-                            <span class="title">Paid & awaiting postage</span>
-                            <span class="nav-link-badge" *ngIf="orders.awaitFulfill?.length" [ngStyle]="{'background-color': 'blue','color': 'white'}">
-                                {{orders.awaitFulfill.length}}
-                            </span>
-                          </a>
-                        </div>
-                        <div class="nav-item" aria-label="frequently contacted" (click)="setCurrentOrders('hold')">
-                          <a class="nav-link" matRipple>
-                            <span class="title">Onhold</span>
-                            <span class="nav-link-badge" *ngIf="orders.hold?.length" [ngStyle]="{'background-color': 'blue','color': 'white'}">
-                              {{orders.hold.length}}
-                          </span>
-                          </a>
-                        </div>
-                        <div class="nav-item" aria-label="starred" (click)="setCurrentOrders('unpaid')">
-                          <a class="nav-link" matRipple>
-                            <span class="title">Unpaid</span>
-                            <span class="nav-link-badge" *ngIf="orders.unpaid?.length" [ngStyle]="{'background-color': 'blue','color': 'white'}">
-                              {{orders.unpaid.length}}
-                          </span>
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </mat-sidenav> -->
-    <!-- / SIDENAV -->
-
     <!-- CENTER -->
     <div class="center p-24" fusePerfectScrollbar>
-        <div layout-gt-xs="row" layout-xs="column" layout-align="stretch center" class="layout-xs-column layout-gt-xs-row layout-align-stretch-center">
-            <div layout="row" layout-align="start center" class="layout-align-start-center layout-row">
-                <!-- <mat-form-field class="example-full-width">
-                            <input matInput placeholder="Order ID" value="">
-                        </mat-form-field>
-                        <mat-form-field>
-                            <input matInput [matDatepicker]="dp3" placeholder="Date From" disabled>
-                            <mat-datepicker-toggle matSuffix [for]="dp3"></mat-datepicker-toggle>
-                            <mat-datepicker #dp3 disabled="false"></mat-datepicker>
-                        </mat-form-field>
-                        <mat-form-field>
-                            <input matInput [matDatepicker]="dp4" placeholder="Date To" disabled>
-                            <mat-datepicker-toggle matSuffix [for]="dp4"></mat-datepicker-toggle>
-                            <mat-datepicker #dp4 disabled="false"></mat-datepicker>
-                        </mat-form-field> value="awaitFulfill"-->
-                <mat-form-field>
-                    <mat-select placeholder="Filter Order" (selectionChange)="optionSelected($event.value)" #orderStatusFilter style="width: 230px;">
-                        <mat-option value="paid">
-                            Paid
-                            <span class="nav-link-badge"> ({{paid}})</span>
-                        </mat-option>
-                        <mat-option value="unpaid">
-                            Unpaid<span class="nav-link-badge"> ({{unPaid}})</span>
-                        </mat-option>
-                        <mat-option value="processed">
-                            Processed<span class="nav-link-badge"> ({{processed}})</span>
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field>
-            </div>
-        </div>
         <!-- CONTENT -->
         <div class="content mat-white-bg mat-elevation-z4" fxLayout="row" fusePerfectScrollbar>
             <ag-grid-angular #agGrid style="width: 100%; min-height: 550px;" class="ag-theme-material" [gridOptions]="gridOptions" [columnDefs]="columnDefs" [rowData]="rows">
@@ -172,8 +36,3 @@
     <!-- / CENTER -->
     <!-- </mat-sidenav-container> -->
 </div>
-<!-- ADD CONTACT BUTTON -->
-<button mat-fab class="mat-accent-bg" id="add-contact-button" aria-label="add contact" *fuseIfOnDom [@animate]="{value:'*', params:{delay:'300ms',scale:'.2'}}">
-          <mat-icon>person_add</mat-icon>
-        </button>
-<!-- / ADD CONTACT BUTTON -->
