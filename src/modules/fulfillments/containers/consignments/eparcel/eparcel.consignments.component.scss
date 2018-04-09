@@ -14,3 +14,21 @@
     height: 120px;
     z-index: 99;
 }
+
+.ag-theme-material .ag-overlay-loading-wrapper {
+    background-color: rgba(255, 255, 255, 0.5)
+}
+
+.ag-theme-material .ag-overlay-loading-center {
+    background-color: #fff;
+    border: 1px solid #BDC3C7;
+    color: #000;
+    padding: 16px;
+}
+
+.ag-theme-material .ag-overlay-loading-center {
+    background: white;
+    border-radius: 2px;
+    box-shadow: none;
+    padding: 4px;
+}

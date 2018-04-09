@@ -3,6 +3,7 @@ import { MAT_DIALOG_DATA, MatDialogRef, MatSnackBar } from '@angular/material';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ApiService } from '../../../../../app/alpha/services';
 import { ActiveContentService } from '../../../../../app/alpha/services/activeContent.service';
+import { ConsignmentsService } from '../../../services/consignments.service';
 
 @Component({
     // tslint:disable-next-line:component-selector
@@ -24,6 +25,7 @@ export class ConsignmentEditDialogComponent implements OnInit
         private formBuilder: FormBuilder,
         private apiService: ApiService,
         private activeContentService: ActiveContentService,
+        private consignmentsService: ConsignmentsService,
         private snackBar: MatSnackBar
     ){
         this.consignment = data[0];
@@ -84,10 +86,28 @@ export class ConsignmentEditDialogComponent implements OnInit
         if (!this.consignmentEditForm.invalid) {console.log(this.consignmentEditForm.value);
             button.textContent = 'Submiting...';
             button.disabled = true;
-            this.apiService.put('Fulfillments', 'consignment', this.consignment.id, this.consignmentEditForm.value).subscribe(
+            this.consignmentsService.editConsignment(this.consignment.id, this.consignmentEditForm.value).subscribe(
                 res => {
-                    this.activeContentService.getConsignments();
-                    this.dialogRef.close();
+                    this.consignmentsService.solidConsignments(this.consignment.id).subscribe(
+                        data => {
+                            this.activeContentService.getConsignments();
+                            this.dialogRef.close();
+
+                            if (data.data[0][0].errors) {
+                                this.snackBar.open(data.data[0][0].errors, 'Dismiss', {
+                                    duration: 5000,
+                                    horizontalPosition: 'right',
+                                    verticalPosition: 'top',
+                                  });
+                            }
+                        },
+                        err => {
+                            this.snackBar.open(err.error.message, 'Dismiss', {
+                                duration: 15000,
+                                horizontalPosition: 'right',
+                                verticalPosition: 'top',
+                              });
+                        });
                 },
                 error => {
                     this.snackBar.open(error.error.message, 'Dismiss', {
@@ -95,8 +115,6 @@ export class ConsignmentEditDialogComponent implements OnInit
                         horizontalPosition: 'right',
                         verticalPosition: 'top',
                       });
-                    button.textContent = 'Submit';
-                    button.disabled = false;
                 }
             );
         }

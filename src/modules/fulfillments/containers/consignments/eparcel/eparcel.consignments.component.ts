@@ -12,6 +12,7 @@ import { fuseAnimations } from '../../../../../app/core/animations';
 import { MatDialog } from '@angular/material';
 import { ConsignmentEditDialogComponent } from '../consignment-edit/consignment-edit.component';
 import { ConsignmentsService } from '../../../services/consignments.service';
+import { EparcelTableActionCellComponent } from './table-action-cell/table-action-cell.component';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -141,8 +142,11 @@ export class EparcelConsignmentsComponent implements OnInit, OnDestroy {
         }
       }
     },
-    { headerName: 'Actions', width: 5, cellRendererFramework: TableActionCellComponent}
+    { headerName: 'Actions', width: 5, cellRendererFramework: EparcelTableActionCellComponent}
   ];
+
+  overlayLoadingTemplate =
+      '<span class="ag-overlay-loading-center">Your request is being processed, please wait...</span>';
 
   constructor(
     private activeContentService: ActiveContentService,
@@ -259,8 +263,16 @@ export class EparcelConsignmentsComponent implements OnInit, OnDestroy {
     for (let i = 0; i < this.selected.length; i++) {
       ids.push(this.selected[i].id);
     }
-console.log(ids);
-    this.consignmentsService.submitEparcelConsignments(ids);
+    
+    this.consignmentsService.submitEparcelConsignments(ids).subscribe(
+      (res) => {
+        window.open(res.data.pdf);
+        console.log(res);
+        this.activeContentService.getConsignments();
+      },
+      (error) => {
+
+      });
   }
 
   fixIssue (issueConsignment) {
@@ -268,6 +280,11 @@ console.log(ids);
       panelClass: 'consignment-edit-dialog',
       data: issueConsignment
     });
+  }
+
+  submitConsignment(consignmentId) {
+    this.gridOptions.api.showLoadingOverlay();
+    // this.consignmentsService.submitEparcelConsignments([consignmentId]);
   }
 }
 

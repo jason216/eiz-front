@@ -100,7 +100,7 @@
         </div>
         <!-- CONTENT -->
         <div class="content mat-white-bg mat-elevation-z4" fxLayout="row" fusePerfectScrollbar>
-            <ag-grid-angular #agGrid style="width: 100%; min-height: 550px;" class="ag-theme-material" [gridOptions]="gridOptions" [columnDefs]="columnDefs"></ag-grid-angular>
+            <ag-grid-angular #agGrid style="width: 100%; min-height: 550px;" class="ag-theme-material" [gridOptions]="gridOptions" [columnDefs]="columnDefs" [overlayLoadingTemplate]="overlayLoadingTemplate"></ag-grid-angular>
         </div>
         <!-- / CONTENT -->
     </div>
