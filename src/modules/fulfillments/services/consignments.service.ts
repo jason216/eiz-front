@@ -38,11 +38,11 @@ export class ConsignmentsService {
 
   // 还没有测试账号，不要使用该功能
   submitFastwayConsignments(ids: any[]){
-    // this.apiService.post('Fastway', 'submit', null, {'ids[]': ids}).subscribe(
-    //   (res) => {
-    //     this.activeContentService.getConsignments();
-    //   }
-    // );
+    this.apiService.post('Fastway', 'submit', null, {'ids[]': ids}).subscribe(
+      (res) => {
+        this.activeContentService.getConsignments();
+      }
+    );
   }
 
   editConsignment(consignmentId: any, formVal: any): Observable<any> {

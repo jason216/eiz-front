@@ -33,6 +33,7 @@ import { FileUtil } from './containers/order-new/orderupload.util';
 import { Constants } from './containers/order-new/orderupload.constants';
 import { OrderDetailDialogComponent } from './containers/order-list/order-detail.component';
 import { OrderEditDialogComponent } from './containers/order-list/order-edit.component';
+import { OrderArchivedListComponent } from './containers/order-archived/order-archived.component';
 
 @NgModule({
   imports: [
@@ -55,6 +56,7 @@ import { OrderEditDialogComponent } from './containers/order-list/order-edit.com
     FulfillmentsBulkDialogComponent,
     OrderDetailDialogComponent,
     OrderEditDialogComponent,
+    OrderArchivedListComponent
     // OrderUploadComponent
   ],
   entryComponents: [

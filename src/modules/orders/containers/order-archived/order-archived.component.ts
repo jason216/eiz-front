@@ -10,8 +10,8 @@ import { ActiveContentService } from '../../../../app/alpha/services/activeConte
 @Component({
     // tslint:disable-next-line:component-selector
     selector: 'page-order-list1',
-    templateUrl: './order-list.component.html',
-    styleUrls: ['./order-list.component.scss'],
+    templateUrl: './order-archived.component.html',
+    styleUrls: ['./order-archived.component.scss'],
     animations: fuseAnimations
 })
 export class OrderArchivedListComponent implements OnInit, OnDestroy {

@@ -259,7 +259,7 @@ export class FastwayConsignmentsComponent implements OnInit, OnDestroy {
     // tslint:disable-next-line:prefer-const
     let ids = [];
     for (let i = 0; i < this.selected.length; i++) {
-      ids.push(this.selected[i].id);
+      ids.push(this.selected[i].manifest_id);
     }
 
     this.consignmentsService.submitFastwayConsignments(ids);
