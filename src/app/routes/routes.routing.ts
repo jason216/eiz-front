@@ -9,6 +9,7 @@ import { FuseMainComponent } from '../main/main.component';
 import { AuthGuard } from '../alpha/services/guard/auth.guard';
 import { UserResolver } from '../basic/user-setting/user.resolve.service';
 import { ActiveComponent } from './auth/register/user-active.component';
+import { AppformComponent } from './auth/appForm/appform.component';
 
 const routes: Routes = [
   {
@@ -22,6 +23,10 @@ const routes: Routes = [
   {
     path: 'register',
     component: RegisterComponent
+  },
+  {
+    path: 'appform',
+    component: AppformComponent
   },
   {
     path: 'register/mailconfirm',

@@ -14,6 +14,7 @@ import { PageNotFoundComponent } from './error/page-not-found/page-not-found.com
 import { FuseShortcutsModule } from '../core/components/shortcuts/shortcuts.module';
 import { FuseSearchBarModule } from '../core/components/search-bar/search-bar.module';
 import { ActiveComponent } from './auth/register/user-active.component';
+import { AppformComponent } from './auth/appForm/appform.component';
 
 @NgModule({
   imports: [
@@ -28,7 +29,8 @@ import { ActiveComponent } from './auth/register/user-active.component';
     ActiveComponent,
     RegisterComponent,
     MailConfirmComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    AppformComponent
   ]
 })
 export class RoutesModule {}

@@ -1,0 +1,101 @@
+<div id="register" fxLayout="column" fusePerfectScrollbar>
+    <div id="register-form-wrapper" fxLayout="column" fxLayoutAlign="center center">
+        <div id="register-form" *fuseIfOnDom [@animate]="{value:'*',params:{duration:'300ms',y:'100px'}}">
+            <div class="title">Fastway Application Form</div>
+            <form name="registerForm" [formGroup]="registerForm" novalidate>
+                <mat-form-field>
+                    <input matInput placeholder="Company Name" formControlName="companyName">
+                    <mat-error *ngIf="registerFormErrors.companyName.required">
+                        CompanyName is required
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field>
+                    <input matInput placeholder="Email" formControlName="email">
+                    <mat-error *ngIf="registerFormErrors.email.required">
+                        Email is required
+                    </mat-error>
+                    <mat-error *ngIf="!registerFormErrors.email.required && registerFormErrors.email.email">
+                        Please enter a valid email address
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field>
+                    <input matInput placeholder="Contact person" formControlName="contactPerson">
+                    <mat-error *ngIf="registerFormErrors.contactPerson.required">
+                        Contact Person is required
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field>
+                    <input matInput placeholder="Contact phone" formControlName="contactPhone">
+                    <mat-error *ngIf="registerFormErrors.contactPhone.required">
+                        Contact phone is required
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field>
+                    <input matInput placeholder="Fastway API Key" formControlName="fastwayApiKey">
+                    <mat-error *ngIf="registerFormErrors.fastwayApiKey.required">
+                        Fastway API Key is required
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field class="example-full-width">
+                    <textarea matInput placeholder="Fastway Available service & rate"></textarea>
+                </mat-form-field>
+
+                <mat-form-field>
+                    <mat-select placeholder="Wheter have eParcel API Key" formControlName="whetherHaveKey" #hasKey (change)="onChange(hasKey.value)">
+                        <mat-option value="0">
+                            --
+                        </mat-option>
+                        <mat-option value="1">
+                            I have production API key
+                        </mat-option>
+                        <mat-option value="2">
+                            I have testbed API key
+                        </mat-option>
+                        <mat-option value="3">
+                            I don't have API key
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field *ngIf="hasApiKey">
+                    <input matInput placeholder="eParcel API key" formControlName="eApiKey">
+                </mat-form-field>
+                <mat-form-field *ngIf="hasApiKey">
+                    <input matInput placeholder="eParcel API password" formControlName="eApiPass">
+                </mat-form-field>
+                <mat-form-field *ngIf="hasApiKey">
+                    <input matInput placeholder="eParcel API account number" formControlName="eApiAccountNum">
+                </mat-form-field>
+
+                <mat-form-field *ngIf="hasTestbedApiKey">
+                    <input matInput placeholder="eParcel testbed API key" formControlName="eTApiKey">
+                </mat-form-field>
+                <mat-form-field *ngIf="hasTestbedApiKey">
+                    <input matInput placeholder="eParcel testbed API password" formControlName="eTApiPass">
+                </mat-form-field>
+                <mat-form-field *ngIf="hasTestbedApiKey">
+                    <input matInput placeholder="eParcel testbed API account number" formControlName="eTApiAccountNum">
+                </mat-form-field>
+
+                <mat-form-field *ngIf="noApiKey">
+                    <input matInput placeholder="eParcel account number" formControlName="eAccountNum">
+                </mat-form-field>
+
+                <mat-form-field class="example-full-width">
+                    <textarea matInput placeholder="What kind of stores you would like to interact? e.g. eBay,Magento" formControlName="stores"></textarea>
+                </mat-form-field>
+
+                <mat-form-field class="example-full-width">
+                    <textarea matInput placeholder="Other requirement" formControlName="others"></textarea>
+                </mat-form-field>
+
+                <button mat-raised-button color="accent" class="submit-button" aria-label="Submit" [disabled]="registerForm.invalid">
+                    Submit
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
