@@ -128,8 +128,13 @@
                     <div class="content p-24">
                         <div fxLayout="column" fxLayoutAlign="center">
                             <div>
-                                <input type="file" #fileImportInput name="File Upload" id="txtFileUpload" class="btn btn-primary" (change)="fileChangeListener($event)" accept=".csv" value={{selectedImageFile}}/>
-                                <button mat-raised-button color="accent" class="submit-button" aria-label="Submit" (click)=uploadconsignment()> Submit </button>
+                                <input type="file" #consignmentImportInput name="File Upload" id="txtFileUpload" class="btn btn-primary" (change)="fileChangeListener($event)" accept=".csv" value={{selectedImageFile}}/>
+                                <mat-error *ngIf="needCSVFile">
+                                    A CSV file is required!
+                                </mat-error>
+                            </div>
+                            <div class="pt-24" fxLayout="row" fxLayoutAlign="center center">
+                                <button mat-raised-button color="accent" class="submit-button" aria-label="Submit" (click)=uploadconsignment($event.target)> Submit </button>
                             </div>
                         </div>
                     </div>

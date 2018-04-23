@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, TemplateRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, TemplateRef, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FileUtil } from './orderupload.util';
@@ -7,6 +7,7 @@ import { Constants } from './orderupload.constants';
 import { MatTableDataSource } from '@angular/material';
 import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material';
 import { fuseAnimations } from '../../../../app/core/animations';
+import { ApiService } from '../../../../app/alpha/services/api.service';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -49,6 +50,13 @@ export class ConsignmentNewComponent implements OnInit, OnDestroy {
 
   defaultVal: 1;
 
+  needCSVFile = false;
+
+  @ViewChild('consignmentImportInput') consignmentImportInput: ElementRef;
+
+  csvRecords = [];
+  uploadData = [];
+
   // orderColDuplicateError = false;
 
   // displayedColumns = ['orderCol', 'customerOrderCol'];
@@ -69,7 +77,8 @@ export class ConsignmentNewComponent implements OnInit, OnDestroy {
   constructor(private _router: Router,
     private _fileUtil: FileUtil,
     private formBuilder: FormBuilder,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private apiService: ApiService,
   ) {
     this.consignmentFormErrors = {
       consignee: {},
@@ -133,7 +142,7 @@ export class ConsignmentNewComponent implements OnInit, OnDestroy {
       if (control && control.dirty && !control.valid) {
         this.consignmentFormErrors[field] = control.errors;
       }
-    }console.log(this.consignmentFormErrors);
+    }
   }
 
   addOrderLine(event, row, rowIndex) {
@@ -204,7 +213,7 @@ export class ConsignmentNewComponent implements OnInit, OnDestroy {
     }
   }
 
-  submit() {console.log(this.consignmentFormErrors);
+  submit() {
     const regex = new RegExp(/^(\d*\.)?\d+$/); // /^[1-9]+(\.[0-9]*){0,1}$/g // /^([1-9]\d*|0)(\.\d*[1-9])?$/
     const numberInputs = document.getElementsByClassName('number') as HTMLCollectionOf<HTMLInputElement>;
     // tslint:disable-next-line:prefer-const
@@ -237,6 +246,168 @@ export class ConsignmentNewComponent implements OnInit, OnDestroy {
     this.consignment['data'] = this.rows;
     console.log(this.consignment);
   }
+
+  uploadconsignment(button) {
+    if (this.consignmentImportInput.nativeElement.value === '') {
+      this.needCSVFile = true;
+      return;
+    }
+
+    button.textContent = 'Submitting...';
+    button.parentElement.disabled = true;
+console.log(this.uploadData);
+    this.apiService.post('Fulfillments', 'consignment', null, this.uploadData).subscribe(
+      res => {
+          this.fileReset();
+          this.snackBar.open('Import successfully', 'Dismiss', {
+            duration: 15000,
+            horizontalPosition: 'right',
+            verticalPosition: 'top',
+          });
+
+          this.uploadData = [];
+          button.textContent = 'Submit';
+          button.parentElement.disabled = false;
+      },
+      err => {
+        this.snackBar.open('Error in import consignments:' + err, 'Dismiss', {
+          duration: 15000,
+          horizontalPosition: 'right',
+          verticalPosition: 'top',
+        });
+        button.textContent = 'Submit';
+          button.parentElement.disabled = false;
+      }
+    );
+  }
+
+  fileReset(){
+    this.consignmentImportInput.nativeElement.value = '';
+    this.csvRecords = [];
+  }
+
+  // METHOD CALLED WHEN CSV FILE IS IMPORTED
+  fileChangeListener($event): void {
+    this.needCSVFile = false;
+
+    const text = [];
+    const target = $event.target || $event.srcElement;
+    const files = target.files; 
+
+    if (Constants.validateHeaderAndRecordLengthFlag){
+      if (!this._fileUtil.isCSVFile(files[0])){
+        alert('Please import valid .csv file.');
+        this.fileReset();
+      }
+    }
+
+    const input = $event.target;
+    const reader = new FileReader();
+    // tslint:disable-next-line:label-position
+    reader.readAsText(input.files[0]);
+
+    reader.onload = (data) => {
+      // tslint:disable-next-line:prefer-const
+      let csvData = reader.result;
+      // tslint:disable-next-line:prefer-const
+      let headersRow: any;
+
+      const csvRecordsArray = csvData.split(/\r\n|\n/);
+
+      // tslint:disable-next-line:prefer-const
+      let headerLength = -1;
+
+      this.csvRecords = this._fileUtil.getDataRecordsArrayFromCSVFile(csvRecordsArray, 
+          headerLength, !Constants.validateHeaderAndRecordLengthFlag, Constants.tokenDelimeter);
+
+      // tslint:disable-next-line:prefer-const
+      
+      for (let i = 0; i < this.csvRecords.length; i++) {
+
+        // tslint:disable-next-line:prefer-const
+        let itemData = [];
+        // tslint:disable-next-line:prefer-const
+        let methodIds = [];
+        // tslint:disable-next-line:prefer-const
+        let method: number[];
+
+        if (this.csvRecords[i][0] === 'C') {
+          method = this.csvRecords[i][12].split(';');
+          for (let x = 0; x < method.length; x++) {
+            methodIds.push(Number(method[x]));
+          }
+
+          for (let j = i + 1; j < this.csvRecords.length; j++) {
+            if (this.csvRecords[j][0] === 'A') {
+              itemData.push(this.createItem(this.csvRecords[j]));
+            } else {
+              break;
+            }
+          }
+         
+          this.uploadData.push(this.createConsignmentCol(this.csvRecords[i], methodIds, itemData));
+        }
+      }
+      console.log(this.uploadData);
+    };
+
+    reader.onerror = function () {
+      alert('Unable to read ' + input.files[0]);
+    };
+  }
+
+  createConsignmentCol(row, methodIds, itemData) {
+    return {
+      shipTo_ref: row[1],
+      shipTo_name: row[2],
+      shipTo_companyName: row[3],
+      shipTo_phone: row[4],
+      shipTo_email: row[5],
+      shipTo_address1: row[6],
+      shipTo_suburb: row[7],
+      shipTo_state: row[8],
+      shipTo_postcode: row[9],
+      shipTo_country: row[10],
+      shipTo_instruction1: row[11],
+      shippingMethod_ids: methodIds,
+      data: itemData
+    };
+  }
+
+  createItem(itemRow) {
+    return {
+      qty: Number(itemRow[1]),
+      weight: Number(itemRow[2]),
+      length: Number(itemRow[3]),
+      width: Number(itemRow[4]),
+      height: Number(itemRow[5])
+    };
+  }
+}
+
+export interface ConsignmentCol {
+  // rowType: string;
+  shipTo_ref: string;
+  shipTo_name: string;
+  shipTo_companyName: string;
+  shipTo_phone: string;
+  shipTo_email: string;
+  shipTo_address1: string;
+  shipTo_suburb: string;
+  shipTo_state: string;
+  shipTo_postcode: string;
+  shipTo_country: string;
+  shipTo_instruction1: string;
+  shippingMethod_ids: number[];
+  data: Item[];
+}
+
+export interface Item {
+  qty: number;
+  weight: number;
+  length: number;
+  width: number;
+  height: number;
 }
 
 
