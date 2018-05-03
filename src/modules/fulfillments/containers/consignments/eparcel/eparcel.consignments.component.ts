@@ -28,7 +28,7 @@ export class EparcelConsignmentsComponent implements OnInit, OnDestroy {
   consignemntStatusFilter;
   hasSelectedConsignments = false;
   selected: any = [];
-  selectedStatus = 'solid';
+  selectedStatus = 'pending';
 
   Pending = 0;
   Solid = 0;
@@ -179,7 +179,7 @@ export class EparcelConsignmentsComponent implements OnInit, OnDestroy {
       onGridReady: () => {
           this.gridOptions.api.doLayout();
           this.gridOptions.api.sizeColumnsToFit();
-          this.currentConsignments = 'solid';
+          this.currentConsignments = 'pending';
           this.consignmentsSubscription = this.activeContentService.onConsignmentsChange.subscribe(
             (consignments) => {
               if (consignments.eparcel) {
@@ -192,7 +192,7 @@ export class EparcelConsignmentsComponent implements OnInit, OnDestroy {
                   this.Issue = consignments.eparcel['issue'].length;
                   
                   if (!this.consignemntStatusFilter) {
-                    this.consignemntStatusFilter = 'solid';
+                    this.consignemntStatusFilter = 'pending';
                   }
                 }
               }
@@ -228,7 +228,10 @@ export class EparcelConsignmentsComponent implements OnInit, OnDestroy {
     this.hasSelectedConsignments = false;
   }
 
-  bulkSolidConsignment(){
+  bulkSolidConsignment(event){
+    event.parentElement.disabled = true;
+    event.parentElement.textContent = 'Submiting';
+
     this.selected = this.gridOptions.api.getSelectedRows();
     // tslint:disable-next-line:prefer-const
     let ids = [];

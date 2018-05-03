@@ -83,40 +83,40 @@ export class ConsignmentEditDialogComponent implements OnInit
     }
 
     submit(button) {
-        if (!this.consignmentEditForm.invalid) {console.log(this.consignmentEditForm.value);
+        if (!this.consignmentEditForm.invalid) {
             button.textContent = 'Submiting...';
             button.disabled = true;
-            this.consignmentsService.editConsignment(this.consignment.id, this.consignmentEditForm.value).subscribe(
-                res => {
-                    this.consignmentsService.solidConsignments(this.consignment.id).subscribe(
-                        data => {
-                            this.activeContentService.getConsignments();
-                            this.dialogRef.close();
+            // this.consignmentsService.editConsignment(this.consignment.id, this.consignmentEditForm.value).subscribe(
+            //     res => {
+            //         this.consignmentsService.solidConsignments(this.consignment.id).subscribe(
+            //             data => {
+            //                 this.activeContentService.getConsignments();
+            //                 this.dialogRef.close();
 
-                            if (data.data[0][0].errors) {
-                                this.snackBar.open(data.data[0][0].errors, 'Dismiss', {
-                                    duration: 5000,
-                                    horizontalPosition: 'right',
-                                    verticalPosition: 'top',
-                                  });
-                            }
-                        },
-                        err => {
-                            this.snackBar.open(err.error.message, 'Dismiss', {
-                                duration: 15000,
-                                horizontalPosition: 'right',
-                                verticalPosition: 'top',
-                              });
-                        });
-                },
-                error => {
-                    this.snackBar.open(error.error.message, 'Dismiss', {
-                        duration: 15000,
-                        horizontalPosition: 'right',
-                        verticalPosition: 'top',
-                      });
-                }
-            );
+            //                 if (data.data[0][0].errors) {
+            //                     this.snackBar.open(data.data[0][0].errors, 'Dismiss', {
+            //                         duration: 5000,
+            //                         horizontalPosition: 'right',
+            //                         verticalPosition: 'top',
+            //                       });
+            //                 }
+            //             },
+            //             err => {
+            //                 this.snackBar.open(err.error.message, 'Dismiss', {
+            //                     duration: 15000,
+            //                     horizontalPosition: 'right',
+            //                     verticalPosition: 'top',
+            //                   });
+            //             });
+            //     },
+            //     error => {
+            //         this.snackBar.open(error.error.message, 'Dismiss', {
+            //             duration: 15000,
+            //             horizontalPosition: 'right',
+            //             verticalPosition: 'top',
+            //           });
+            //     }
+            // );
         }
     }
 }

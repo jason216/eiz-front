@@ -69,9 +69,9 @@
             <div layout="row" layout-align="start center" class="layout-align-start-center layout-row">
                 <mat-form-field>
                     <mat-select placeholder="Filter Consignment" (selectionChange)="optionSelected($event.value)" [(ngModel)]="consignemntStatusFilter" style="width: 230px;">
-                        <!-- <mat-option value="pending">
+                        <mat-option value="pending">
                             Pending<span class="nav-link-badge"> ({{Pending}}) </span>
-                        </mat-option> -->
+                        </mat-option>
                         <mat-option value="solid">
                             Solid
                             <span class="nav-link-badge"> ({{Solid}}) </span>

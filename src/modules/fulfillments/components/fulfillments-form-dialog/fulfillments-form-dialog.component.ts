@@ -123,7 +123,7 @@ export class FulfillmentsFormDialogComponent {
       this.apiService.post('Fulfillments', 'quote', null, {'parcels': consignment.packages, 'suburb': this.shipTo.shipTo_suburb, 'postcode': this.shipTo.shipTo_postcode, 'postcode_id': this.shipTo.postcode_id}).subscribe(
         (res) => {
           consignment.quoteSelected = res.data[0];
-          consignment.quotes = res.data;
+          consignment.quotes = res.data; 
           consignment.quotes.forEach(quote => {
             if (quote.amount !== null && quote.amount !== '') {
               if (consignment.quoteSelected.amount > quote.amount){

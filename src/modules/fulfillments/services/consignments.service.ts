@@ -28,15 +28,23 @@ export class ConsignmentsService {
     );
   }
 
-  solidConsignments(ids: any[]): Observable<any> {
-    return this.apiService.post('Fulfillments', 'solidConsignments', null, {'ids[]': ids});
+  // solidConsignments(ids: any[]): Observable<any> {
+  //   return this.apiService.post('Fulfillments', 'solidConsignments', null, {'ids[]': ids});
+  // }
+
+  solidConsignments(ids: any[]) {
+      this.apiService.post('Fulfillments', 'solidConsignments', null, {'ids[]': ids}).subscribe(
+        (res) => {
+          this.printConsignments(ids);
+          this.activeContentService.getConsignments();
+        }
+    );
   }
 
   submitEparcelConsignments(ids: any[]): Observable<any> {
     return this.apiService.post('eParcel', 'submit', null, {'ids[]': ids});
   }
 
-  // 还没有测试账号，不要使用该功能
   submitFastwayConsignments(ids: any[]){
     this.apiService.post('Fastway', 'submit', null, {'ids[]': ids}).subscribe(
       (res) => {
